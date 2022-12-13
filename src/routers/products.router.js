@@ -111,7 +111,7 @@ const productoAgregado = {
 
 // Actualizar un producto
 
-router.put ('/' , async (req, res) => {
+router.put ('/:pid' , async (req, res) => {
 
     try {
 
@@ -158,7 +158,7 @@ const forUpdate = {
 
 // Eliminar un producto
 
-router.delete ('/' , async (req, res) => {
+router.delete ('/:pid' , async (req, res) => {
 
     try {
 

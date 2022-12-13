@@ -112,7 +112,7 @@ return nuevoProducto
 
 }
 
-updateProduct = async (obj,id) => {
+updateProduct = async (obj) => {
 
     const db = await this.getProducts()
 
