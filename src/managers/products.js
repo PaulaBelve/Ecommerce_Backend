@@ -1,4 +1,5 @@
 import fs from "fs"
+import { NotFoundError, ValidationError } from "../utils/index.js";
 
 export class ProductManager {
 
@@ -88,7 +89,7 @@ export class ProductManager {
 
         if (checkCode) {
 
-            throw new Error('El codigo ya existe');
+            throw new ValidationError('El código ya existe');
 }
 
 const list = await this.getProducts ()
@@ -112,25 +113,42 @@ return nuevoProducto
 
 }
 
-updateProduct = async (obj) => {
+updateProduct = async (id, dataAct ) => {
 
-    const db = await this.getProducts()
+    const products = await this.getProducts()
+
+    const productIndex = products.findIndex((product) => product.id === id)
+
+    if (productIndex === -1) {
+
+        throw new NotFoundError ('El id solcitado no ha sido encontrado')
+}
+
+const buscarProducto = products[productIndex]
+
+products[productIndex] = {...buscarProducto , ...dataAct}
+
+await this.#write(products);
+
+    return products[productIndex]
+  
+/*  const db = await this.getProducts()
 
     const productUpdate = db.find((product) => product.id === obj.id)
 
     if (!productUpdate) {
 
-        throw new Error ( 'El código solcitado no ha sido encontrado')
+        throw new NotFoundError ( 'El id solcitado no ha sido encontrado')
     }
 
     const buscarProducto = db.filter ((product) => product.id !== obj.id)
 
-    const productosConCambios = { id : updateProduct.id, ...obj}
+    const productosConCambios = { id : productUpdate.id, ...obj}
     buscarProducto.push(productosConCambios)
 
     await this.#write(buscarProducto);
 
-    return productosConCambios
+    return productosConCambios */
 
 
 }

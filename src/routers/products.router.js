@@ -1,8 +1,9 @@
 import { Router } from "express";
+import { ERRORS } from "../const/error.js";
 import { budines } from "../managers/index.js";
 //import { ProductManager } from "../managers/products.js";
 
-const router = Router ()
+const router = Router()
 
 
 /*router.get('/', (req, res) => {
@@ -76,34 +77,43 @@ router.get('/:id', async (req, res) => {
 
 // Agregar un producto
 
-router.post('/' , async (req, res) => {
+router.post('/', async (req, res) => {
 
     try {
-       
-        const {title, description, code, price, stock, category, thumbnails} = req.body
+
+        const { title, description, code, price, stock, category, thumbnails } = req.body
 
 
-const productoAgregado = {
-    
-    title: title, 
-    description: description,
-    code: code, 
-    price: price,
-    status: true,
-    stock: stock,
-    category: category, 
-    thumbnails: thumbnails
+        const productoAgregado = {
 
-}
+            title: title,
+            description: description,
+            code: code,
+            price: price,
+            status: true,
+            stock: stock,
+            category: category,
+            thumbnails: thumbnails
 
-    await budines.addProduct ({...productoAgregado})
+        }
 
-    res.send ({ succes: true, product: productoAgregado })
+        await budines.addProduct({ ...productoAgregado })
+
+        res.send({ succes: true, product: productoAgregado })
 
     } catch (error) {
-       console.log('error')
+        console.log('error')
 
-        res.send({ succes: false, error: 'error!' })
+        if (error.name === ERRORS.VALIDATION_ERROR) {
+
+            return res.send({
+                succes: false,
+                error: `${error.name}: ${error.message}`
+
+            })
+        }
+
+        res.send({ succes: false, error: 'Ha ocurrido un error!' })
 
     };
 
@@ -111,77 +121,85 @@ const productoAgregado = {
 
 // Actualizar un producto
 
-router.put ('/:pid' , async (req, res) => {
+router.put('/:pid', async (req, res) => {
 
     try {
 
-
-        const {pid} = req.params
+        const { pid/*id : paramId */} = req.params
         const id = Number(pid)
 
-         if (Number.isNaN(id) || id <= 0) {
+        if (Number.isNaN(id) || id < 0) {
 
             return res.send({ succes: false, error: 'ingresar un número valido' })
         }
 
-       
-        const {title, description, code, price, stock, category, thumbnails} = req.body
+
+        const { title, description, code, price, stock, category, thumbnails } = req.body
 
 
-const forUpdate = {
-    
-    title: title, 
-    description: description,
-    code: code, 
-    price: price,
-    status: true,
-    stock: stock,
-    category: category, 
-    thumbnails: thumbnails
+        const forUpdate =  await budines.updateProduct (id, {
 
-}
+            title: title,
+            description: description,
+            code: code,
+            price: price,
+            status: true,
+            stock: stock,
+            category: category,
+            thumbnails: thumbnails
 
-    await budines.updateProduct ({...forUpdate})
 
-    res.send ({ succes: true, product: forUpdate })
+        })
+
+        return res.send({ succes: true, product: forUpdate })
+
+   /*     await budines.updateProduct({ ...forUpdate })
+
+     return res.send({ succes: true, product: forUpdate }) */
 
     } catch (error) {
-       console.log('error')
+        console.log('error')
 
-        res.send({ succes: false, error: 'error!' })
+        if (error.name === ERRORS.NOT_FOUND_ERROR) {
+
+            return res.send({
+                succes: false,
+                error: `${error.name}: ${error.message}`
+
+            })
+        }
+
+        res.send({ succes: false, error: 'Ha ocurrido un error!' })
 
     };
-
-
-
 })
 
 // Eliminar un producto
 
-router.delete ('/:pid' , async (req, res) => {
+router.delete('/:pid', async (req, res) => {
 
     try {
 
 
-        const {pid} = req.params
+        const { pid } = req.params
         const id = Number(pid)
 
-         if (Number.isNaN(id) || id <= 0) {
+        if (Number.isNaN(id) || id <= 0) {
 
             return res.send({ succes: false, error: 'ingresar un número valido' })
         }
 
-       await budines.deleteProduct(id)
-       res.send ({ succes: true, Message: 'El producto ha sido eliminado' })
+        await budines.deleteProduct(id)
+        res.send({ succes: true, Message: 'El producto ha sido eliminado' })
 
 
     } catch (error) {
-       console.log('error')
+        console.log('error')
 
         res.send({ succes: false, error: 'error!' })
 
     };
-   
+
 
 
 

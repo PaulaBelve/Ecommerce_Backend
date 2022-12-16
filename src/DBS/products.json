@@ -2,56 +2,61 @@
    {
       "title": "Apollo",
       "description": "budin de naranja",
-      "price": "1000",
+      "price": 1000,
       "thumbnail": "image",
       "code": "230",
-      "stock": "5",
+      "stock": 5,
+      "category": "budines",
       "id": 1
    },
    {
       "title": "Gea",
       "description": "budin coco",
-      "price": "1000",
+      "price": 1000,
       "thumbnail": "image",
       "code": "240",
-      "stock": "5",
+      "stock": 5,
+      "category": "budines",
       "id": 2
    },
    {
       "title": "Zeus",
       "description": "budin frutos rojos y vainilla",
-      "price": "1000",
+      "price": 1000,
       "thumbnail": "image",
       "code": "250",
-      "stock": "5",
+      "stock": 5,
+      "category": "budines",
       "id": 3
    },
    {
       "title": "Venus",
       "description": "budin cacao y banana",
-      "price": "1000",
+      "price": 1000,
       "thumbnail": "image",
       "code": "260",
-      "stock": "5",
+      "stock": 5,
+      "category": "budines",
       "id": 5
    },
    {
       "title": "Atenea",
       "description": "budin de manzana y canela",
-      "price": "1000",
+      "price": 1000,
       "thumbnail": "image",
       "code": "270",
-      "stock": "5",
+      "stock": 5,
+      "category": "budines",
       "id": 6
    },
    {
-      "title": "Hercules",
-      "description": "budin de cacao",
-      "price": "1000",
-      "thumbnail": "image",
-      "code": "280",
-      "stock": "5",
-      "id": 7
+      "id": 7,
+      "title": "Hermes",
+      "code": "555",
+      "price": 1600,
+      "status": true,
+      "category": "budines",
+      "stock": 3
    },
    {
       "title": "Artemisa",
@@ -59,26 +64,28 @@
       "price": "1000",
       "thumbnail": "image",
       "code": "290",
-      "stock": "5",
+      "stock": 5,
+      "category": "budines",
       "id": 8
    },
    {
       "title": "Poseidon",
       "description": "budin de limon",
-      "price": "1000",
+      "price": 1000,
       "thumbnail": "image",
       "code": "300",
-      "stock": "5",
+      "stock": 5,
+      "category": "budines",
       "id": 9
    },
    {
-      "id": 11,
-      "title": "Hermes",
-      "description": "budin marmolado",
-      "code": "555",
-      "price": 1500,
+      "id": 10,
+      "title": "Hercules",
+      "description": "budin de cacao",
+      "code": "573",
+      "price": 1600,
       "status": true,
-      "stock": 5,
+      "stock": 4,
       "category": "budines"
    }
 ]
