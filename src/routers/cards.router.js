@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { cardManager } from "../managers/index.js";
 
-const router = Router ()
+const router = Router()
 
 
 router.get('/:cid', async (req, res) => {
@@ -17,48 +17,75 @@ router.get('/:cid', async (req, res) => {
             return res.send({ succes: false, error: 'ingresar un número valido. Por favor, ingresar de nuevo' })
         }
 
-        const idCarrito = await cardManager.getCardsById(id)
+        const idCarrito = await cardManager.getCartsById(id)
 
-        return res.send({ succes: true, cart : idCarrito })
+        return res.send({ success: true, Cart: idCarrito })
 
     } catch (error) {
         console.log('error')
 
-        res.send({ succes: false, error: 'error!' })
+       return res.send({ success: false, error: 'error!' })
 
     };
 
 });
 
-/*router.post('/:cid/products/:pid', async (req, res) => {
+router.post('/', async (req, res) => {
+
+    try {
+
+        const newCart = await cardManager.crearElCarrito();
+
+        return res.send({ succes: true, Cart: newCart })
+
+    }
+
+    catch (error) {
+
+        console.log('error')
+
+     return   res.send({ succes: false, Error: 'Ha ocurrido un error' })
+
+
+    }
+
+})
+
+router.post('/:cid/products/:pid', async (req, res) => {
 
     try {
         const { cid } = req.params
 
-        const id = Number(cid)
+        const cartId = Number(cid)
 
 
-        if (Number.isNaN(id) || id < 0) {
+        if (Number.isNaN(cartId) || cartId < 0) {
 
             return res.send({ succes: false, error: 'ingresar un número valido' })
         }
 
-        const cart = await cardManager.getCardsById(id)
+        const { pid } = req.params
 
-        if (!product) {
+        const prodId = Number(pid)
 
-            return res.send({ succes: false, error: 'el producto no ha sido encontrado' })
+
+        if (Number.isNaN(prodId) || prodId < 0) {
+
+            return res.send({ succes: false, error: 'ingresar un número valido' })
         }
 
-        return res.json({ succes: true, product })
+        const addproduct = await cardManager.addCart(cartId , prodId)
+
+       return res.send ({succes: true, product: addproduct})
+
 
     } catch (error) {
         console.log('error')
 
-        res.send({ succes: false, error: 'error!' })
+     return res.send({ succes: false, error: 'error!' })
 
     };
 
-}); */
+}); 
 
 export default router

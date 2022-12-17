@@ -10,16 +10,6 @@
       "id": 1
    },
    {
-      "title": "Gea",
-      "description": "budin coco",
-      "price": 1000,
-      "thumbnail": "image",
-      "code": "240",
-      "stock": 5,
-      "category": "budines",
-      "id": 2
-   },
-   {
       "title": "Zeus",
       "description": "budin frutos rojos y vainilla",
       "price": 1000,

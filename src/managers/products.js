@@ -22,29 +22,10 @@ export class ProductManager {
 
     }
 
-/*    #read = () => {
-
-        if (fs.existsSync(this.path)) {
-
-            return fs.promises.readFile(this.path, "utf-8")
-            .then(result => JSON.parse(result))
-
-        }
-        
-        return []
-    } */
-
     #write = (list) => {
 
         return fs.promises.writeFile(this.path, JSON.stringify(list, null, 3))
     }
-
-   /*  getProducts = async () => {
-
-        const getProduct = await this.#read()
-        return getProduct
-
-          }*/
 
 
     getProductById = async (id) => {
@@ -131,35 +112,32 @@ products[productIndex] = {...buscarProducto , ...dataAct}
 await this.#write(products);
 
     return products[productIndex]
-  
-/*  const db = await this.getProducts()
 
-    const productUpdate = db.find((product) => product.id === obj.id)
-
-    if (!productUpdate) {
-
-        throw new NotFoundError ( 'El id solcitado no ha sido encontrado')
-    }
-
-    const buscarProducto = db.filter ((product) => product.id !== obj.id)
-
-    const productosConCambios = { id : productUpdate.id, ...obj}
-    buscarProducto.push(productosConCambios)
-
-    await this.#write(buscarProducto);
-
-    return productosConCambios */
 
 
 }
 
 deleteProduct = async (id) => {
 
-    const db = await this.getProducts()
+    const products = await this.getProducts()
 
-    const buscarProducto = db.filter ((product) => product.id !== id)
+    const productIndex = products.findIndex((product) => product.id === id)
 
-    await this.#write(buscarProducto);
+    if (productIndex === -1) {
+
+        throw new NotFoundError ('Producto no encontrado')
+}
+
+const deleteProducts = products.splice(productIndex, 1)
+
+await this.#write(products);
+
+return deleteProducts[0]
+
+
+  /*  const buscarProducto = db.filter ((product) => product.id !== id) */
+
+    
 }
 
 }

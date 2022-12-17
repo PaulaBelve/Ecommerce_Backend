@@ -125,7 +125,7 @@ router.put('/:pid', async (req, res) => {
 
     try {
 
-        const { pid/*id : paramId */} = req.params
+        const {pid} = req.params
         const id = Number(pid)
 
         if (Number.isNaN(id) || id < 0) {
@@ -189,27 +189,30 @@ router.delete('/:pid', async (req, res) => {
             return res.send({ succes: false, error: 'ingresar un número valido' })
         }
 
-        await budines.deleteProduct(id)
-        res.send({ succes: true, Message: 'El producto ha sido eliminado' })
+   const deleteProducts = await budines.deleteProduct(id)
+      //  res.send({ succes: true, Message: 'El producto ha sido eliminado' })
+
+      res.send({ succes: true, deleted: deleteProducts })
 
 
     } catch (error) {
         console.log('error')
+        if (error.name === ERRORS.NOT_FOUND_ERROR) {
 
-        res.send({ succes: false, error: 'error!' })
+            return res.send({
+                succes: false,
+                error: `${error.name}: ${error.message}`
+
+            })
+        }
+
+        res.send({ succes: false, error: 'Ha ocurrido un error!' })
 
     };
 
-
-
-
+   
 
 })
-
-
-
-
-
 
 
 export default router
