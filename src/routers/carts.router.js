@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { cardManager } from "../managers/index.js";
+import { cartManager } from "../managers/index.js";
 
 const router = Router()
 
@@ -17,14 +17,14 @@ router.get('/:cid', async (req, res) => {
             return res.send({ succes: false, error: 'ingresar un número valido. Por favor, ingresar de nuevo' })
         }
 
-        const idCarrito = await cardManager.getCartsById(id)
+        const idCarrito = await cartManager.getCartsById(id)
 
         return res.send({ success: true, Cart: idCarrito })
 
     } catch (error) {
         console.log('error')
 
-       return res.send({ success: false, error: 'error!' })
+        return res.send({ success: false, error: 'error!' })
 
     };
 
@@ -34,7 +34,7 @@ router.post('/', async (req, res) => {
 
     try {
 
-        const newCart = await cardManager.crearElCarrito();
+        const newCart = await cartManager.crearElCarrito();
 
         return res.send({ succes: true, Cart: newCart })
 
@@ -44,7 +44,7 @@ router.post('/', async (req, res) => {
 
         console.log('error')
 
-     return   res.send({ succes: false, Error: 'Ha ocurrido un error' })
+        return res.send({ succes: false, Error: 'Ha ocurrido un error' })
 
 
     }
@@ -74,18 +74,18 @@ router.post('/:cid/products/:pid', async (req, res) => {
             return res.send({ succes: false, error: 'ingresar un número valido' })
         }
 
-        const addproduct = await cardManager.addCart(cartId , prodId)
+        const addproduct = await cartManager.addCart(cartId, prodId)
 
-       return res.send ({succes: true, product: addproduct})
+        return res.send({ succes: true, product: addproduct })
 
 
     } catch (error) {
-        console.log('error')
+        console.log(error)
 
-     return res.send({ succes: false, error: 'error!' })
+        return res.send({ succes: false, error: 'error!' })
 
     };
 
-}); 
+});
 
 export default router

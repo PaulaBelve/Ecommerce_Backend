@@ -77,5 +77,15 @@
       "status": true,
       "stock": 4,
       "category": "budines"
+   },
+   {
+      "id": 11,
+      "title": "Gea",
+      "description": "budin de coco",
+      "code": "563",
+      "price": 1600,
+      "status": true,
+      "stock": 4,
+      "category": "budines"
    }
 ]

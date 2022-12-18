@@ -1,7 +1,7 @@
 import fs from "fs"
-import { budines } from "../managers/index.js"
+import { budines } from "./index.js"
 
-export class CardManager {
+export class CartManager {
 
   constructor(path) {
 
@@ -75,6 +75,7 @@ export class CardManager {
     // Crear el id del producto para comprobar que exista
 
     const buscarProducto = await budines.getProducts();
+
     const productoElegido = buscarProducto.find((product) => product.id === productId);
 
     if (!productoElegido) {
@@ -84,7 +85,7 @@ export class CardManager {
 
     // Buscamos si el producto ya se encuentra en el carrito
 
-    const verificarProductoEnCarrito = buscarCart.products.find((product) => product.id === productId);
+    const verificarProductoEnCarrito = buscarCart.product.find((product) => product.id === productId);
 
     console.log(verificarProductoEnCarrito);
 
@@ -102,7 +103,7 @@ export class CardManager {
 
     // Agregamos producto al carrito, solo id y cantidad
 
-    buscarCart.products.push({
+    buscarCart.product.push({
       id: buscarProducto.id,
       quantity: 1
 
