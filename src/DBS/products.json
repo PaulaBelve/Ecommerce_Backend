@@ -13,7 +13,7 @@
       "title": "Zeus",
       "description": "budin frutos rojos y vainilla",
       "price": 1000,
-      "thumbnail": "image",
+      "thumbnail": "../img/budinchococuadrado.png",
       "code": "250",
       "stock": 5,
       "category": "budines",
@@ -86,6 +86,16 @@
       "price": 1600,
       "status": true,
       "stock": 4,
+      "category": "budines"
+   },
+   {
+      "id": 12,
+      "title": "Abaris",
+      "description": "budin con frutos secos",
+      "code": "10",
+      "price": 2000,
+      "status": true,
+      "stock": 5,
       "category": "budines"
    }
 ]

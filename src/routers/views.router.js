@@ -5,6 +5,8 @@ import { budines } from "../managers/index.js";
 
 const router = Router ()
 
+// DONDE SE VISUALIZA LA BASO DE DATOS
+
 router.get ('/' , async (req, res) => {
 
  const products = await budines.getProducts()
@@ -23,4 +25,5 @@ router.get ('/realtimeproducts' , (req, res) => {
 })
 
 
-export {router as viewsRouter}
+//export {router as viewsRouter}
+export default router

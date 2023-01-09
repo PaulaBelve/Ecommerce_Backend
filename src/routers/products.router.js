@@ -1,22 +1,28 @@
 import { Router } from "express";
 import { ERRORS } from "../const/error.js";
-import { budines } from "../managers/index.js";
+//import { budines } from "../managers/index.js";
+import {productModel}  from "../dao/models/products.model.js";
 //import { ProductManager } from "../managers/products.js";
 
 const router = Router()
 
-
-/*router.get('/', (req, res) => {
-
-res.send('Router Products')
-
-})*/
+// Base de datos, que devuelve formato json
 
 //Todos los productos 
 
 router.get('/', async (req, res) => {
 
-    try {
+   
+    
+   try {
+
+       const products = await productModel.find()
+
+    console.log(products)
+
+    res.send(products)
+
+/* 
         const { limit } = req.query
 
         const allProducts = await budines.getProducts()
@@ -29,11 +35,12 @@ router.get('/', async (req, res) => {
         const products = allProducts.slice(0, limit)
 
 
-        res.send({ succes: true, products })
+        res.send({ succes: true, products }) */
 
     } catch (error) {
 
         console.log("error")
+        console.log(error)
 
         res.send({ succes: false, error: "ha ocurrido un error" })
 
@@ -44,7 +51,7 @@ router.get('/', async (req, res) => {
 
 // Filtrar producto por ID
 
-router.get('/:id', async (req, res) => {
+/*router.get('/:id', async (req, res) => {
 
     try {
         const { id: paramId } = req.params
@@ -73,7 +80,7 @@ router.get('/:id', async (req, res) => {
 
     };
 
-});
+});*/
 
 // Agregar un producto
 
@@ -81,7 +88,11 @@ router.post('/', async (req, res) => {
 
     try {
 
-        const { title, description, code, price, stock, category, thumbnails } = req.body
+        const result = await productModel.create(req.body)
+
+        res.json(result)
+
+     /*   const { title, description, code, price, stock, category, thumbnails } = req.body
 
 
         const productoAgregado = {
@@ -99,10 +110,11 @@ router.post('/', async (req, res) => {
 
         await budines.addProduct({ ...productoAgregado })
 
-        res.send({ succes: true, product: productoAgregado })
+        res.send({ succes: true, product: productoAgregado }) */
 
     } catch (error) {
         console.log('error')
+
 
         if (error.name === ERRORS.VALIDATION_ERROR) {
 

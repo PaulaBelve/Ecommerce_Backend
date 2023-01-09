@@ -3,10 +3,12 @@ import handlebars from 'express-handlebars'
 import __dirname from './dirname.js'
 import {Server as HttpServer} from 'http'
 import {Server as IoServer} from 'socket.io'
+import mongoose from 'mongoose'
 
 import productsRouter from './routers/products.router.js'
 import cartsRouter from './routers/carts.router.js'
-import { viewsRouter } from './routers/views.router.js'
+import  viewsRouter  from './routers/views.router.js'
+import { budines } from './managers/index.js'
 //import { Socket } from 'dgram'
 
 
@@ -28,10 +30,7 @@ app.set ('views' , `${__dirname}/views`)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-//app.use('/static', express.static('./public'))
-app.use('/static' , express.static('public'))
-
-
+app.use(express.static('public'))
 
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
@@ -41,16 +40,38 @@ app.use('/' , viewsRouter)
 
 const server = httpServer.listen(8080, () => console.log('server running...'))
 
-io.on('connection', (socket) => {
+/*io.on('connection', async (socket) => {
 
 console.log(`New client connected, id: ${socket.id}`)
 
 io.sockets.emit('hello', 'hola')
 
-io.sockets.emit('products', [{id: 1, tittle: 'prod1'}])
+const products = await budines.getProducts()
+
+io.sockets.emit('products', products) }) */
 
 
+// Conexion a DB Mongo Atlas
+const MONGO_URI  ='mongodb+srv://Delfos:NWGEnmHFvTikPpp5@cluster0.8q2zhr1.mongodb.net/?retryWrites=true&w=majority'
+mongoose.set('strictQuery', false) 
+
+mongoose.connect(MONGO_URI, { dbName: 'Ecommerce' }, error => {
+    if(error) {
+        console.error('No se pudo conectar a la DB');
+        return
+    }
+
+    console.log('DB connected!');
+    server
+    
 })
+
+
+
+
+
+//contraseña mongoAtlas - JtwpMuWnslxTcUcc
+// Delfos - NWGEnmHFvTikPpp5
 
 
 
