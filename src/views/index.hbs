@@ -1,39 +1,37 @@
-
-
 <h1 class="title"> PRODUCTOS </h1>
 
-<div class="cards-products"> 
 
-  <!--  <tr>
 
-        <th>name</th>
-        <th>Descripcion</th>
-        <th>Price</th>
-        <th>Thumbnails</th>
-        <th>Categoria</th>
 
-   </tr> -->
 
-   {{#if products.length}}
-    {{#each products}}
+{{#if products.length}}
+{{#each products}}
+<a href="/product/{{this.title}}">
+    <section class="section-budines">
+        <div class="cards-products">
 
-    <tr >
+            <picture><img src="{{this.thumbnail}}" /></picture>
+            <h2>{{this.title}}</h2>
+            <p>{{this.description}}</p>
+            <p>{{this.price}}</p>
 
-     <td><img{{this.thumbnail}}/></td>
-     <td>{{this.title}}</td>
-     <td>{{this.description}}</td>
-     <td>{{this.price}}</td>
- 
-   
 
-</tr>
+
+        </div>
+
+    </section>
+</a>
 
 {{/each}}
 {{/if}}
 
-</div>
+
 
 <style>
+    img {
+
+        width: 100%;
+    }
 
     .title {
 
@@ -41,22 +39,29 @@
         color: blueviolet;
     }
 
-    .cards-products{
-
-       /* border: solid red; */
-
+    .section-budines {
         display: flex;
         flex-direction: row;
+        gap: 2rem;
+        margin-top: 1.5rem;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .cards-products {
+
+        /* border: solid red; */
+
+        display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
-        width: 100%;
-        height: 100%;
+        width: 20%;
+        /* height: 50%; */
         border-radius: 4px;
         box-shadow: 0 0 5px cadetblue;
         text-align: center;
     }
-
-
 </style>
 
 <!-- <script src="js/main.js"></script> -->

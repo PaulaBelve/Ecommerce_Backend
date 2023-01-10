@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ERRORS } from "../const/error.js";
 //import { budines } from "../managers/index.js";
-import {productModel}  from "../dao/models/products.model.js";
+import { productModel } from "../dao/models/products.model.js";
 //import { ProductManager } from "../managers/products.js";
 
 const router = Router()
@@ -12,30 +12,28 @@ const router = Router()
 
 router.get('/', async (req, res) => {
 
-   
-    
-   try {
+    try {
 
-       const products = await productModel.find()
+        const products = await productModel.find()
 
-    console.log(products)
+        console.log(products)
 
-    res.send(products)
+        res.send(products)
 
-/* 
-        const { limit } = req.query
-
-        const allProducts = await budines.getProducts()
-
-        if (!limit || limit < 1) {
-
-            return res.send({ succes: true, products: allProducts })
-        }
-
-        const products = allProducts.slice(0, limit)
-
-
-        res.send({ succes: true, products }) */
+        /* 
+                const { limit } = req.query
+        
+                const allProducts = await budines.getProducts()
+        
+                if (!limit || limit < 1) {
+        
+                    return res.send({ succes: true, products: allProducts })
+                }
+        
+                const products = allProducts.slice(0, limit)
+        
+        
+                res.send({ succes: true, products }) */
 
     } catch (error) {
 
@@ -92,25 +90,25 @@ router.post('/', async (req, res) => {
 
         res.json(result)
 
-     /*   const { title, description, code, price, stock, category, thumbnails } = req.body
-
-
-        const productoAgregado = {
-
-            title: title,
-            description: description,
-            code: code,
-            price: price,
-            status: true,
-            stock: stock,
-            category: category,
-            thumbnails: thumbnails
-
-        }
-
-        await budines.addProduct({ ...productoAgregado })
-
-        res.send({ succes: true, product: productoAgregado }) */
+        /*   const { title, description, code, price, stock, category, thumbnails } = req.body
+   
+   
+           const productoAgregado = {
+   
+               title: title,
+               description: description,
+               code: code,
+               price: price,
+               status: true,
+               stock: stock,
+               category: category,
+               thumbnails: thumbnails
+   
+           }
+   
+           await budines.addProduct({ ...productoAgregado })
+   
+           res.send({ succes: true, product: productoAgregado }) */
 
     } catch (error) {
         console.log('error')
@@ -137,7 +135,7 @@ router.put('/:pid', async (req, res) => {
 
     try {
 
-        const {pid} = req.params
+        const { pid } = req.params
         const id = Number(pid)
 
         if (Number.isNaN(id) || id < 0) {
@@ -149,7 +147,7 @@ router.put('/:pid', async (req, res) => {
         const { title, description, code, price, stock, category, thumbnails } = req.body
 
 
-        const forUpdate =  await budines.updateProduct (id, {
+        const forUpdate = await budines.updateProduct(id, {
 
             title: title,
             description: description,
@@ -165,9 +163,9 @@ router.put('/:pid', async (req, res) => {
 
         return res.send({ succes: true, product: forUpdate })
 
-   /*     await budines.updateProduct({ ...forUpdate })
-
-     return res.send({ succes: true, product: forUpdate }) */
+        /*     await budines.updateProduct({ ...forUpdate })
+     
+          return res.send({ succes: true, product: forUpdate }) */
 
     } catch (error) {
         console.log('error')
@@ -201,10 +199,10 @@ router.delete('/:pid', async (req, res) => {
             return res.send({ succes: false, error: 'ingresar un número valido' })
         }
 
-   const deleteProducts = await budines.deleteProduct(id)
-      //  res.send({ succes: true, Message: 'El producto ha sido eliminado' })
+        const deleteProducts = await budines.deleteProduct(id)
+        //  res.send({ succes: true, Message: 'El producto ha sido eliminado' })
 
-      res.send({ succes: true, deleted: deleteProducts })
+        res.send({ succes: true, deleted: deleteProducts })
 
 
     } catch (error) {
@@ -222,7 +220,7 @@ router.delete('/:pid', async (req, res) => {
 
     };
 
-   
+
 
 })
 

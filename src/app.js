@@ -34,7 +34,7 @@ app.use(express.static('public'))
 
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
-app.use('/' , viewsRouter)
+app.use('/product' , viewsRouter)
 //app.use('/', (req, res) => res.send("INICIO"))
 
 
@@ -52,7 +52,7 @@ io.sockets.emit('products', products) }) */
 
 
 // Conexion a DB Mongo Atlas
-const MONGO_URI  ='mongodb+srv://Delfos:NWGEnmHFvTikPpp5@cluster0.8q2zhr1.mongodb.net/?retryWrites=true&w=majority'
+const MONGO_URI  ='mongodb+srv://Delfos:8Q1KqRE6Yj8Bo2fz@cluster0.8q2zhr1.mongodb.net/?retryWrites=true&w=majority'
 mongoose.set('strictQuery', false) 
 
 mongoose.connect(MONGO_URI, { dbName: 'Ecommerce' }, error => {
@@ -71,7 +71,7 @@ mongoose.connect(MONGO_URI, { dbName: 'Ecommerce' }, error => {
 
 
 //contraseña mongoAtlas - JtwpMuWnslxTcUcc
-// Delfos - NWGEnmHFvTikPpp5
+// Delfos - 8Q1KqRE6Yj8Bo2fz
 
 
 
