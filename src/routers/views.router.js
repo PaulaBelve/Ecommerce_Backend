@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {productModel}  from "../dao/models/products.model.js";
 import { budines } from "../dao/index.js";
+import {messageModel}  from "../dao/models/message.model.js";
 //import { realTimeProducts } from "../views/layouts/realtimeproducts"
 
 
@@ -21,30 +22,30 @@ router.get ('/' , async (req, res) => {
      
 })
 
-/*router.get ('/create' , async  (req, res) => {
+router.get ('/chat' , async  (req, res) => {
 
-   res.render('create' , {})
+   res.render('chat' , {})
 
 
 })
 
-router.post ('/create' , async  (req, res) => {
+router.post ('/chat' , async  (req, res) => {
 
-    const nuevoProducto = req.body
+    const nuevoMessage = req.body
 
-    const productGenerated = new productModel(nuevoProducto);
-    await productGenerated.save();
+    const messageGenerated = new messageModel(nuevoMessage);
+    await messageGenerated.save();
 
-    console.log(productGenerated);
+    console.log(messageGenerated);
 
-    res.redirect('/product/' + productGenerated.title)
+    res.redirect('/message/' + messageGenerated.User)
 
     //res.render('create' , {})
     //res.render("one" , {nuevoProducto})
     // const result = await productModel.create(nuevoProducto)
     //console.log(result) 
 
-}) */
+}) 
 
 router.get ('/:title' , async  (req, res) => {
 

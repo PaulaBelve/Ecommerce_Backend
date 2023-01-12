@@ -65,32 +65,26 @@ router.post('/', async (req, res) => {
 
 // Agregar los productos al carrito
 
-router.post('/:cid/products/:pid', async (req, res) => {
+router.post('/:cid', async (req, res) => {
 
     try {
         const { cid } = req.params
 
-        const cartId = Number(cid)
+        if (!cid) {
+
+            return res.send({ succes: false, error: 'ingresar un número valido' });
+        };
+
+        const result = await cartsModel.findById({ _id: cid });
 
 
-        if (Number.isNaN(cartId) || cartId < 0) {
+        if (!result) {
 
-            return res.send({ succes: false, error: 'ingresar un número valido' })
-        }
+            return res.send({ succes: false, error: 'ingresar un número valido' });
 
-        const { pid } = req.params
+        };
 
-        const prodId = Number(pid)
-
-
-        if (Number.isNaN(prodId) || prodId < 0) {
-
-            return res.send({ succes: false, error: 'ingresar un número valido' })
-        }
-
-        const addproduct = await cartManager.addCart(cartId, prodId)
-
-        return res.send({ succes: true, product: addproduct })
+        return res.send({ succes: true, payload: result, })
 
 
     } catch (error) {
