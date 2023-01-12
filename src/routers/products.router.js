@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { ERRORS } from "../const/error.js";
-//import { budines } from "../managers/index.js";
+//import { budines } from "../dao/managers/index.js";
 import { productModel } from "../dao/models/products.model.js";
 //import { ProductManager } from "../managers/products.js";
 
@@ -129,9 +129,64 @@ router.post('/', async (req, res) => {
 
 })
 
-// Actualizar un producto
+// Actualizar un producto con mongose
 
 router.put('/:pid', async (req, res) => {
+try {   const { pid } = req.params
+
+    const productToReplace = req.body
+
+    const result = await productModel.updateOne({_id: pid}, productToReplace)
+
+    res.send({status: 'success', payload: result})
+
+} catch (error) {
+
+    console.log('error')
+
+        if (error.name === ERRORS.NOT_FOUND_ERROR) {
+
+            return res.send({
+                succes: false,
+                error: `${error.name}: ${error.message}`
+
+            })
+        }
+
+        res.send({ succes: false, error: 'Ha ocurrido un error!' })
+
+}
+})
+
+// Eliminar un producto con mongose
+
+router.delete('/:pid', async (req, res) => {
+try {   const { pid } = req.params
+
+    const result = await productModel.deleteOne({_id: pid})
+
+    res.send({status: 'success', payload: result})
+
+} catch (error) {
+
+    console.log('error')
+    if (error.name === ERRORS.NOT_FOUND_ERROR) {
+
+        return res.send({
+            succes: false,
+            error: `${error.name}: ${error.message}`
+
+        })
+    }
+
+    res.send({ succes: false, error: 'Ha ocurrido un error!' })
+}
+})
+
+
+
+
+/*router.put('/:pid', async (req, res) => {
 
     try {
 
@@ -167,7 +222,7 @@ router.put('/:pid', async (req, res) => {
      
           return res.send({ succes: true, product: forUpdate }) */
 
-    } catch (error) {
+  /*  } catch (error) {
         console.log('error')
 
         if (error.name === ERRORS.NOT_FOUND_ERROR) {
@@ -182,11 +237,11 @@ router.put('/:pid', async (req, res) => {
         res.send({ succes: false, error: 'Ha ocurrido un error!' })
 
     };
-})
+})*/
 
 // Eliminar un producto
 
-router.delete('/:pid', async (req, res) => {
+/*router.delete('/:pid', async (req, res) => {
 
     try {
 
@@ -222,7 +277,7 @@ router.delete('/:pid', async (req, res) => {
 
 
 
-})
+}) */
 
 
 export default router

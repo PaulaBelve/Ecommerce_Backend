@@ -1,24 +1,23 @@
 import mongoose from "mongoose";
+//import { productModel } from "../dao/models/products.model.js";
 
 // Nombre de la colección
-const productCollection = 'products'
+const cartsCollection = 'carts'
 
 // Como se guardan los datos en esta colección // Esquema del documento
 
-const productSchema = new mongoose.Schema({
+const cartSchema = new mongoose.Schema({
 
-     title: String,
-     id: Number,
-    description: String,
-    price: Number,
-    thumbnail: String,
-    code: String,
-    stock: Number,
-    category: String
+     
+     products: [{
 
+     id: String,
+     quantity: Number,
+  
+}],
 
-})
+});
 
 // Creación del model : collection + schema 
 
- export const productModel = mongoose.model(productCollection, productSchema)
+ export const cartsModel = mongoose.model(cartsCollection, cartSchema)

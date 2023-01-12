@@ -1,5 +1,5 @@
 import fs from "fs"
-import { budines } from "./index.js"
+import { budines } from "../dao/index.js"
 
 export class CartManager {
 

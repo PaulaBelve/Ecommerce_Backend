@@ -4,11 +4,12 @@ import __dirname from './dirname.js'
 import {Server as HttpServer} from 'http'
 import {Server as IoServer} from 'socket.io'
 import mongoose from 'mongoose'
+//import bodyParser from 'body-parser'
 
 import productsRouter from './routers/products.router.js'
 import cartsRouter from './routers/carts.router.js'
 import  viewsRouter  from './routers/views.router.js'
-import { budines } from './managers/index.js'
+//import { budines } from '../dao/index.js'
 //import { Socket } from 'dgram'
 
 
@@ -30,8 +31,11 @@ app.set ('views' , `${__dirname}/views`)
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(express.static('public'))
+/*app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({extended: true}))*/
 
+
+app.use(express.static('public'))
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
 app.use('/product' , viewsRouter)

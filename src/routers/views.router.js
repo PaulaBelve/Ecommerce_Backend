@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {productModel}  from "../dao/models/products.model.js";
-import { budines } from "../managers/index.js";
+import { budines } from "../dao/index.js";
 //import { realTimeProducts } from "../views/layouts/realtimeproducts"
 
 
@@ -21,7 +21,7 @@ router.get ('/' , async (req, res) => {
      
 })
 
-router.get ('/create' , async  (req, res) => {
+/*router.get ('/create' , async  (req, res) => {
 
    res.render('create' , {})
 
@@ -32,13 +32,19 @@ router.post ('/create' , async  (req, res) => {
 
     const nuevoProducto = req.body
 
-    const result = await productModel.create(nuevoProducto)
-    console.log(result)
+    const productGenerated = new productModel(nuevoProducto);
+    await productGenerated.save();
+
+    console.log(productGenerated);
+
+    res.redirect('/product/' + productGenerated.title)
 
     //res.render('create' , {})
-    res.render("one" , {nuevoProducto})
+    //res.render("one" , {nuevoProducto})
+    // const result = await productModel.create(nuevoProducto)
+    //console.log(result) 
 
-})
+}) */
 
 router.get ('/:title' , async  (req, res) => {
 
