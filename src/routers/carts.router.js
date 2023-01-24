@@ -1,18 +1,235 @@
 import { Router } from "express";
-//import { cartManager } from "../dao/index.js";
-import { cartsModel } from "../dao/models/carts.model.js";
-import { productModel } from "../dao/models/products.model.js";
+import { cartManager } from "../dao/managers/index.js";
+//import { productModel } from "../dao/models/products.model.js";
 
 const router = Router()
+
+// MANAGER
+
+// Vista del carrito
+
+router.get ('/', async (req, res) => {
+try {
+
+const cart = await cartManager.getCart()
+
+res.send({ status: succes,
+    payload: cart })
+
+
+} catch (error) {
+
+console.log(error)
+return res.send({ success: false, error: 'error!' })
+
+
+
+}
+
+})
+
+// Agregar un carrito
+
+router.post ('/', async (req, res) => {
+
+try {
+
+const result = await cartManager.createCart()
+res.send({ status: succes,
+    payload: result })
+
+} catch(error) {
+
+    console.log(error)
+    return res.send({ success: false, error: 'error!' })
+
+
+
+}
+
+})
+
+// Muestra un carrito determinado con su producto
+router.get('/:cid', async (req, res) => {
+
+    try {
+        const { cid } = req.params
+
+        const result = await cartManager.getCartsById({ _id: cid });
+
+
+        if (!result) {
+
+            return res.send({ succes: false, error: 'NOT FOUND CART' });
+
+        };
+
+       res.send({ succes: true, payload: result, })
+
+
+    } catch (error) {
+        console.log(error)
+
+         res.send({ succes: false, error: 'error!' })
+
+    };
+
+});
+
+// Agregar un producto en el carrito
+
+router.post ('/:cid/product/:pid' , async (req, res) => {
+
+try {
+
+    const {cid, pid} = req.params
+
+    const result = await cartManager.addCart(cid, pid)
+
+    res.send({ status: succes, 
+        payload: result, })
+
+
+} catch (error) {
+
+    console.log(error)
+
+    res.send({ succes: false, error: 'error!' })
+
+} })
+
+// Eliminar del carrito el producto seleccionado
+
+router.delete ('/:cid/product/:pid', async (req, res) => {
+
+try {
+
+    const {cid, pid} = req.params
+
+    const result = await cartManager.deleteProductToCart(cid, pid)
+
+    res.send({ status: succes, 
+        payload: result, }) 
+
+
+
+} catch (error) {
+
+    console.log (error)
+
+    res.send({ succes: false, error: 'error!' })
+
+}
+
+})
+
+// Agregar al carrito un array de productos
+
+router.put ('/:cid' , async (req, res) => {
+
+try {
+
+    const {cid} = req.params
+
+    const products = req.body
+
+    const result = await cartManager.arrayProduct(
+        
+        cid,
+        products)
+
+    res.send({ status: succes, 
+        payload: result, })  
+
+
+
+} catch (error) {
+
+    console.log (error)
+
+    res.send({ succes: false, error: 'error!' })
+
+}
+
+})
+
+// Actualizar la cantidad de un producto
+
+router.put ('/:cid/product/:pid' , async (req, res) => {
+
+
+    try {
+
+        const {quantity} = req.body
+        
+        const {cid, pid} = req.params
+    
+        const result = await cartManager.updateQuantityProduct(
+            quantity,
+            cid,
+            pid
+            )
+    
+        res.send({ status: succes, 
+            payload: result, })  
+    
+    
+    
+    } catch (error) {
+    
+        console.log (error)
+    
+        res.send({ succes: false, error: 'error!' })
+    
+    }
+
+
+
+})
+
+router.delete ('/:cid', async (req, res) => {
+
+    try {
+
+        const {cid} = req.params
+    
+        const result = await cartManager.emptyCart(cid)
+    
+        res.send({ status: succes, 
+            payload: result, }) 
+    
+    
+    
+    } catch (error) {
+    
+        console.log (error)
+    
+        res.send({ succes: false, error: 'error!' })
+    
+    }
+    
+
+
+})
+
+
+export default router
+
+
+
+
+
+
+
 
 // MONGOOSE
 
 // Vista del carrito
 
-router.get('/', async (req, res) => {
+/*router.get('/', async (req, res) => {
 
     try {
-        //  const { cid } = req.params
+   
 
         const carts = await cartsModel.find()
 
@@ -29,11 +246,11 @@ router.get('/', async (req, res) => {
 
     };
 
-});
+}); */
 
 // Agregar carrito
 
-router.post('/', async (req, res) => {
+/*router.post('/', async (req, res) => {
 
     try {
 
@@ -42,8 +259,6 @@ router.post('/', async (req, res) => {
             products: []
         };
 
-
-        //  return res.send({ succes: true, Cart: newCart })
         const result = await cartsModel.create(newCart)
 
         res.send({
@@ -61,11 +276,11 @@ router.post('/', async (req, res) => {
 
     }
 
-})
+}) */
 
-// Agregar los productos al carrito
+// Agregar carrito con su producto
 
-router.post('/:cid', async (req, res) => {
+/*router.get('/:cid', async (req, res) => {
 
     try {
         const { cid } = req.params
@@ -94,9 +309,9 @@ router.post('/:cid', async (req, res) => {
 
     };
 
-});
+}); */
 
-// MANAGER
+// MANAGER SIN MONGODB
 
 /*router.get('/:cid', async (req, res) => {
 
@@ -182,4 +397,3 @@ router.post('/:cid/products/:pid', async (req, res) => {
 
 }); */
 
-export default router

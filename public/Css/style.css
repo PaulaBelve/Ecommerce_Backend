@@ -1,0 +1,42 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+    font-weight: 600;
+  }
+
+  img {
+
+    width: 100%;
+}
+
+.title {
+
+    text-align: center;
+    color: blueviolet;
+}
+
+.section-budines {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    margin-top: 1.5rem;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.cards-products {
+
+    /* border: solid red; */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 20%;
+    /* height: 50%; */
+    border-radius: 4px;
+    box-shadow: 0 0 5px cadetblue;
+    text-align: center;
+}

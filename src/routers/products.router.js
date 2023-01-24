@@ -1,16 +1,200 @@
 import { Router } from "express";
 import { ERRORS } from "../const/error.js";
-//import { budines } from "../dao/managers/index.js";
-import { productModel } from "../dao/models/products.model.js";
-//import { ProductManager } from "../managers/products.js";
+import { productsManager } from "../dao/managers/index.js";
+
 
 const router = Router()
 
 // Base de datos, que devuelve formato json
 
 //Todos los productos 
+// Get conectado con Managers
+
+router.get ('/', async (req, res) => {
+
+try {
+
+    const {sort, query, page, limit} = req.query;
+
+    const options = {
+
+    limit : limit || 5,
+    page : page || 1,
+    sort : {price:sort} || {price : 1},
+    leart: true,
+};
+
+const products = await productsManager.getProducts(query, options);
+
+
+        console.log(products)
+
+
+
+res.send ({
+    status:"success",
+    payload: products.docs,
+    totalPages: products.totalPages,
+    prevPage: products.prevPage,
+    nextPage: products.nextPage,
+    page: products.page,
+    hasPrevPage: products.hasPrevPage,
+    hasNextPage: products.hasNextPage,
+    prevLink: products.hasPrevPage 
+    ? `/api/products?page=${products.prevPage}`
+    : null, 
+    nextLink: products.hasNextPage
+    ? `/api/products?page=${products.nextPage}`
+    : null, 
+    
+})
+    
+
+} catch (error) {
+
+    console.log (error)
+
+
+
+
+}
+
+})
+
+// Traer un solo producto por id
+
+router.get ('/:pid' , async (req, res) => {
+
+try {
+
+    const {pid} = req.body
+
+    const product = await productsManager.getProductById(pid)
+
+
+res.send({ status: succes,
+    payload: product })
+
+
+} catch (error) {
+
+    console.log("error")
+    console.log(error)
+
+    res.send({ succes: false, error: "ha ocurrido un error" })
+
+
+}
+
+})
+
+// Agregar un producto
+
+router.post ('/', async (req, res) => {
+
+try{
+
+    const newProduct = req.body
+
+    if(!newProduct) {
+
+        return res.send({
+            status: "error",
+            error: "EMPTY PRODUCT",
+          });
+    }
+    
+       const result = await productsManager.addProduct(newProduct)
+
+       res.send({
+        status: "succes",
+        payload: result,
+      });
+
+
+}catch (error){
+
+    console.log("error")
+    console.log(error)
+
+    res.send({ succes: false, error: "ha ocurrido un error" })
+
+
+
+} })
+
+
+// Actualizar un producto
+
+router.put ('/:pid', async (req, res) => {
+
+    try {   
+        
+        const { pid } = req.params
+
+    const productToReplace = req.body
+
+    const result = await ProductManager.updateProduct(pid, productToReplace)
+
+    res.send({status: 'success', 
+    payload: result})
+
+} catch (error) {
+
+    console.log('error')
+
+        if (error.name === ERRORS.NOT_FOUND_ERROR) {
+
+            return res.send({
+                succes: false,
+                error: `${error.name}: ${error.message}`
+
+            })
+        }
+
+        res.send({ succes: false, error: 'Ha ocurrido un error!' })
+
+}
+
+
+})
+
+// Eliminar un producto
+
+router.delete('/:pid', async (req, res) => {
+    try {   
+        
+        const { pid } = req.params
+    
+        const result = await ProductManager.deleteProduct(pid)
+    
+        res.send({status: 'success', payload: result})
+    
+    } catch (error) {
+    
+        console.log('error')
+        if (error.name === ERRORS.NOT_FOUND_ERROR) {
+    
+            return res.send({
+                succes: false,
+                error: `${error.name}: ${error.message}`
+    
+            })
+        }
+    
+        res.send({ succes: false, error: 'Ha ocurrido un error!' })
+    }
+    })
+
+
+
+
+
+
 
 router.get('/', async (req, res) => {
+
+    // Mongo DB
 
     try {
 
@@ -19,6 +203,8 @@ router.get('/', async (req, res) => {
         console.log(products)
 
         res.send(products)
+
+        // MANAGERS
 
         /* 
                 const { limit } = req.query
@@ -47,7 +233,7 @@ router.get('/', async (req, res) => {
 
 })
 
-// Filtrar producto por ID
+// Filtrar producto por ID MANAGERS
 
 /*router.get('/:id', async (req, res) => {
 
@@ -84,11 +270,15 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
 
+    // MONGO DB
+
     try {
 
         const result = await productModel.create(req.body)
 
         res.json(result)
+
+        // MANAGERS
 
         /*   const { title, description, code, price, stock, category, thumbnails } = req.body
    
@@ -161,7 +351,9 @@ try {   const { pid } = req.params
 // Eliminar un producto con mongose
 
 router.delete('/:pid', async (req, res) => {
-try {   const { pid } = req.params
+try {   
+    
+    const { pid } = req.params
 
     const result = await productModel.deleteOne({_id: pid})
 

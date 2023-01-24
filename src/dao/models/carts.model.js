@@ -8,16 +8,35 @@ const cartsCollection = 'carts'
 
 const cartSchema = new mongoose.Schema({
 
-     
-     products: [{
+     cart: {
 
-     id: String,
-     quantity: Number,
-  
-}],
+          type: [
+
+               {
+                    product: {
+
+                         id: {
+                              type: mongoose.Schema.Types.ObjectId,
+                              ref: 'products'
+                         },
+                         quantity: {
+                              type: Number,
+
+                              default: 1,
+                         }
+                    }
+
+               }
+
+               
+
+          ],
+          
+          default: [],
+     },
 
 });
 
 // Creación del model : collection + schema 
 
- export const cartsModel = mongoose.model(cartsCollection, cartSchema)
+export const cartsModel = mongoose.model(cartsCollection, cartSchema)
