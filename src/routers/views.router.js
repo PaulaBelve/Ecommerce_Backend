@@ -6,43 +6,44 @@ import {messageModel}  from "../dao/models/message.model.js";
 
 const router = Router ()
 
+
 // Vista de los productos
 
 router.get ('/product' , async (req, res) => {
 
     try {
 
-        const {sort, query, page, limit} = req.query;
+        const {sort,query,  page, limit} = req.query;
     
         const options = {
     
         limit : limit || 5,
         page : page || 1,
-        sort : {price:sort} || {price : 1},
+        sort : { price:sort } || {price : 1},
         leart: true,
     };
     
     const result = await productsManager.getProducts(query, options);
     
-  
-    
-    const response = ({
+    const response = {
         status:"success",
-        payload: result.products,
+        payload: result.docs,
         totalPages: result.totalPages,
         prevPage: result.prevPage,
         nextPage: result.nextPage,
         page: result.page,
         hasPrevPage: result.hasPrevPage,
         hasNextPage: result.hasNextPage,
-        prevLink: result.hasPrevPage ? `/api/products?page=${products.prevPage}`: null, 
-        nextLink: result.hasNextPage ? `/api/products?page=${products.nextPage}`: null, 
+        prevLink: result.hasPrevPage ? `/product?page=${result.prevPage}`: null, 
+        nextLink: result.hasNextPage ? `/product?page=${result.nextPage}`: null, 
         
-    })
+    }
+
+    console.log(result)
 
     res.render('index' , {
         style:"style.css",
-        response});
+        response,});
         
       
     

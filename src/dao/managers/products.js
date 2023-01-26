@@ -17,13 +17,44 @@ export class ProductManager {
 
             throw new ValidationError('NOT FOUND DB')
         }
+        return products
+    } 
+
+    if (query === "cacao" ||
+        query === "citricos" ||
+        query === "frutales" ||
+        query === "secos"
+        
+        ) { const products = await productModel.paginate (
+
+           {category:query},
+
+           options
+        );
+
+        if(!products) {
+
+            throw new ValidationError('NOT FOUND DB')
+        }
 
         return products
+}
 
-    }
-    } catch (error) {
+const products = await productModel.paginate({}, options)
 
-console.log(error)
+if(!products) {
+
+    throw new ValidationError('NOT FOUND DB')
+}
+
+return products
+
+        } catch (error) {
+
+        console.log(error)
+
+        throw new ValidationError('Se ha producido un error')
+
     }
 
 
@@ -35,7 +66,7 @@ console.log(error)
     getProductById = async (pid) => {
 
         try {
-            const product = await cartsModel.findById({ _id: pid });
+            const product = await productModel.findById({ _id: pid });
 
             if (!product) {
 
@@ -65,7 +96,7 @@ console.log(error)
 
             }
 
-            const result = await productsModel.create(newProduct)
+            const result = await productModel.create(newProduct)
 
             if (!result) {
 

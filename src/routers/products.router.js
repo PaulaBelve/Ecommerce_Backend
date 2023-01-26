@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { query, Router } from "express";
 import { ERRORS } from "../const/error.js";
 import { productsManager } from "../dao/managers/index.js";
 
@@ -6,6 +6,8 @@ import { productsManager } from "../dao/managers/index.js";
 const router = Router()
 
 // Base de datos, que devuelve formato json
+
+
 
 //Todos los productos 
 // Get conectado con Managers
@@ -27,11 +29,7 @@ try {
 const products = await productsManager.getProducts(query, options);
 
 
-        console.log(products)
-
-
-
-res.send ({
+    res.send ({
     status:"success",
     payload: products.docs,
     totalPages: products.totalPages,
@@ -48,13 +46,15 @@ res.send ({
     : null, 
     
 })
+
+//return products
     
 
 } catch (error) {
 
     console.log (error)
 
-
+    res.send({ succes: false, error: "ha ocurrido un error" })
 
 
 }
@@ -67,12 +67,12 @@ router.get ('/:pid' , async (req, res) => {
 
 try {
 
-    const {pid} = req.body
+    const {pid} = req.params
 
     const product = await productsManager.getProductById(pid)
 
 
-res.send({ status: succes,
+res.send({ status: "succes",
     payload: product })
 
 
@@ -134,7 +134,7 @@ router.put ('/:pid', async (req, res) => {
 
     const productToReplace = req.body
 
-    const result = await ProductManager.updateProduct(pid, productToReplace)
+    const result = await productsManager.updateProduct(pid, productToReplace)
 
     res.send({status: 'success', 
     payload: result})
@@ -166,7 +166,7 @@ router.delete('/:pid', async (req, res) => {
         
         const { pid } = req.params
     
-        const result = await ProductManager.deleteProduct(pid)
+        const result = await productsManager.deleteProduct(pid)
     
         res.send({status: 'success', payload: result})
     
@@ -188,11 +188,11 @@ router.delete('/:pid', async (req, res) => {
 
 
 
+    export default router
 
 
 
-
-router.get('/', async (req, res) => {
+/*router.get('/', async (req, res) => {
 
     // Mongo DB
 
@@ -202,7 +202,7 @@ router.get('/', async (req, res) => {
 
         console.log(products)
 
-        res.send(products)
+        res.send(products) */
 
         // MANAGERS
 
@@ -221,7 +221,7 @@ router.get('/', async (req, res) => {
         
                 res.send({ succes: true, products }) */
 
-    } catch (error) {
+  /*  } catch (error) {
 
         console.log("error")
         console.log(error)
@@ -231,7 +231,7 @@ router.get('/', async (req, res) => {
 
     }
 
-})
+}) */
 
 // Filtrar producto por ID MANAGERS
 
@@ -268,7 +268,7 @@ router.get('/', async (req, res) => {
 
 // Agregar un producto
 
-router.post('/', async (req, res) => {
+/*router.post('/', async (req, res) => {
 
     // MONGO DB
 
@@ -276,7 +276,7 @@ router.post('/', async (req, res) => {
 
         const result = await productModel.create(req.body)
 
-        res.json(result)
+        res.json(result) */
 
         // MANAGERS
 
@@ -300,7 +300,7 @@ router.post('/', async (req, res) => {
    
            res.send({ succes: true, product: productoAgregado }) */
 
-    } catch (error) {
+  /*  } catch (error) {
         console.log('error')
 
 
@@ -317,11 +317,11 @@ router.post('/', async (req, res) => {
 
     };
 
-})
+}) */
 
 // Actualizar un producto con mongose
 
-router.put('/:pid', async (req, res) => {
+/*router.put('/:pid', async (req, res) => {
 try {   const { pid } = req.params
 
     const productToReplace = req.body
@@ -346,11 +346,11 @@ try {   const { pid } = req.params
         res.send({ succes: false, error: 'Ha ocurrido un error!' })
 
 }
-})
+}) */
 
 // Eliminar un producto con mongose
 
-router.delete('/:pid', async (req, res) => {
+/*router.delete('/:pid', async (req, res) => {
 try {   
     
     const { pid } = req.params
@@ -373,7 +373,7 @@ try {
 
     res.send({ succes: false, error: 'Ha ocurrido un error!' })
 }
-})
+}) */
 
 
 
@@ -472,4 +472,3 @@ try {
 }) */
 
 
-export default router

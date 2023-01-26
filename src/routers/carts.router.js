@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { cartManager } from "../dao/managers/index.js";
-//import { productModel } from "../dao/models/products.model.js";
 
 const router = Router()
 
@@ -11,9 +10,9 @@ const router = Router()
 router.get ('/', async (req, res) => {
 try {
 
-const cart = await cartManager.getCart()
+const cart = await cartManager.getCarts()
 
-res.send({ status: succes,
+res.send({ status: "succes",
     payload: cart })
 
 
@@ -35,7 +34,7 @@ router.post ('/', async (req, res) => {
 try {
 
 const result = await cartManager.createCart()
-res.send({ status: succes,
+res.send({ status: "succes",
     payload: result })
 
 } catch(error) {
@@ -78,7 +77,7 @@ router.get('/:cid', async (req, res) => {
 
 // Agregar un producto en el carrito
 
-router.post ('/:cid/product/:pid' , async (req, res) => {
+router.post ('/:cid/products/:pid' , async (req, res) => {
 
 try {
 
@@ -86,7 +85,7 @@ try {
 
     const result = await cartManager.addCart(cid, pid)
 
-    res.send({ status: succes, 
+    res.send({ status: "succes", 
         payload: result, })
 
 
@@ -108,7 +107,7 @@ try {
 
     const result = await cartManager.deleteProductToCart(cid, pid)
 
-    res.send({ status: succes, 
+    res.send({ status: "succes", 
         payload: result, }) 
 
 
@@ -138,7 +137,7 @@ try {
         cid,
         products)
 
-    res.send({ status: succes, 
+    res.send({ status: "succes", 
         payload: result, })  
 
 
@@ -170,7 +169,7 @@ router.put ('/:cid/product/:pid' , async (req, res) => {
             pid
             )
     
-        res.send({ status: succes, 
+        res.send({ status: "succes", 
             payload: result, })  
     
     
@@ -195,7 +194,7 @@ router.delete ('/:cid', async (req, res) => {
     
         const result = await cartManager.emptyCart(cid)
     
-        res.send({ status: succes, 
+        res.send({ status: "succes", 
             payload: result, }) 
     
     

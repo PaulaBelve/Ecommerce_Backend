@@ -186,7 +186,7 @@ return upgradeQuantity
 const findProduct = products.map ((product) => {
 
   return {product : product._id}
-})
+});
 
 const result = await cartsModel.updateOne(
   
