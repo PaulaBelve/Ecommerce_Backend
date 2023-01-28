@@ -1,64 +1,67 @@
 import { Router } from "express";
 import { cartManager, productsManager } from "../dao/managers/index.js";
-import {messageModel}  from "../dao/models/message.model.js";
+import { messageModel } from "../dao/models/message.model.js";
 
 // DONDE SE VISUALIZA LA BASO DE DATOS
 
-const router = Router ()
+const router = Router()
 
 
 // Vista de los productos
 
-router.get ('/product' , async (req, res) => {
+router.get('/product', async (req, res) => {
 
     try {
 
-        const {sort,query,  page, limit} = req.query;
-    
+        const { sort, query, page, limit } = req.query;
+
         const options = {
-    
-        limit : limit || 5,
-        page : page || 1,
-        sort : { price:sort } || {price : 1},
-        leart: true,
-    };
-    
-    const result = await productsManager.getProducts(query, options);
-    
-    const response = {
-        status:"success",
-        payload: result.docs,
-        totalPages: result.totalPages,
-        prevPage: result.prevPage,
-        nextPage: result.nextPage,
-        page: result.page,
-        hasPrevPage: result.hasPrevPage,
-        hasNextPage: result.hasNextPage,
-        prevLink: result.hasPrevPage ? `/product?page=${result.prevPage}`: null, 
-        nextLink: result.hasNextPage ? `/product?page=${result.nextPage}`: null, 
-        
-    }
 
-    console.log(result)
+            limit: limit || 5,
+            page: page || 1,
+            sort: { price: sort } || { price: 1 },
+            lean: true,
+        };
 
-    res.render('index' , {
-        style:"style.css",
-        response,});
-        
-      
-    
+        const result = await productsManager.getProducts(query, options);
+
+        const response = {
+            status: "success",
+            payload: result.docs,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            page: result.page,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            prevLink: result.hasPrevPage ? `/product?page=${result.prevPage}` : null,
+            nextLink: result.hasNextPage ? `/product?page=${result.nextPage}` : null,
+
+        }
+
+        console.log(result)
+
+        res.render("index", {
+            style: "Css/style.css",
+            test: "Prueba",
+            ...response,
+        });
+
+
+
+
     } catch (error) {
-    
-        console.log (error)
-    
-    
-    res.send({ succes: false, error: "ha ocurrido un error" })
-    
-    }
-    
-    })
 
-    // Vista de productos en index
+        console.log(error)
+
+
+        res.send({ succes: false, error: "ha ocurrido un error" })
+
+    }
+
+})
+
+// Vista de productos en index
 
 /*router.get ('/' , async (req, res) => {
 
@@ -75,24 +78,25 @@ router.get ('/product' , async (req, res) => {
 
 // Product Detail
 
-router.get ('/products/:pid' , async (req, res) => {
+router.get('/products/:pid', async (req, res) => {
 
     try {
 
-        const {pid} = req.params
+        const { pid } = req.params
 
         const product = await productsManager.getProductById(pid)
-    
-        console.log (product)
-    
-        res.render("detail" , {
-            
-            style:"style.css",
-            product});
+
+        console.log(product)
+
+        res.render("detail", {
+
+            style: "style.css",
+            product
+        });
 
 
 
-    } catch (error){
+    } catch (error) {
 
         console.log(error)
         return res.send({ success: false, error: 'error!' })
@@ -103,43 +107,43 @@ router.get ('/products/:pid' , async (req, res) => {
 
 // Vista de un carrito
 
-router.get ('/cart/:cid' , async (req, res) => {
+router.get('/cart/:cid', async (req, res) => {
 
     try {
 
-        const {cid} = req.params
+        const { cid } = req.params
 
-    const carts = await cartManager.getCartsById(cid)
+        const carts = await cartManager.getCartsById(cid)
 
-    result = carts.result
+        result = carts.result
 
-    res.render("cart", {
-        style:"style.css",
-        carts,
-    
-    });
+        res.render("cart", {
+            style: "style.css",
+            carts,
 
-} catch (error) {
+        });
 
-    console.log(error)
-return res.send({ success: false, error: 'error!' })
+    } catch (error) {
 
-}
+        console.log(error)
+        return res.send({ success: false, error: 'error!' })
+
+    }
 
 })
 
 // Chat vacio
 
-router.get ('/chat' , async  (req, res) => {
+router.get('/chat', async (req, res) => {
 
-   res.render('chat' , {})
+    res.render('chat', {})
 
 
 })
 
 // Vista del chat
 
-router.post ('/chat' , async  (req, res) => {
+router.post('/chat', async (req, res) => {
 
     const nuevoMessage = req.body
 
@@ -155,7 +159,7 @@ router.post ('/chat' , async  (req, res) => {
     // const result = await productModel.create(nuevoProducto)
     //console.log(result) 
 
-}) 
+})
 
 // Vista description x title
 

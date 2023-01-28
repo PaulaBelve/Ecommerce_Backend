@@ -1,32 +1,17 @@
-<h1 class="title"> PRODUCTOS </h1>
+<div>
+    <h1 class="title"> PRODUCTOS </h1>
 
-<!--{{#if products.length}}-->
-{{#each response.payload}}
-<a href="/product/{{this.title}}">
+    {{#each payload}}
+
     <section class="section-budines">
         <div class="cards-products">
+
 
             <picture><img src="{{this.thumbnail}}" /></picture>
             <h2>{{this.title}}</h2>
             <p>{{this.description}}</p>
             <p>${{this.price}}</p>
 
-            <a href="/product/detail{{this._id}}"><button>Ver descripción</button></a>
-
+            <a href="/detail{{this._id}}"><button>Ver descripción</button></a>
+            {{/each}}
         </div>
-
-    </section>
-</a>
-
-{{/each}}
-
-<div class="pages__container">
-    <a href={{response.prevLink}}><button class="pagination__btn">Anterior</button></a>
-    <a href={{response.nextLink}}><button class="pagination__btn">Siguiente</button></a>
-</div>
-<!--{{/if}} -->
-
-
-
-
-<!-- <script src="js/main.js"></script> -->

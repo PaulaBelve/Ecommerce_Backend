@@ -34,7 +34,7 @@ mongoosePaginate.paginate.options = {
     page: 1,
     sort: { price: 1 },
     lean: true,
-  };
+};
 
 productSchema.plugin(mongoosePaginate);
 
@@ -42,4 +42,3 @@ productSchema.plugin(mongoosePaginate);
 
 export const productModel = mongoose.model(productCollection, productSchema)
 
-//export default productModel

@@ -23,7 +23,7 @@ try {
     limit : limit || 5,
     page : page || 1,
     sort : {price:sort} || {price : 1},
-    leart: true,
+    lean: true,
 };
 
 const products = await productsManager.getProducts(query, options);
@@ -46,9 +46,7 @@ const products = await productsManager.getProducts(query, options);
     : null, 
     
 })
-
-//return products
-    
+   
 
 } catch (error) {
 

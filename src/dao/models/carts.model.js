@@ -1,41 +1,24 @@
 import mongoose from "mongoose";
-//import { productModel } from "../dao/models/products.model.js";
+
+const Schema = mongoose.Schema;
+
 
 // Nombre de la colección
-const cartsCollection = 'carts'
+const cartsCollection = 'carts';
 
 // Como se guardan los datos en esta colección // Esquema del documento
 
-const cartSchema = new mongoose.Schema({
+//const cartSchema = new Schema({
 
-     cart: {
-
-          type: [
-
-               {
-                    product: {
-
-                         id: {
-                              type: mongoose.Schema.Types.ObjectId,
-                              ref: 'products'
-                         },
-                         quantity: {
-                              type: Number,
-
-                              default: 1,
-                         }
-                    }
-
-               }
-
-               
-
-          ],
-          
-          default: [],
-     },
-
+const cartSchema = new Schema({
+     products: [
+          {
+               product: { type: Schema.Types.ObjectId, ref: "products" },
+               quantity: { type: Number },
+          },
+     ],
 });
+//   })        
 
 // Creación del model : collection + schema 
 
