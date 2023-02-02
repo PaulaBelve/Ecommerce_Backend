@@ -1,3 +1,24 @@
-<h1> CARRITO </h1>
+<div>
+
+    <h1> CARRITO </h1>
+
+    {{this.products._id}}
+
+    {{#each cart}}
+
+    <section class="section-carrito">
+        <div class="cards-carrito">
 
 
+
+            <h2>{{this.products.title}}{{this.products._id}}</h2>
+            <img src="{{this.products.thumbnail}}" />
+            <p>${{this.products.price}}</p>
+
+
+            {{/each}}
+
+            <a href=""><button>Vaciar carrito</button></a>
+            <a href=""><button>Finalizar compra</button></a>
+
+        </div>

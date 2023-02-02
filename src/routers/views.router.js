@@ -42,7 +42,7 @@ router.get('/product', async (req, res) => {
         console.log(result)
 
         res.render("index", {
-            style: "Css/style.css",
+            style: "style.css",
             test: "Prueba",
             ...response,
         });
@@ -61,20 +61,6 @@ router.get('/product', async (req, res) => {
 
 })
 
-// Vista de productos en index
-
-/*router.get ('/' , async (req, res) => {
-
- 
- const products = await productModel.find().lean().exec()
-
-    res.render("index", {
-        
-        products,
-    
-    }) 
-     
-}) */
 
 // Product Detail
 
@@ -90,7 +76,7 @@ router.get('/products/:pid', async (req, res) => {
 
         res.render("detail", {
 
-            style: "style.css",
+            style: "Css/style.css",
             product
         });
 
@@ -113,13 +99,15 @@ router.get('/cart/:cid', async (req, res) => {
 
         const { cid } = req.params
 
-        const carts = await cartManager.getCartsById(cid)
+        const result = await cartManager.getCartsById(cid)
 
-        result = carts.result
+        const cart = result.cart
+
+        console.log(cart)
 
         res.render("cart", {
-            style: "style.css",
-            carts,
+            style: "Css/style.css",
+            ...cart,
 
         });
 

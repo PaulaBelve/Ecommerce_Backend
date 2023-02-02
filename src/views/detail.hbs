@@ -1,12 +1,16 @@
-<h1>Mis productos</h1>
+<h1>Detalle</h1>
 
-  <div class="cards-products">
 
-     <picture><img src="{{product.thumbnail}}"/></picture>
-     <h2>{{product.title}}</h2>
-     <p>{{product.description}}</p>
-     <p>{{product.price}}</p>
- <!--<a href="/product/delete/{{product._id}}">Delete</a>-->
-   
 
-    </div>
+<div class="cards-products">
+
+   <picture><img src="{{products.thumbnail}}" /></picture>
+   <h2>{{products.title}}</h2>
+   <p>{{products.description}}</p>
+   <p>{{products.price}}</p>
+
+
+
+   <button value={{products._id}}>Agregar al carrito</button>
+
+</div>

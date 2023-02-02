@@ -4,9 +4,9 @@
     box-sizing: border-box;
     font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
     font-weight: 600;
-  }
+}
 
-  img {
+img {
 
     width: 100%;
 }
@@ -28,7 +28,6 @@
 
 .cards-products {
 
-    /* border: solid red; */
 
     display: flex;
     flex-direction: column;

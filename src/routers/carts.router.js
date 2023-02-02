@@ -142,7 +142,9 @@ router.put('/:cid', async (req, res) => {
 
         const { cid } = req.params
 
-        const products = req.body
+        const { products } = req.body
+
+        console.log(products)
 
         const result = await cartManager.arrayProduct(
 
@@ -178,17 +180,18 @@ router.put('/:cid/product/:pid', async (req, res) => {
         const { cid, pid } = req.params
 
         const result = await cartManager.updateQuantityProduct(
-            quantity,
+            quantity ?? 1,
             cid,
             pid
         )
+
 
         res.send({
             status: "success",
             payload: result,
         })
 
-
+        console.log(result)
 
     } catch (error) {
 
@@ -239,178 +242,4 @@ export default router
 
 
 
-// MONGOOSE
-
-// Vista del carrito
-
-/*router.get('/', async (req, res) => {
-
-    try {
-
-
-        const carts = await cartsModel.find()
-
-        console.log(carts)
-
-        res.send(carts)
-
-
-
-    } catch (error) {
-        console.log(error)
-
-        return res.send({ success: false, error: 'error!' })
-
-    };
-
-}); */
-
-// Agregar carrito
-
-/*router.post('/', async (req, res) => {
-
-    try {
-
-        const newCart = {
-
-            products: []
-        };
-
-        const result = await cartsModel.create(newCart)
-
-        res.send({
-            succes: true,
-            payload: result,
-
-        })
-
-    } catch (error) {
-
-        console.log('error')
-
-        return res.send({ succes: false, Error: 'Ha ocurrido un error' })
-
-
-    }
-
-}) */
-
-// Agregar carrito con su producto
-
-/*router.get('/:cid', async (req, res) => {
-
-    try {
-        const { cid } = req.params
-
-        if (!cid) {
-
-            return res.send({ succes: false, error: 'ingresar un número valido' });
-        };
-
-        const result = await cartsModel.findById({ _id: cid });
-
-
-        if (!result) {
-
-            return res.send({ succes: false, error: 'ingresar un número valido' });
-
-        };
-
-        return res.send({ succes: true, payload: result, })
-
-
-    } catch (error) {
-        console.log(error)
-
-        return res.send({ succes: false, error: 'error!' })
-
-    };
-
-}); */
-
-// MANAGER SIN MONGODB
-
-/*router.get('/:cid', async (req, res) => {
-
-    try {
-        const { cid } = req.params
-
-        const id = Number(cid)
-
-
-        if (Number.isNaN(id) || id < 0) {
-
-            return res.send({ succes: false, error: 'ingresar un número valido. Por favor, ingresar de nuevo' })
-        }
-
-        const idCarrito = await cartManager.getCartsById(id)
-
-        return res.send({ success: true, Cart: idCarrito })
-
-    } catch (error) {
-        console.log('error')
-
-        return res.send({ success: false, error: 'error!' })
-
-    };
-
-});
-
-router.post('/', async (req, res) => {
-
-    try {
-
-        const newCart = await cartManager.crearElCarrito();
-
-        return res.send({ succes: true, Cart: newCart })
-
-    }
-
-    catch (error) {
-
-        console.log('error')
-
-        return res.send({ succes: false, Error: 'Ha ocurrido un error' })
-
-
-    }
-
-})
-
-router.post('/:cid/products/:pid', async (req, res) => {
-
-    try {
-        const { cid } = req.params
-
-        const cartId = Number(cid)
-
-
-        if (Number.isNaN(cartId) || cartId < 0) {
-
-            return res.send({ succes: false, error: 'ingresar un número valido' })
-        }
-
-        const { pid } = req.params
-
-        const prodId = Number(pid)
-
-
-        if (Number.isNaN(prodId) || prodId < 0) {
-
-            return res.send({ succes: false, error: 'ingresar un número valido' })
-        }
-
-        const addproduct = await cartManager.addCart(cartId, prodId)
-
-        return res.send({ succes: true, product: addproduct })
-
-
-    } catch (error) {
-        console.log(error)
-
-        return res.send({ succes: false, error: 'error!' })
-
-    };
-
-}); */
 
