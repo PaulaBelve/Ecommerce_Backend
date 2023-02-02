@@ -8,40 +8,29 @@ export class ProductManager {
 
     getProducts = async (query, options) => {
 
-        try {
 
-            if (query === "inStock") {
-                const products = await productModel.paginate({ state: true }, options);
+        if (query === "inStock") {
+            const products = await productModel.paginate({ state: true }, options);
 
-                if (!products) {
+            if (!products) {
 
-                    throw new ValidationError('NOT FOUND DB')
-                }
-                return products
+                throw new ValidationError('NOT FOUND DB')
             }
+            return products
+        }
 
-            if (query === "cacao" ||
-                query === "citricos" ||
-                query === "frutales" ||
-                query === "secos"
+        if (query === "cacao" ||
+            query === "citricos" ||
+            query === "frutales" ||
+            query === "secos"
 
-            ) {
-                const products = await productModel.paginate(
+        ) {
+            const products = await productModel.paginate(
 
-                    { category: query },
+                { category: query },
 
-                    options
-                );
-
-                if (!products) {
-
-                    throw new ValidationError('NOT FOUND DB')
-                }
-
-                return products
-            }
-
-            const products = await productModel.paginate({}, options)
+                options
+            );
 
             if (!products) {
 
@@ -49,10 +38,16 @@ export class ProductManager {
             }
 
             return products
-        } catch (error) {
-
-            console.log(error)
         }
+
+        const products = await productModel.paginate({}, options)
+
+        if (!products) {
+
+            throw new ValidationError('NOT FOUND DB')
+        }
+
+        return products
 
 
 
