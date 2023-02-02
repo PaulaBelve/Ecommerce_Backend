@@ -8,40 +8,30 @@ export class ProductManager {
 
     getProducts = async (query, options) => {
 
-        try {
 
-            if (query === "inStock") {
-                const products = await productModel.paginate({ state: true }, options);
 
-                if (!products) {
+        if (query === "inStock") {
+            const products = await productModel.paginate({ state: true }, options);
 
-                    throw new ValidationError('NOT FOUND DB')
-                }
-                return products
+            if (!products) {
+
+                throw new ValidationError('NOT FOUND DB')
             }
+            return products
+        }
 
-            if (query === "cacao" ||
-                query === "citricos" ||
-                query === "frutales" ||
-                query === "secos"
+        if (query === "cacao" ||
+            query === "citricos" ||
+            query === "frutales" ||
+            query === "secos"
 
-            ) {
-                const products = await productModel.paginate(
+        ) {
+            const products = await productModel.paginate(
 
-                    { category: query },
+                { category: query },
 
-                    options
-                );
-
-                if (!products) {
-
-                    throw new ValidationError('NOT FOUND DB')
-                }
-
-                return products
-            }
-
-            const products = await productModel.paginate({}, options)
+                options
+            );
 
             if (!products) {
 
@@ -49,14 +39,18 @@ export class ProductManager {
             }
 
             return products
-
-        } catch (error) {
-
-            console.log(error)
-
-            throw new ValidationError('Se ha producido un error')
-
         }
+
+        const products = await productModel.paginate({}, options)
+
+        if (!products) {
+
+            throw new ValidationError('NOT FOUND DB')
+        }
+
+        return products
+
+
 
 
     }
@@ -66,21 +60,17 @@ export class ProductManager {
 
     getProductById = async (pid) => {
 
-        try {
-            const product = await productModel.findById({ _id: pid });
 
-            if (!product) {
+        const product = await productModel.findById({ _id: pid });
 
-                throw new ValidationError('PRODUCT NOT FOUND')
+        if (!product) {
 
-            }
-
-            return product
-        } catch (error) {
-
-            throw new ValidationError('Se ha producido un error')
+            throw new ValidationError('PRODUCT NOT FOUND')
 
         }
+
+        return product
+
 
     }
 
@@ -88,32 +78,26 @@ export class ProductManager {
 
     addProduct = async (newProduct) => {
 
-        try {
 
-            if (!newProduct) {
+        if (!newProduct) {
 
-                throw new ValidationError('El código ya existe')
-
-
-            }
-
-            const result = await productModel.create(newProduct)
-
-            if (!result) {
-
-                throw new ValidationError('FAILED TO ADD TO DATABASE')
-
-
-            }
-
-            return result
-
-        } catch (error) {
-
-            throw new ValidationError('Se ha producido un error')
+            throw new ValidationError('El código ya existe')
 
 
         }
+
+        const result = await productModel.create(newProduct)
+
+        if (!result) {
+
+            throw new ValidationError('FAILED TO ADD TO DATABASE')
+
+
+        }
+
+        return result
+
+
 
 
     }
@@ -122,29 +106,22 @@ export class ProductManager {
 
     updateProduct = async (pid, updateProduct) => {
 
-        try {
 
-            if (!pid) {
+        if (!pid) {
 
-                throw new NotFoundError('PRODUCT NOT FOUND')
-            }
-
-            const result = await productModel.updateOne(
-
-                { _id: pid },
-
-                updateProduct);
-
-            return result
-
-
-        } catch (error) {
-
-
-            throw new NotFoundError('Se ha producido un error')
-
-
+            throw new NotFoundError('PRODUCT NOT FOUND')
         }
+
+        const result = await productModel.updateOne(
+
+            { _id: pid },
+
+            updateProduct);
+
+        return result
+
+
+
 
 
     }
@@ -153,22 +130,17 @@ export class ProductManager {
 
     deleteProduct = async (pid) => {
 
-        try {
-            if (!pid) {
 
-                throw new NotFoundError('Producto no encontrado')
-            }
+        if (!pid) {
 
-            const result = await productModel.deleteOne({ _id: pid })
-
-            return result
-
-        } catch (error) {
-
-            throw new NotFoundError('No se pudo eliminar el producto')
-
-
+            throw new NotFoundError('Producto no encontrado')
         }
+
+        const result = await productModel.deleteOne({ _id: pid })
+
+        return result
+
+
 
     }
 

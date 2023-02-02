@@ -63,6 +63,7 @@ router.get('/product', async (req, res) => {
 
 
 // Product Detail
+// NO ME MUESTRA EL DETALLE DEL PRODUCTO
 
 router.get('/products/:pid', async (req, res) => {
 
@@ -92,6 +93,8 @@ router.get('/products/:pid', async (req, res) => {
 
 
 // Vista de un carrito
+
+// NO TRAE EL PRODUCTO DEL CARRITO
 
 router.get('/cart/:cid', async (req, res) => {
 

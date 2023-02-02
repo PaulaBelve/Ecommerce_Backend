@@ -2,7 +2,7 @@ import { Router } from "express";
 import { ERRORS } from "../const/error.js";
 import { messageModel } from "../dao/models/message.model";
 
-
+// REVISAR
 const router = Router()
 
 router.get('/', async (req, res) => {
@@ -15,7 +15,7 @@ router.get('/', async (req, res) => {
 
         res.send(messages)
 
-      
+
 
     } catch (error) {
 
@@ -37,7 +37,7 @@ router.post('/', async (req, res) => {
 
         res.json(result)
 
-       
+
 
     } catch (error) {
         console.log('error')
@@ -82,4 +82,4 @@ router.post('/', async (req, res) => {
 
 
 
- export default router
+export default router

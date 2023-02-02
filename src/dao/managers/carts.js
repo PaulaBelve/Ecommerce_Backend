@@ -7,8 +7,6 @@ export class CartManager {
 
   createCart = async () => {
 
-
-
     const newCart = {
 
       products: []
@@ -27,8 +25,6 @@ export class CartManager {
   getCarts = async () => {
 
 
-
-
     const carts = await cartsModel.find();
 
     if (!carts) {
@@ -36,11 +32,8 @@ export class CartManager {
       throw new ValidationError('NOT FOUND CART DB');
     }
 
-    console.log(carts)
+
     return carts
-
-
-
 
   }
 
@@ -145,7 +138,7 @@ export class CartManager {
 
   arrayProduct = async (cid, products) => {
 
-    // No me toma el map
+
     const mapProducts = products.map((product) => {
 
       return { product: product._id }
