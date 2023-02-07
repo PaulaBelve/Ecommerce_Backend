@@ -1,20 +1,38 @@
-<div>
-    <h1 class="title"> PRODUCTOS </h1>
+<main>
 
-    {{#each payload}}
-
-    <section class="section-budines">
-        <div class="cards-products">
-
-
-            <picture><img src="{{this.thumbnail}}" /></picture>
-            <h2>{{this.title}}</h2>
-            <p>{{this.description}}</p>
-            <p>${{this.price}}</p>
-
-            <a href="/products/{{this._id}}"><button>Ver descripción</button></a>
-
-            {{/each}}
+    {{#if user}}
+    <h2>Hola
+        {{this.user.first_name}}
+        {{this.user.last_name}}!</h2>
 
 
-        </div>
+
+    {{/if}}
+
+    <div>
+        <li><a href="/admin">Administrador</a></li>
+        <li><a href="/logout">Logout</a></li>
+    </div>
+
+    <div>
+        <h1 class="title"> PRODUCTOS </h1>
+
+        {{#each payload}}
+
+        <section class="section-budines">
+            <div class="cards-products">
+
+
+                <picture><img src="{{this.thumbnail}}" /></picture>
+                <h2>{{this.title}}</h2>
+                <p>{{this.description}}</p>
+                <p>${{this.price}}</p>
+
+                <a href="/product/{{this._id}}"><button>Ver descripción</button></a>
+
+                {{/each}}
+
+
+            </div>
+
+</main>

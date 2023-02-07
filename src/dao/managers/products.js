@@ -59,7 +59,7 @@ export class ProductManager {
     getProductById = async (pid) => {
 
 
-        const product = await productModel.findById({ _id: pid });
+        const product = await productModel.findById({ _id: pid }).lean();
 
         if (!product) {
 

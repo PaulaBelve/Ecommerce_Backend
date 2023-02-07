@@ -2,18 +2,18 @@
 
     <h1> CARRITO </h1>
 
-    {{this.products._id}}
+    <!--{{_id}}-->
 
-    {{#each cart}}
+    {{#each products}}
 
     <section class="section-carrito">
         <div class="cards-carrito">
 
 
 
-            <h2>{{this.products.title}}{{this.products._id}}</h2>
-            <img src="{{this.products.thumbnail}}" />
-            <p>${{this.products.price}}</p>
+            <h2>{{this.product.title}}{{this.product._id}}</h2>
+            <img src="{{this.product.thumbnail}}" />
+            <p>${{this.product.price}}</p>
 
 
             {{/each}}

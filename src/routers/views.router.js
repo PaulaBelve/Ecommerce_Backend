@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { cartManager, productsManager } from "../dao/managers/index.js";
+import { cartManager, productsManager, usersManager } from "../dao/managers/index.js";
 import { messageModel } from "../dao/models/message.model.js";
 
 // DONDE SE VISUALIZA LA BASO DE DATOS
@@ -25,9 +25,11 @@ router.get('/product', async (req, res) => {
 
         const result = await productsManager.getProducts(query, options);
 
+        const user = req.session.user;
+
         const response = {
             status: "success",
-            payload: result.docs,
+            payload: result.docs, user,
             totalPages: result.totalPages,
             prevPage: result.prevPage,
             nextPage: result.nextPage,
@@ -63,9 +65,8 @@ router.get('/product', async (req, res) => {
 
 
 // Product Detail
-// NO ME MUESTRA EL DETALLE DEL PRODUCTO
 
-router.get('/products/:pid', async (req, res) => {
+router.get('/product/:pid', async (req, res) => {
 
     try {
 
@@ -104,7 +105,7 @@ router.get('/cart/:cid', async (req, res) => {
 
         const result = await cartManager.getCartsById(cid)
 
-        const cart = result.cart
+        const cart = result
 
         console.log(cart)
 
