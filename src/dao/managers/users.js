@@ -3,12 +3,15 @@ import { userModel } from "../models/user.model.js";
 
 
 
+
 export class UserManager {
 
     // Crear un nuevo usuario
     userCreate = async (newUser) => {
 
+
         const result = await userModel.create(newUser);
+
 
         if (!result) {
 
@@ -23,14 +26,14 @@ export class UserManager {
 
     userLogin = async (email, password) => {
 
-        const result = await userModel.findOne({ email, password }).lean()
+        const findUser = await userModel.findOne({ email, password }).lean()
 
-        if (!result) {
+        if (!findUser) { throw new ValidationError('USER NOT FOUND') }
 
-            throw new ValidationError('USER NOT FOUND')
-        }
 
-        return result
+
+        return findUser
+
 
     }
 
@@ -46,6 +49,23 @@ export class UserManager {
         }
 
         return result
+    }
+
+    getUserByEmail = async (email) => {
+
+        const findUser = await userModel.findOne(email);
+
+        return findUser
+
+
+    }
+
+    getUserById = async (id) => {
+
+        const findUser = await userModel.findById(id);
+
+        return findUser
+
     }
 
 }

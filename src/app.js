@@ -4,6 +4,8 @@ import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
+import passport from 'passport'
+import initializePassport from './config/passport.config.js'
 //import FileStore from 'session-file-store'
 
 import { Server as HttpServer } from 'http'
@@ -41,6 +43,10 @@ app.use(session({
 
 }))
 
+initializePassport()
+app.use(passport.initialize());
+app.use(passport.session())
+
 function auth(req, res, next) {
 
     if (req.session?.user) return next()
@@ -77,7 +83,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
 
 // Routes
-app.use('/', authRouter)
+app.use('/session', authRouter)
 app.use('/', auth, viewsRouter)
 app.use('/api/products', productsRouter)
 app.use('/api/carts', cartsRouter)
@@ -100,10 +106,9 @@ io.sockets.emit('products', products) }) */
 
 
 // Conexion a DB Mongo Atlas
-const MONGO_URI = 'mongodb+srv://Delfos:8Q1KqRE6Yj8Bo2fz@cluster0.8q2zhr1.mongodb.net/?retryWrites=true&w=majority'
 mongoose.set('strictQuery', false)
 
-mongoose.connect(MONGO_URI, { dbName: 'Ecommerce' }, error => {
+mongoose.connect(uri, { dbName: 'Ecommerce' }, error => {
     if (error) {
         console.error('No se pudo conectar a la DB');
         return

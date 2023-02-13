@@ -1,6 +1,9 @@
 import { Router } from "express";
 import { ERRORS } from "../const/error.js";
 import { usersManager } from "../dao/managers/index.js";
+import passport from "passport";
+
+
 
 
 const router = Router()
@@ -13,21 +16,46 @@ router.get('/login', (req, res) => {
 
 })
 
+router.post('/login', passport.authenticate('login', { failuredirect: '/session/registerFailed' }), async (req, res) => {
+
+    if (!req.user) {
+        return res.status(400).send({
+            Success: 'Error',
+            error: `Invalid credentials`
+        });
+    }
+
+    req.session.user = req.user;
+
+    return res.status(200).redirect('/product');
+
+
+
+})
+
+router.get('/loginFailed', async (req, res) => {
+
+    console.log('The login has failed, please try again.');
+    return res.status(404).send({
+        Success: 'Error',
+        error: `The login is failed`
+    })
+})
+
 // Enviar solicitud del log - admin - user
 
-/*router.get('/login', (req, res) => {
+router.get('/login', (req, res) => {
 
-    const { userName } = req.query
+    const { userName, password } = req.query
 
     req.session.user = userName
 
     res.send('login success')
-
-}) */
+})
 
 // Agregar un login - admin - user
 
-router.post('/login', async (req, res) => {
+/*router.post('/login', async (req, res) => {
 
     try {
         const { email, password } = req.body
@@ -61,7 +89,7 @@ router.post('/login', async (req, res) => {
 
     }
 
-})
+}) */
 
 // logout
 
@@ -80,7 +108,7 @@ router.get("/register", (req, res) => {
 });
 
 // Enviar solicitud de registro
-router.post("/create", async (req, res) => {
+/*router.post("/create", async (req, res) => {
 
     try {
 
@@ -103,7 +131,24 @@ router.post("/create", async (req, res) => {
 
     }
 
-});
+}); */
+
+// Router de registro con passport
+
+router.post('/create', passport.authenticate('register', { failuredirect: '/session/registerFailed' }), async (req, res) => {
+
+    return res.status(200).redirect('/login')
+
+})
+
+router.get('/registerFailed', async (req, res) => {
+
+    console.log('failed to register');
+    return res.status(404).send({
+        Success: 'Error',
+        error: `Failed to register`
+    })
+})
 
 // Vista de todos los usuarios Admin
 
@@ -122,7 +167,7 @@ router.get('/admin', async (req, res) => {
                 users,
             })
         }
-        return res.redirect('/product')
+        return res.redirect('/admin')
     }
 
     catch (error) {
@@ -130,6 +175,22 @@ router.get('/admin', async (req, res) => {
         console.log(error)
 
     }
+
+})
+
+// Login con gitHub
+
+router.get('/login-github', passport.authenticate('gitHub', { scope: ["user:email"] }), async (req, res) => {
+
+
+})
+
+// Callback
+
+router.get('/githubcallback', passport.authenticate('gitHub', { failuredirect: '/login' }), async (req, res) => {
+
+    req.session.user = req.user
+    res.redirect('/product')
 
 })
 
