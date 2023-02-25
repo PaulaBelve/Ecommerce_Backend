@@ -12,22 +12,29 @@ import { Server as HttpServer } from 'http'
 import { Server as IoServer } from 'socket.io'
 import __dirname from './dirname.js'
 import authRouter from './routers/auth.router.js'
-import productsRouter from './routers/products.router.js'
+import ProductsRouter from './routers/products.router.js'
 import cartsRouter from './routers/carts.router.js'
 import viewsRouter from './routers/views.router.js'
+import credentials from "./config/credentials.js"
+import { passportCall } from './utils/utils.js'
 
 
-//const FileStorage = FileStore(session)
 const app = express()
 
-const uri = "mongodb+srv://Delfos:8Q1KqRE6Yj8Bo2fz@cluster0.8q2zhr1.mongodb.net/?retryWrites=true&w=majority"
+// Coustom Routers Config
+const productsRouter = new ProductsRouter();
+//const cartRouter = new CartRouter();
+//const sessionRouter = new SessionRouter();
+//const userRouter = new UserRouter();
+//const viewsRouter = new ViewsRouter();
+
 
 // Session
 app.use(session({
 
     store: MongoStore.create({
-        mongoUrl: uri,
-        dbName: 'Ecommerce',
+        mongoUrl: credentials.MONGO_URL,
+        dbName: credentials.DB_NAME,
         mongoOptions: {
             useNewUrlParser: true,
             useUnifiedTopology: true
@@ -36,16 +43,14 @@ app.use(session({
         ttl: 200
 
     }),
-    secret: '12345678',
+    secret: credentials.MONGO_SECRET,
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: false
 
 
 }))
 
-initializePassport()
-app.use(passport.initialize());
-app.use(passport.session())
+
 
 function auth(req, res, next) {
 
@@ -58,10 +63,6 @@ function auth(req, res, next) {
 
 
 }
-
-// CookieParser
-app.use(cookieParser())
-
 
 // Conexión con socket
 const httpServer = new HttpServer(app)
@@ -81,41 +82,35 @@ app.set('views', `${__dirname}/views`)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
+app.use(cookieParser(credentials.COOKIE_SECRET))
+initializePassport()
+app.use(passport.initialize());
+app.use(passport.session())
 
 // Routes
 app.use('/session', authRouter)
-app.use('/', auth, viewsRouter)
-app.use('/api/products', productsRouter)
+app.use('/', passportCall('jwt'), viewsRouter)
+app.use('/api/products', productsRouter.getRouter())
 app.use('/api/carts', cartsRouter)
 
 
 
 // Correr el servidor
 
-const server = httpServer.listen(8080, () => console.log('server running...'))
-
-/*io.on('connection', async (socket) => {
-
-console.log(`New client connected, id: ${socket.id}`)
-
-io.sockets.emit('hello', 'hola')
-
-const products = await budines.getProducts()
-
-io.sockets.emit('products', products) }) */
-
+const HTTPServer = httpServer.listen(credentials.PORT, () => console.log('server running...'))
 
 // Conexion a DB Mongo Atlas
+
 mongoose.set('strictQuery', false)
 
-mongoose.connect(uri, { dbName: 'Ecommerce' }, error => {
+mongoose.connect(credentials.MONGO_URL, { dbName: credentials.DB_NAME }, error => {
     if (error) {
         console.error('No se pudo conectar a la DB');
         return
     }
 
     console.log('DB connected!');
-    server
+    HTTPServer
 
 })
 

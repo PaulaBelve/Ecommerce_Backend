@@ -2,103 +2,9 @@ import { Router } from "express";
 import { ERRORS } from "../const/error.js";
 import { usersManager } from "../dao/managers/index.js";
 import passport from "passport";
-
-
-
+import credentials from "../config/credentials.js"
 
 const router = Router()
-
-// Vista del login
-
-router.get('/login', (req, res) => {
-
-    res.render('login', {})
-
-})
-
-router.post('/login', passport.authenticate('login', { failuredirect: '/session/registerFailed' }), async (req, res) => {
-
-    if (!req.user) {
-        return res.status(400).send({
-            Success: 'Error',
-            error: `Invalid credentials`
-        });
-    }
-
-    req.session.user = req.user;
-
-    return res.status(200).redirect('/product');
-
-
-
-})
-
-router.get('/loginFailed', async (req, res) => {
-
-    console.log('The login has failed, please try again.');
-    return res.status(404).send({
-        Success: 'Error',
-        error: `The login is failed`
-    })
-})
-
-// Enviar solicitud del log - admin - user
-
-router.get('/login', (req, res) => {
-
-    const { userName, password } = req.query
-
-    req.session.user = userName
-
-    res.send('login success')
-})
-
-// Agregar un login - admin - user
-
-/*router.post('/login', async (req, res) => {
-
-    try {
-        const { email, password } = req.body
-
-        if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
-            req.session.user = {
-                first_name: "admin",
-            }
-
-            req.session.user.rol = "admin";
-            return res.redirect('/product')
-        }
-
-        const user = await usersManager.userLogin(email, password)
-
-        if (!user) {
-            // No me lee el error
-            res.status(401, { error: "error-UserName y/o password incorrecta" });
-
-
-            return res.render('login', {})
-        }
-
-        req.session.user = user
-
-        res.redirect('/product')
-
-    } catch (error) {
-
-        console.log(error)
-
-    }
-
-}) */
-
-// logout
-
-router.get('/logout', (req, res) => {
-
-    req.session.destroy()
-
-    res.redirect('/login')
-})
 
 // Vista de registro
 
@@ -107,37 +13,11 @@ router.get("/register", (req, res) => {
     res.render("register", {});
 });
 
-// Enviar solicitud de registro
-/*router.post("/create", async (req, res) => {
-
-    try {
-
-        const newUser = req.body
-
-        const user = await usersManager.userCreate(newUser);
-
-        if (!user) {
-
-            return res.redirect('/register')
-        }
-
-        res.redirect('/login')
 
 
-    } catch (error) {
+router.post('/register', passport.authenticate('register', { failuredirect: '/errors' }), async (req, res) => {
 
-        console.log(error)
-
-
-    }
-
-}); */
-
-// Router de registro con passport
-
-router.post('/create', passport.authenticate('register', { failuredirect: '/session/registerFailed' }), async (req, res) => {
-
-    return res.status(200).redirect('/login')
+    return res.status(200).redirect('/session/login')
 
 })
 
@@ -150,6 +30,75 @@ router.get('/registerFailed', async (req, res) => {
     })
 })
 
+// Vista del login
+
+router.get('/session/login', (req, res) => {
+
+    res.render('/session/login', {})
+
+})
+
+router.post('/login', passport.authenticate('login', { failuredirect: '/errors' }), (req, res) => {
+
+    if (!req.user) {
+        return res.status(400).send({
+            Success: 'Error',
+            error: `Invalid credentials`
+        });
+    }
+
+    /* req.session.user = {
+         first_name: req.user.first_name,
+         last_name: req.user.last_name,
+         email: req.user.email,
+         zona: req.user.zona,
+         role: req.user.role,
+         social: req.user.social
+     } */
+
+    req.session.user = req.user;
+
+    res.cookie(credentials.COOKIE_NAME, req.user.token).redirect('/product')
+
+
+
+
+
+})
+
+router.get('/loginFailed', async (req, res) => {
+
+    //console.log('The login has failed, please try again.');
+    return res.status(404).send({
+        Success: 'Error',
+        error: `The login is failed`
+    })
+})
+
+// Enviar solicitud del log - admin - user
+
+/*router.get('/login', (req, res) => {
+
+    const { userName, password } = req.query
+
+    res.send('login success')
+}) */
+
+// logout
+
+router.get('/logout', (req, res) => {
+
+    req.session.destroy(err => {
+        if (err) {
+            return console.log('Fallo el logout')
+        }
+    })
+
+    res.redirect('/session/login')
+})
+
+
+
 // Vista de todos los usuarios Admin
 
 router.get('/admin', async (req, res) => {
@@ -159,7 +108,7 @@ router.get('/admin', async (req, res) => {
         const role = req.session.user.role;
 
         const users = await usersManager.getAllUser();
-        //No entra a la vista de admin - tampoco me aparece error
+
         if (role === "admin") {
 
             return res.render('admin', {
@@ -167,7 +116,7 @@ router.get('/admin', async (req, res) => {
                 users,
             })
         }
-        return res.redirect('/admin')
+        return res.redirect('/session/admin')
     }
 
     catch (error) {

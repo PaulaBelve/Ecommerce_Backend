@@ -1,12 +1,25 @@
 import passport from "passport";
 import local from "passport-local";
+import jwt from 'passport-jwt';
 import GitHubStrategy from 'passport-github2';
 import { usersManager } from "../dao/managers/index.js";
 import { userModel } from "../dao/models/user.model.js";
-import { createHash, isValidPassword } from "../utils/utils.js";
+import { createHash, isValidPassword, generateToken } from "../utils/utils.js";
+import credentials from "./credentials.js"
 
 
-const localStrategy = local.Strategy
+const localStrategy = local.Strategy;
+
+const JWTStrategy = jwt.Strategy;
+const ExtractJWT = jwt.ExtractJwt;
+
+const cookieExtractor = req => {
+    const token = (req && req.cookies) ? req.cookies[credentials.COOKIE_NAME] : null;
+
+    return token;
+}
+
+
 
 const initializePassport = () => {
 
@@ -15,6 +28,7 @@ const initializePassport = () => {
             clientID: "Iv1.1f67dc2b0a006359",
             clientSecret: "8f25918d79cb04e315903d30f25533eb305bfae4",
             callBackUrl: "http://localhost:8080/session/githubcallback",
+            scope: ["users:email"],
         },
         async (accessToken, refreshToken, profile, done) => {
 
@@ -31,14 +45,18 @@ const initializePassport = () => {
 
                 const newUser = {
 
-                    first_name: "",
+                    first_name: "", //profile._json.name,
                     last_name: "",
-                    email: profile._json.name,
+                    email: profile._json.email,//profile.emails[0].values,
+                    social: 'GitHub',
                     password: ""
 
                 };
 
-                const result = new userModel(newUser);
+                //const result = new userModel(newUser);
+
+                const result = usersManager.userCreate(newUser)
+
                 return done(null, result);
 
 
@@ -52,70 +70,57 @@ const initializePassport = () => {
 
     ))
 
-    passport.use('register', new localStrategy(
+    passport.use(
+        'register', new localStrategy(
 
-        {
-            passReqToCallback: true, usernameField: 'email'
-        },
+            {
+                passReqToCallback: true, usernameField: 'email'
+            },
 
-        async (req, username, password, done) => {
+            async (req, username, password, done) => {
 
-            const { first_name, last_name, email } = req.body
+                const { first_name, last_name, email } = req.body
 
-            try {
-                //const user = await usersManager.userLogin({ email: username })
-                const user = await userModel.findOne({ email: username })
-                if (user) {
+                try {
+                    //const user = await usersManager.userLogin({ email: username })
+                    const user = await userModel.findOne({ email: username })
+                    if (user) {
 
-                    console.log('user al ready exist');
-                    return done(null, false)
-                }
+                        console.log('user al ready exist');
+                        return done(null, false)
+                    }
 
-                const newUser = {
+                    const newUser = {
 
-                    first_name,
-                    last_name,
-                    email,
-                    password: createHash(password)
+                        first_name,
+                        last_name,
+                        email,
+                        password: createHash(password)
 
-                }
-                // PROBAR
-                // No me esta tomando el rol del admin
-                const result = new userModel(newUser);
+                    }
 
-                if (result.email === 'adminCoder@coder.com') {
-                    result.role = 'admin';
+                    const result = new userModel(newUser);
+
+                    if (result.email === 'adminCoder@coder.com') {
+                        result.role = 'admin';
+                        await result.save();
+                        return done(null, result);
+                    }
+
                     await result.save();
                     return done(null, result);
+
+
+
+
+                } catch (error) {
+
+                    return done('Error to Register' + error)
                 }
-
-                await result.save();
-                return done(null, result);
-
-
-
-                /*    const result = await usersManager.userCreate(newUser)
-    
-                    if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
-                        req.session.user = {
-                            first_name: "admin",
-                        };
-    
-                        req.session.user.role = "admin";
-    
-    
-                    }
-    
-                    return done(null, result)*/
-
-            } catch (error) {
-
-                return done('Error to Register' + error)
             }
-        }
 
 
-    ))
+        ))
 
     passport.use('login', new localStrategy(
 
@@ -124,8 +129,11 @@ const initializePassport = () => {
         async (username, password, done) => {
 
             try {
-                //const user = await usersManager.userLogin({ username, email, password })
-                const user = await userModel.findOne({ email: username }).lean().exec()
+
+                const user = await userModel
+                    .findOne({ email: username })
+                    .lean()
+                    .exec()
 
                 if (!user) {
 
@@ -133,7 +141,10 @@ const initializePassport = () => {
                     return done(null, false)
                 }
 
-                if (!isValidPassword(user, password)) return done(null, false)
+                if (!isValidPassword(user, password)) { return done(null, false) }
+
+                const token = generateToken(user);
+                user.token = token;
 
                 return done(null, user)
 
@@ -144,17 +155,31 @@ const initializePassport = () => {
 
 
             }
+        }
 
+    ))
 
+    // JWT Passport Strategy
 
+    passport.use('jwt', new JWTStrategy({
+
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: credentials.PRIVATE_KEY,
+
+    }, async (jwt_payload, done) => {
+        try {
+
+            return done(null, jwt_payload);
+
+        } catch (error) {
+
+            return done(error)
 
         }
 
 
 
-
-
-    ))
+    }))
 
     // Serializar - Deserializar
     passport.serializeUser((user, done) => {

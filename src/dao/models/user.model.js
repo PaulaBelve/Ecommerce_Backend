@@ -22,11 +22,23 @@ const userSchema = new mongoose.Schema({
         default: "user",
     },
 
+    carts: [
+        {
+            cart: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "carts"
+            },
+
+        },
+    ],
+
+    default: [],
+
 })
 
-
-
-//userSchema.plugin(mongoosePaginate);
+/*userSchema.pre('findOne', function() {
+    this.populate('carts.cart')
+})*/
 
 // Creación del model : collection + schema 
 

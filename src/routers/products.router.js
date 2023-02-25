@@ -1,197 +1,158 @@
-import { query, Router } from "express";
-import { ERRORS } from "../const/error.js";
 import { productsManager } from "../dao/managers/index.js";
+import MyRouter from "./router.js"
 
 
-const router = Router()
+export default class ProductsRouter extends MyRouter {
 
-// Base de datos, que devuelve formato json
+    init() {
 
+        this.get('/', async (req, res) => {
 
+            try {
 
-//Todos los productos 
-// Get conectado con Managers
+                const { sort, query, page, limit } = req.query;
 
-router.get('/', async (req, res) => {
+                const options = {
 
-    try {
+                    limit: limit || 5,
+                    page: page || 1,
+                    sort: { price: sort } || { price: 1 },
+                    lean: true,
+                };
 
-        const { sort, query, page, limit } = req.query;
-
-        const options = {
-
-            limit: limit || 5,
-            page: page || 1,
-            sort: { price: sort } || { price: 1 },
-            lean: true,
-        };
-
-        const products = await productsManager.getProducts(query, options);
+                const products = await productsManager.getProducts(query, options);
 
 
-        res.send({
-            status: "success",
-            payload: products.docs,
-            totalPages: products.totalPages,
-            prevPage: products.prevPage,
-            nextPage: products.nextPage,
-            page: products.page,
-            hasPrevPage: products.hasPrevPage,
-            hasNextPage: products.hasNextPage,
-            prevLink: products.hasPrevPage
-                ? `/api/products?page=${products.prevPage}`
-                : null,
-            nextLink: products.hasNextPage
-                ? `/api/products?page=${products.nextPage}`
-                : null,
+                res.send({
+                    status: "success",
+                    payload: products.docs,
+                    totalPages: products.totalPages,
+                    prevPage: products.prevPage,
+                    nextPage: products.nextPage,
+                    page: products.page,
+                    hasPrevPage: products.hasPrevPage,
+                    hasNextPage: products.hasNextPage,
+                    prevLink: products.hasPrevPage
+                        ? `/api/products?page=${products.prevPage}`
+                        : null,
+                    nextLink: products.hasNextPage
+                        ? `/api/products?page=${products.nextPage}`
+                        : null,
+
+                })
+
+
+            } catch (error) {
+
+                res.sendServerError(error)
+                console.log(error)
+
+
+            }
 
         })
 
+        // Traer un solo producto por id
 
-    } catch (error) {
+        this.get('/:pid', async (req, res) => {
 
-        console.log(error)
+            try {
 
-        res.send({ succes: false, error: "ha ocurrido un error" })
+                const { pid } = req.params
 
-
-    }
-
-})
-
-// Traer un solo producto por id
-
-router.get('/:pid', async (req, res) => {
-
-    try {
-
-        const { pid } = req.params
-
-        const product = await productsManager.getProductById(pid)
+                const product = await productsManager.getProductById(pid)
 
 
-        res.send({
-            status: "succes",
-            payload: product
+                res.send({
+                    status: "succes",
+                    payload: product
+                })
+
+
+            } catch (error) {
+
+                res.sendServerError(error)
+
+
+            }
+
+        })
+
+        // Agregar un producto
+
+        this.post('/', async (req, res) => {
+
+            try {
+
+                const newProduct = req.body
+
+                if (!newProduct) {
+
+                    return res.send({
+                        status: "error",
+                        error: "EMPTY PRODUCT",
+                    });
+                }
+
+                const result = await productsManager.addProduct(newProduct)
+
+                res.sendSuccess({ result });
+
+            } catch (error) {
+
+                res.sendServerError({ error: error.message });
+
+
+
+            }
         })
 
 
-    } catch (error) {
+        // Actualizar un producto
 
-        console.log("error")
-        console.log(error)
+        this.put('/:pid', async (req, res) => {
 
-        res.send({ succes: false, error: "ha ocurrido un error" })
+            try {
 
+                const { pid } = req.params
 
-    }
+                const productToReplace = req.body
 
-})
+                const result = await productsManager.updateProduct(pid, productToReplace)
 
-// Agregar un producto
+                res.sendSuccess({ result });
 
-router.post('/', async (req, res) => {
+            } catch (error) {
 
-    try {
+                res.sendServerError({ error: error.message });
 
-        const newProduct = req.body
-
-        if (!newProduct) {
-
-            return res.send({
-                status: "error",
-                error: "EMPTY PRODUCT",
-            });
-        }
-
-        const result = await productsManager.addProduct(newProduct)
-
-        res.send({
-            status: "succes",
-            payload: result,
-        });
+            }
 
 
-    } catch (error) {
-
-        console.log("error")
-        console.log(error)
-
-        res.send({ succes: false, error: "ha ocurrido un error" })
-
-
-
-    }
-})
-
-
-// Actualizar un producto
-
-router.put('/:pid', async (req, res) => {
-
-    try {
-
-        const { pid } = req.params
-
-        const productToReplace = req.body
-
-        const result = await productsManager.updateProduct(pid, productToReplace)
-
-        res.send({
-            status: 'success',
-            payload: result
         })
 
-    } catch (error) {
+        // Eliminar un producto
 
-        console.log('error')
+        this.delete('/:pid', async (req, res) => {
+            try {
 
-        if (error.name === ERRORS.NOT_FOUND_ERROR) {
+                const { pid } = req.params
 
-            return res.send({
-                succes: false,
-                error: `${error.name}: ${error.message}`
+                const result = await productsManager.deleteProduct(pid)
 
-            })
-        }
+                return res.sendSuccess({ result });
 
-        res.send({ succes: false, error: 'Ha ocurrido un error!' })
+            } catch (error) {
+
+                return res.sendServerError({ error: error.message });
+            }
+        })
+
 
     }
+}
 
 
-})
-
-// Eliminar un producto
-
-router.delete('/:pid', async (req, res) => {
-    try {
-
-        const { pid } = req.params
-
-        const result = await productsManager.deleteProduct(pid)
-
-        res.send({ status: 'success', payload: result })
-
-    } catch (error) {
-
-        console.log('error')
-        if (error.name === ERRORS.NOT_FOUND_ERROR) {
-
-            return res.send({
-                succes: false,
-                error: `${error.name}: ${error.message}`
-
-            })
-        }
-
-        res.send({ succes: false, error: 'Ha ocurrido un error!' })
-    }
-})
-
-
-
-export default router
 
 
 
