@@ -57,6 +57,9 @@ const initializePassport = () => {
 
                 const result = usersManager.userCreate(newUser)
 
+                const token = generateToken(user);
+                user.token = token;
+
                 return done(null, result);
 
 
@@ -122,42 +125,43 @@ const initializePassport = () => {
 
         ))
 
-    passport.use('login', new localStrategy(
+    passport.use(
+        'login', new localStrategy(
 
-        { usernameField: 'email' },
+            { usernameField: 'email' },
 
-        async (username, password, done) => {
+            async (username, password, done) => {
 
-            try {
+                try {
 
-                const user = await userModel
-                    .findOne({ email: username })
-                    .lean()
-                    .exec()
+                    const user = await userModel
+                        .findOne({ email: username })
+                        .lean()
+                        .exec()
 
-                if (!user) {
+                    if (!user) {
 
-                    console.log('User dosnt exist');
-                    return done(null, false)
+                        console.log('User dosnt exist');
+                        return done(null, false)
+                    }
+
+                    if (!isValidPassword(user, password)) { return done(null, false) }
+
+                    const token = generateToken(user);
+                    user.token = token;
+
+                    return done(null, user)
+
+
+                } catch (error) {
+
+                    return done('Hubo un error en el login')
+
+
                 }
-
-                if (!isValidPassword(user, password)) { return done(null, false) }
-
-                const token = generateToken(user);
-                user.token = token;
-
-                return done(null, user)
-
-
-            } catch (error) {
-
-                return done('Hubo un error en el login')
-
-
             }
-        }
 
-    ))
+        ))
 
     // JWT Passport Strategy
 

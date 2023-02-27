@@ -1,33 +1,47 @@
 import express from 'express'
 import handlebars from 'express-handlebars'
-import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
 import passport from 'passport'
 import initializePassport from './config/passport.config.js'
-//import FileStore from 'session-file-store'
+import { connectDB } from "./utils/mongoDB.js";
+
 
 import { Server as HttpServer } from 'http'
 import { Server as IoServer } from 'socket.io'
 import __dirname from './dirname.js'
-import authRouter from './routers/auth.router.js'
+import ViewsRouter from './routers/views.router.js'
+import SessionRouter from './routers/session.router.js'
 import ProductsRouter from './routers/products.router.js'
-import cartsRouter from './routers/carts.router.js'
-import viewsRouter from './routers/views.router.js'
-import credentials from "./config/credentials.js"
+import CartsRouter from './routers/carts.router.js'
+import UsersRouter from './routers/users.router.js'
 import { passportCall } from './utils/utils.js'
-
+// import variables de entorno
+import credentials from "./config/credentials.js"
 
 const app = express()
 
-// Coustom Routers Config
-const productsRouter = new ProductsRouter();
-//const cartRouter = new CartRouter();
-//const sessionRouter = new SessionRouter();
-//const userRouter = new UserRouter();
-//const viewsRouter = new ViewsRouter();
+initializePassport()
 
+//mongo connect
+connectDB();
+
+// Coustom Routers Config
+const viewsRouter = new ViewsRouter();
+const sessionRouter = new SessionRouter();
+const productsRouter = new ProductsRouter();
+const cartsRouter = new CartsRouter();
+const usersRouter = new UsersRouter();
+
+// Server
+
+const PORT = 8080
+const HTTPServer = app.listen(PORT, console.log(`Server running OK, in port ${PORT}`));
+console.log(credentials)
+
+
+//const HTTPServer = httpServer.listen(credentials.PORT, () => console.log('server running...'))
 
 // Session
 app.use(session({
@@ -50,20 +64,6 @@ app.use(session({
 
 }))
 
-
-
-function auth(req, res, next) {
-
-    if (req.session?.user) return next()
-
-    return res.status(401).send({
-        status: "error",
-        error: "No tine permisos de acceso",
-    });
-
-
-}
-
 // Conexión con socket
 const httpServer = new HttpServer(app)
 const io = new IoServer(httpServer)
@@ -83,36 +83,18 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
 app.use(cookieParser(credentials.COOKIE_SECRET))
-initializePassport()
 app.use(passport.initialize());
 app.use(passport.session())
 
 // Routes
-app.use('/session', authRouter)
-app.use('/', passportCall('jwt'), viewsRouter)
+app.use('/api/session', sessionRouter.getRouter())
+app.use('/users', usersRouter.getRouter())
+app.use('/', passportCall('jwt'), viewsRouter.getRouter())
 app.use('/api/products', productsRouter.getRouter())
-app.use('/api/carts', cartsRouter)
+app.use('/api/carts', cartsRouter.getRouter())
 
 
 
-// Correr el servidor
-
-const HTTPServer = httpServer.listen(credentials.PORT, () => console.log('server running...'))
-
-// Conexion a DB Mongo Atlas
-
-mongoose.set('strictQuery', false)
-
-mongoose.connect(credentials.MONGO_URL, { dbName: credentials.DB_NAME }, error => {
-    if (error) {
-        console.error('No se pudo conectar a la DB');
-        return
-    }
-
-    console.log('DB connected!');
-    HTTPServer
-
-})
 
 
 

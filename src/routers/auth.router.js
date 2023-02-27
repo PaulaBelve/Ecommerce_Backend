@@ -1,5 +1,4 @@
-import { Router } from "express";
-import { ERRORS } from "../const/error.js";
+/*import { Router } from "express";
 import { usersManager } from "../dao/managers/index.js";
 import passport from "passport";
 import credentials from "../config/credentials.js"
@@ -32,69 +31,59 @@ router.get('/registerFailed', async (req, res) => {
 
 // Vista del login
 
-router.get('/session/login', (req, res) => {
+router.get('/login', (req, res) => {
 
-    res.render('/session/login', {})
-
-})
-
-router.post('/login', passport.authenticate('login', { failuredirect: '/errors' }), (req, res) => {
-
-    if (!req.user) {
-        return res.status(400).send({
-            Success: 'Error',
-            error: `Invalid credentials`
-        });
-    }
-
-    /* req.session.user = {
-         first_name: req.user.first_name,
-         last_name: req.user.last_name,
-         email: req.user.email,
-         zona: req.user.zona,
-         role: req.user.role,
-         social: req.user.social
-     } */
-
-    req.session.user = req.user;
-
-    res.cookie(credentials.COOKIE_NAME, req.user.token).redirect('/product')
-
-
-
-
+    res.render('login', {})
 
 })
+
+router.post('/login', passport.authenticate('login', { failuredirect: '/errors' }),
+    (req, res) => {
+
+        if (!req.user) {
+            return res.status(400).send({
+                Success: 'Error',
+                error: `Invalid credentials`
+            });
+        }
+
+        /* req.session.user = {
+             first_name: req.user.first_name,
+             last_name: req.user.last_name,
+             email: req.user.email,
+             zona: req.user.zona,
+             role: req.user.role,
+             social: req.user.social
+         } */
+
+/*      req.session.user = req.user;
+
+      res.cookie(credentials.COOKIE_NAME, req.user.token).redirect('/product')
+
+  }) 
 
 router.get('/loginFailed', async (req, res) => {
 
-    //console.log('The login has failed, please try again.');
-    return res.status(404).send({
-        Success: 'Error',
-        error: `The login is failed`
-    })
+  //console.log('The login has failed, please try again.');
+  return res.status(404).send({
+      Success: 'Error',
+      error: `The login is failed`
+  })
 })
 
-// Enviar solicitud del log - admin - user
-
-/*router.get('/login', (req, res) => {
-
-    const { userName, password } = req.query
-
-    res.send('login success')
-}) */
 
 // logout
 
 router.get('/logout', (req, res) => {
 
-    req.session.destroy(err => {
-        if (err) {
-            return console.log('Fallo el logout')
-        }
-    })
+  req.session.destroy(err => {
 
-    res.redirect('/session/login')
+      if (err) {
+          return console.log('Fallo el logout')
+      }
+  })
+
+  res.clearCookie(credentials.COOKIE_NAME).redirect('/session/login')
 })
 
 
@@ -103,27 +92,27 @@ router.get('/logout', (req, res) => {
 
 router.get('/admin', async (req, res) => {
 
-    try {
+  try {
 
-        const role = req.session.user.role;
+      const role = req.session.user.role;
 
-        const users = await usersManager.getAllUser();
+      const users = await usersManager.getAllUser();
 
-        if (role === "admin") {
+      if (role === "admin") {
 
-            return res.render('admin', {
-                style: 'Css.style.css',
-                users,
-            })
-        }
-        return res.redirect('/session/admin')
-    }
+          return res.render('admin', {
+              style: 'Css.style.css',
+              users,
+          })
+      }
+      return res.redirect('/session/admin')
+  }
 
-    catch (error) {
+  catch (error) {
 
-        console.log(error)
+      console.log(error)
 
-    }
+  }
 
 })
 
@@ -138,9 +127,9 @@ router.get('/login-github', passport.authenticate('gitHub', { scope: ["user:emai
 
 router.get('/githubcallback', passport.authenticate('gitHub', { failuredirect: '/login' }), async (req, res) => {
 
-    req.session.user = req.user
-    res.redirect('/product')
+  req.session.user = req.user
+  res.redirect('/product')
 
 })
 
-export default router
+export default router */

@@ -1,18 +1,19 @@
+import { connect, set } from "mongoose";
 /*import mongoose from "mongoose";
-import credentials from "../config/credentials.js"
+import credentials from "../config/credentials.js"*/
 
 
 // Conexion a DB Mongo Atlas
 
-mongoose.set('strictQuery', false)
+export const connectDB = async () => {
+    try {
+        set("strictQuery", false);
+        await connect("mongodb+srv://Delfos:8Q1KqRE6Yj8Bo2fz@cluster0.8q2zhr1.mongodb.net/?retryWrites=true&w=majority", { dbName: "Ecommerce" });
 
-mongoose.connect(credentials.MONGO_URL, { dbName: credentials.DB_NAME }, error => {
-    if (error) {
-        console.error('No se pudo conectar a la DB');
-        return
+        console.log("Connected to DB");
+    } catch (error) {
+        console.log(error);
     }
+};
 
-    console.log('DB connected!');
-    server
 
-}) */

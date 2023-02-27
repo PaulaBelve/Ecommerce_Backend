@@ -1,18 +1,19 @@
-//import dotenv from 'dotenv';
+import dotenv from 'dotenv';
 
-//dotenv.config();
+dotenv.config();
 
 // Variables de entorno
 
 export default {
-    PORT: "8080",
-    MONGO_URL: 'mongodb+srv://Delfos:8Q1KqRE6Yj8Bo2fz@cluster0.8q2zhr1.mongodb.net/?retryWrites=true&w=majority',
-    DB_NAME: 'Ecommerce',
-    MONGO_SECRET: 'scret12345678',
 
-    PRIVATE_KEY: 'scret5678910',
-    COOKIE_NAME: 'delfosCookieToken',
-    COOKIE_SECRET: 'secret',
+    PORT: process.env.PORT,
+    MONGO_URL: process.env.MONGO_URL,
+    DB_NAME: process.env.DB_NAME,
+    MONGO_SECRET: process.env.MONGO_SECRET,
+
+    PRIVATE_KEY: process.env.PRIVATE_KEY,
+    COOKIE_NAME: process.env.COOKIE_NAME,
+    COOKIE_SECRET: process.env.COOKIE_SECRET,
 
 
 }
