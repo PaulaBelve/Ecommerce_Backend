@@ -1,6 +1,5 @@
 import { connect, set } from "mongoose";
-/*import mongoose from "mongoose";
-import credentials from "../config/credentials.js"*/
+//import credentials from "../config/credentials.js"
 
 
 // Conexion a DB Mongo Atlas

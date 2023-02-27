@@ -10,7 +10,9 @@ export class ProductManager {
 
 
         if (query === "inStock") {
-            const products = await productModel.paginate({ state: true }, options);
+            const products = await productModel.paginate({ state: true },
+
+                options);
 
             if (!products) {
 
