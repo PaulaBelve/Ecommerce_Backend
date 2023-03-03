@@ -19,8 +19,62 @@ import UsersRouter from './routers/users.router.js'
 import { passportCall } from './utils/utils.js'
 // import variables de entorno
 import credentials from "./config/credentials.js"
+import nodemailer from "nodemailer"
 
 const app = express()
+
+// ENVIO DE MAIL CON GMAIL - EJ DE CLASE.
+
+//difttkqhjwobsilk
+
+const transport = nodemailer.createTransport({
+
+    service: 'gmail',
+    port: '587',
+    auth: {
+
+        user: 'pau.belve@gmail.com',
+        pass: 'difttkqhjwobsilk'
+
+
+    }
+})
+
+app.get('/mail', async (re, res) => {
+
+    const result = await transport.sendMail({
+
+        from: 'r2coderhouse@gmail.com',
+        to: 'pau.belve@gmail.com',
+        subject: 'mail coder',
+        html: `
+<div>
+<p> Hola Profe!</p>
+<img>
+</div>
+
+`,
+        attachments: [{
+            filename: '',
+            path: '',
+            cid: '',
+
+
+        }, {
+
+
+        }]
+
+
+
+
+    })
+
+
+
+}
+
+)
 
 initializePassport()
 

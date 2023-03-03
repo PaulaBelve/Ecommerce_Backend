@@ -27,27 +27,37 @@ const initializePassport = () => {
         {
             clientID: "Iv1.1f67dc2b0a006359",
             clientSecret: "8f25918d79cb04e315903d30f25533eb305bfae4",
-            callBackUrl: "http://localhost:8080/session/githubcallback",
+            callBackUrl: "http://localhost:8080/users/githubcallback",
             scope: ["users:email"],
         },
+
+        // NO GENERA EL TOKEN
         async (accessToken, refreshToken, profile, done) => {
 
-            console.log(profile)
+            console.log("Entra", profile);
+
             try {
 
-                const user = await userModel.findOne({ email: profile._json.email })
+                const user = await userModel
+                    .findOne({
+                        email: profile._json.email,  //profile.emails[0].value,
+                    })
+                    .lean()
 
                 if (user) {
 
                     console.log('User already exist');
-                    return done(null, user)
+
+                    const token = generateToken(user);
+
+                    return done(null, { ...user, token });
                 }
 
                 const newUser = {
 
                     first_name: "", //profile._json.name,
                     last_name: "",
-                    email: profile._json.email,//profile.emails[0].values,
+                    email: profile._json.email, // profile.emails[0].values,
                     social: 'GitHub',
                     password: ""
 
@@ -58,9 +68,9 @@ const initializePassport = () => {
                 const result = usersManager.userCreate(newUser)
 
                 const token = generateToken(user);
-                user.token = token;
+                result.token = token;
 
-                return done(null, result);
+                return done(null, { ...result, token });
 
 
             } catch (error) {

@@ -122,7 +122,7 @@ export default class UsersRouter extends MyRouter {
 
         // LOGIN GITHUB
 
-        this.get('/login-github', passport.authenticate('gitHub', { scope: ["user:email"] }), async (req, res) => {
+        this.get('/login-github', passport.authenticate('gitHub'/*, { scope: ["user:email"] }*/), async (req, res) => {
 
 
         })
@@ -133,7 +133,7 @@ export default class UsersRouter extends MyRouter {
 
             req.session.user = req.user
             res.cookie(credentials.COOKIE_NAME, req.user.token).redirect('/product')
-            //res.redirect('/product')
+
 
         })
 
