@@ -1,4 +1,4 @@
-import { NotFoundError, ValidationError } from "../../utils/index.js";
+/*import { NotFoundError, ValidationError } from "../../utils/index.js";
 import { productModel } from "../models/products.model.js";
 
 
@@ -144,5 +144,5 @@ export class ProductManager {
 
     }
 
-}
+} */
 

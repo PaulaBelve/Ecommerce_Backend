@@ -1,14 +1,14 @@
-/*import { NotFoundError, ValidationError } from "../../utils/index.js";
-import { userModel } from "../models/user.model.js";
+import { NotFoundError, ValidationError } from "../utils/index.js";
+import { userModel } from "../dao/models/user.model.js";
 
 
-export class UserManager {
+class UserServices {
 
     // Crear un nuevo usuario
-    userCreate = async (newUser) => {
+    userCreate = async (data) => {
 
 
-        const result = await userModel.create(newUser);
+        const newUser = await userModel.create(data);
 
 
         if (!result) {
@@ -16,38 +16,38 @@ export class UserManager {
             throw new ValidationError('FAILED TO ADD TO DATA BASE')
         }
 
-        return result
+        return newUser
 
     }
 
-    // Loguear usuario
+    // Mostrar todos los usuarios
 
-    userLogin = async (email, password) => {
+    getAllUsers = async () => {
 
-        const findUser = await userModel.findOne({ email, password }).lean()
-
-        if (!findUser) { throw new ValidationError('USER NOT FOUND') }
-
-
-
-        return findUser
-
-
-    }
-
-    // Agregar todos los usuarios
-
-    getAllUser = async () => {
-
-        const result = await userModel.find().lean()
+        const allUsers = await userModel.find().lean().exec();
 
         if (!result) {
 
             throw new ValidationError('USERS NOT FOUND')
         }
 
-        return result
+        return allUsers;
     }
+
+    // Encontrar usuario
+
+    getUser = async (data) => {
+
+        const user = await userModel.findOne({ email: data }).lean().exec()
+
+        if (!user) { throw new ValidationError('USER NOT FOUND') }
+
+
+
+        return user
+
+    }
+
 
     getUserByEmail = async (email) => {
 
@@ -58,7 +58,7 @@ export class UserManager {
 
     }
 
-    getUserById = async (id) => {
+    userById = async (id) => {
 
         const findUser = await userModel
             .findById(id)
@@ -69,7 +69,7 @@ export class UserManager {
 
     }
 
-    // Asociar el user con el cartID
+    // Agregar el user al cartID
 
     updateUser = async (userEmail, cid) => {
 
@@ -91,4 +91,9 @@ export class UserManager {
     }
 
 
-} */
+}
+
+
+const UserService = new UserServices();
+
+export default UserService;

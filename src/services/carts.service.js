@@ -1,5 +1,5 @@
-import { cartsModel } from "../models/carts.model.js"
-import { NotFoundError, ValidationError } from "../../utils/index.js";
+import { cartsModel } from "../dao/models/carts.model.js"
+import { NotFoundError, ValidationError } from "../utils/index.js";
 
 export default class CartService {
 

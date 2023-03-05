@@ -1,4 +1,4 @@
-const socket = io();
+/*const socket = io();
 
 const productsContainer = document.getElementById('products-body')
 const formProducts = document.getElementById('crear-formulario')
@@ -46,4 +46,4 @@ for (const field of formData.entries()) {
 
 }
 
-//socket.on("hello", (data) => console.log(data));
+//socket.on("hello", (data) => console.log(data)); */

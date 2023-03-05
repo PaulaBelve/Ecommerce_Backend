@@ -1,24 +1,37 @@
-<div>
+<main>
 
-    <h1> CARRITO </h1>
+    <div>
 
-    <!--{{_id}}-->
+        <h1> CARRITO </h1>
 
-    {{#each products}}
+        <!--{{_id}}-->
 
-    <section class="section-carrito">
-        <div class="cards-carrito">
+        {{#each products}}
 
-
-
-            <h2>{{this.product.title}}{{this.product._id}}</h2>
-            <img src="{{this.product.thumbnail}}" />
-            <p>${{this.product.price}}</p>
+        <section class="section-carrito">
+            <div class="cards-carrito">
 
 
-            {{/each}}
 
-            <a href=""><button>Vaciar carrito</button></a>
-            <a href=""><button>Finalizar compra</button></a>
+                <h2>{{this.product.title}}</h2>
+                <img src="{{this.product.thumbnail}}" />
+                <p>${{this.product.price}}</p>
+                <p>x{{this.quantity}}</p>
 
-        </div>
+                <button class="cart__deleteBtn" id="cart__product--deleteBtn"
+                    value={{this.product._id}}>Eliminar</button>
+
+
+                {{/each}}
+
+
+                <!-- NO ANDAN LOS BOTONES -->
+
+                <button class="cart__total--btn">Vaciar carrito</button>
+                <button class="cart__total--btn">Confirmar compra</button>
+
+            </div>
+
+</main>
+
+<script src="/public/js/cart.js"></script>

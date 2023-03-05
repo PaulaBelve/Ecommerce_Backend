@@ -1,16 +1,23 @@
-<h1>Detalle</h1>
+<main>
+
+   <h1>Detalle</h1>
 
 
 
-<div class="cards-products">
+   <div class="cards-products">
 
-   <picture><img src="{{product.thumbnail}}" /></picture>
-   <h2>{{product.title}}</h2>
-   <p>{{product.description}}</p>
-   <p>{{product.price}}</p>
+      <picture><img src="{{product.thumbnail}}" /></picture>
+      <h2>{{product.title}}</h2>
+      <p>{{product.description}}</p>
+      <p>${{product.price}}</p>
 
 
+      <!-- NO ANDAN LOS BOTONES -->
 
-   <button value={{product._id}}>Agregar al carrito</button>
+      <button class="product__detail__button" id="addProduct__btn" value={{product._id}}>Agregar al carrito</button>
 
-</div>
+   </div>
+
+</main>
+
+<script src="/js/product.js"></script>

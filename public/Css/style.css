@@ -17,7 +17,7 @@ img {
     color: blueviolet;
 }
 
-.section-budines {
+/*.section-budines {
     display: flex;
     flex-direction: row;
     gap: 2rem;
@@ -34,8 +34,8 @@ img {
     justify-content: center;
     align-items: center;
     width: 20%;
-    /* height: 50%; */
+     height: 50%; 
     border-radius: 4px;
     box-shadow: 0 0 5px cadetblue;
     text-align: center;
-}
+} */

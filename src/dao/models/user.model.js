@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-//import mongoosePaginate from "mongoose-paginate-v2";
+
 
 // Nombre de la colección
+
 const userCollection = 'users'
 
-// Como se guardan los datos en esta colección // Esquema del documento
 
 const userSchema = new mongoose.Schema({
 
@@ -37,9 +37,7 @@ const userSchema = new mongoose.Schema({
 
 })
 
-/*userSchema.pre('findOne', function() {
-    this.populate('carts.cart')
-})*/
+
 
 // Creación del model : collection + schema 
 

@@ -1,4 +1,4 @@
-import { cartsModel } from "../models/carts.model.js"
+/*import { cartsModel } from "../models/carts.model.js"
 import { NotFoundError, ValidationError } from "../../utils/index.js";
 
 export class CartManager {
@@ -204,7 +204,7 @@ export class CartManager {
 
   }
 
-}
+} */
 
 
 

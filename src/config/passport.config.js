@@ -1,23 +1,24 @@
 import passport from "passport";
 import local from "passport-local";
 import jwt from 'passport-jwt';
-import GitHubStrategy from 'passport-github2';
-import { usersManager } from "../dao/managers/index.js";
 import { userModel } from "../dao/models/user.model.js";
+import GitHubStrategy from 'passport-github2';
 import { createHash, isValidPassword, generateToken } from "../utils/utils.js";
 import credentials from "./credentials.js"
+import UserService from "../services/users.service.js";
 
 
 const localStrategy = local.Strategy;
-
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
+const { userCreate, getUser, userById } = UserService;
 
 const cookieExtractor = req => {
     const token = (req && req.cookies) ? req.cookies[credentials.COOKIE_NAME] : null;
 
     return token;
 }
+
 
 
 
@@ -38,11 +39,11 @@ const initializePassport = () => {
 
             try {
 
-                const user = await userModel
+                const user = await getUser(profile._json.email) /*userModel
                     .findOne({
-                        email: profile._json.email,  //profile.emails[0].value,
+                        email: profile._json.email,  
                     })
-                    .lean()
+                    .lean() */
 
                 if (user) {
 
@@ -55,7 +56,7 @@ const initializePassport = () => {
 
                 const newUser = {
 
-                    first_name: "", //profile._json.name,
+                    first_name: profile._json.name,
                     last_name: "",
                     email: profile._json.email, // profile.emails[0].values,
                     social: 'GitHub',
@@ -63,9 +64,7 @@ const initializePassport = () => {
 
                 };
 
-                //const result = new userModel(newUser);
-
-                const result = usersManager.userCreate(newUser)
+                const result = await userCreate(newUser)
 
                 const token = generateToken(user);
                 result.token = token;
@@ -95,8 +94,10 @@ const initializePassport = () => {
                 const { first_name, last_name, email } = req.body
 
                 try {
-                    //const user = await usersManager.userLogin({ email: username })
-                    const user = await userModel.findOne({ email: username })
+
+                    // Aun lo deje conectado con el model porque llamandolo desde el service me daba error y aun no encontre el motivo
+
+                    const user = await userModel.findOne({ email: username }) // getUser(username)
                     if (user) {
 
                         console.log('user al ready exist');
@@ -107,10 +108,14 @@ const initializePassport = () => {
 
                         first_name,
                         last_name,
+                        zona: '',
+                        social: 'local',
                         email,
                         password: createHash(password)
 
                     }
+
+                    //const result = await userCreate(newUser);
 
                     const result = new userModel(newUser);
 
@@ -144,10 +149,13 @@ const initializePassport = () => {
 
                 try {
 
-                    const user = await userModel
+                    /*const user = await userModel
                         .findOne({ email: username })
                         .lean()
-                        .exec()
+                        .exec() */
+
+
+                    const user = await getUser(username);
 
                     if (!user) {
 
@@ -201,7 +209,7 @@ const initializePassport = () => {
     })
 
     passport.deserializeUser(async (id, done) => {
-        const user = await usersManager.getUserById(id)
+        const user = await userById(id)
         done(null, user)
     })
 

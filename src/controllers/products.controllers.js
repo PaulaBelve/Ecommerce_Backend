@@ -7,8 +7,6 @@ export default class ProductsController {
         this.productsService = new ProductsService();
     }
 
-
-
     getAllProductsCtr = async (req, res) => {
 
         try {
@@ -23,7 +21,7 @@ export default class ProductsController {
                 lean: true,
             };
 
-            const products = await productsManager.getProducts(query, options);
+            const products = await this.productsService.getAllProducts(query, options);
 
 
             res.send({
@@ -63,7 +61,7 @@ export default class ProductsController {
 
             const { pid } = req.params
 
-            const product = await productsManager.getProductById(pid)
+            const product = await this.productsService.getProductById(pid)
 
 
             res.send({
@@ -97,7 +95,7 @@ export default class ProductsController {
                 });
             }
 
-            const result = await productsManager.addProduct(newProduct)
+            const result = await this.productsService.addNewProduct(newProduct)
 
             res.sendSuccess({ result });
 
@@ -121,7 +119,7 @@ export default class ProductsController {
 
             const productToReplace = req.body
 
-            const result = await productsManager.updateProduct(pid, productToReplace)
+            const result = await this.productsService.updateProduct(pid, productToReplace)
 
             res.sendSuccess({ result });
 
@@ -141,7 +139,7 @@ export default class ProductsController {
 
             const { pid } = req.params
 
-            const result = await productsManager.deleteProduct(pid)
+            const result = await this.productsService.deleteProduct(pid)
 
             return res.sendSuccess({ result });
 
