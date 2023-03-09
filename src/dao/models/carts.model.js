@@ -2,11 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-
-// Nombre de la colección
 const cartsCollection = 'carts';
-
-// Como se guardan los datos en esta colección // Esquema del documento
 
 //const cartSchema = new Schema({
 
@@ -25,8 +21,6 @@ const cartSchema = new Schema({
      default: []
 
 });
-//   })        
 
-// Creación del model : collection + schema 
 
 export const cartsModel = mongoose.model(cartsCollection, cartSchema)

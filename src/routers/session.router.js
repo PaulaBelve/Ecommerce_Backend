@@ -1,21 +1,14 @@
 import MyRouter from "./router.js";
+import UsersController from "../controllers/users.controllers.js";
+import { authToken } from "../utils/jwt.js";
 
-
+const usersController = new UsersController()
 
 export default class SessionRouter extends MyRouter {
 
     init() {
         // Trae los datos del user loguedo
-        this.get('/current', (req, res) => {
-            try {
-                const user = req.session.user;
+        this.get('/current', authToken, usersController.getCurrentUser)
 
-                if (!user) return res.sendAuthenticationError(`No user logged`);
-
-                return res.sendSuccess({ user })
-            } catch (error) {
-                return res.sendAuthenticationError(error);
-            }
-        })
     }
 }

@@ -15,5 +15,9 @@ export default {
     COOKIE_NAME: process.env.COOKIE_NAME,
     COOKIE_SECRET: process.env.COOKIE_SECRET,
 
+    GITHUB_CIENT_ID: process.env.GITHUB_CIENT_ID,
+    GITHUB_CLIENT_SECRET: process.env.GITHUB_CLIENT_SECRET,
+    GITHUB_CALLBACKURL: process.env.GITHUB_CALLBACKURL,
+
 
 }

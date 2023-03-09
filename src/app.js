@@ -2,29 +2,33 @@ import express from 'express'
 import handlebars from 'express-handlebars'
 import cookieParser from 'cookie-parser'
 import session from 'express-session'
-import MongoStore from 'connect-mongo'
 import passport from 'passport'
 import initializePassport from './config/passport.config.js'
-import { connectDB } from "./utils/mongoDB.js";
+import MongoConnection from './utils/mongoDB.js'
 
-import { Server as HttpServer } from 'http'
-import { Server as IoServer } from 'socket.io'
-import __dirname from './dirname.js'
+import __dirname, { MongoStoreInstance } from './utils.js'
 import ViewsRouter from './routers/views.router.js'
 import SessionRouter from './routers/session.router.js'
 import ProductsRouter from './routers/products.router.js'
 import CartsRouter from './routers/carts.router.js'
 import UsersRouter from './routers/users.router.js'
-import { passportCall } from './utils/utils.js'
-// import variables de entorno
-import credentials from "./config/credentials.js"
+import chatRouter from './routers/messages.router.js'
+
+// import variables de entorno desde config
+import credentials from './config/credentials.js'
+//Socket
+import { Server } from "socket.io";
+import socket from "./socket.js";
 
 const app = express()
+const PORT = credentials.PORT || 5000 //8080
 
+//init mongoDB
+MongoConnection.getInstance();
+
+//passport
 initializePassport()
 
-//mongo connect
-connectDB();
 
 // Coustom Routers Config
 const viewsRouter = new ViewsRouter();
@@ -32,38 +36,6 @@ const sessionRouter = new SessionRouter();
 const productsRouter = new ProductsRouter();
 const cartsRouter = new CartsRouter();
 const usersRouter = new UsersRouter();
-
-// Server
-
-const PORT = 8080
-const HTTPServer = app.listen(PORT, console.log(`Server running OK, in port ${PORT}`));
-console.log(credentials)
-
-
-/// Session
-app.use(session({
-
-    store: MongoStore.create({
-        mongoUrl: credentials.MONGO_URL,
-        dbName: credentials.DB_NAME,
-        mongoOptions: {
-            useNewUrlParser: true,
-            useUnifiedTopology: true
-        },
-
-        ttl: 200
-
-    }),
-    secret: credentials.MONGO_SECRET,
-    resave: true,
-    saveUninitialized: false
-
-
-}))
-
-// Conexión con socket
-const httpServer = new HttpServer(app)
-const io = new IoServer(httpServer)
 
 // Configuración handlebars
 
@@ -74,21 +46,32 @@ app.engine('hbs', handlebars.engine({
 app.set('view engine', 'hbs')
 app.set('views', `${__dirname}/views`)
 
-// Configuración JSON
-
+// Middlewares
+app.use(session(MongoStoreInstance));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(express.static('public'))
+//app.use(express.static(__dirname + "/public"));
 app.use(cookieParser(credentials.COOKIE_SECRET))
 app.use(passport.initialize());
 app.use(passport.session())
 
-// Routes
+// Routers
 app.use('/api/session', sessionRouter.getRouter())
 app.use('/users', usersRouter.getRouter())
-app.use('/', passportCall('jwt'), viewsRouter.getRouter())
+app.use('/', viewsRouter.getRouter())
 app.use('/api/products', productsRouter.getRouter())
 app.use('/api/carts', cartsRouter.getRouter())
+app.use('/chat', chatRouter)
+
+//app.listen
+const httpServer = app.listen(PORT, () => {
+    console.log("Server up!");
+});
+
+//socket
+const io = new Server(httpServer);
+socket(io);
 
 
 

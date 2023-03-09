@@ -1,98 +1,136 @@
-import { cartsModel } from "../dao/models/carts.model.js"
+import { cartsModel } from "../dao/models/carts.model.js" // AGREGAR productsModel
+import userModel from '../dao/models/user.model.js'
+import ticketModel from '../dao/models/ticket.model.js'
+import ProductsService from "../services/products.service.js";
 import { NotFoundError, ValidationError } from "../utils/index.js";
 
 export default class CartService {
 
+    constructor() {
+
+        this.productsService = new ProductsService();
+    }
+
     // Creamos el carrito
 
     createCart = async () => {
+        try {
+            const newCart = {
 
-        const newCart = {
+                products: []
+            };
 
-            products: []
-        };
+            const result = await cartsModel.create(newCart)
 
-        const result = await cartsModel.create(newCart)
+            return result
 
-        return result
+        } catch (error) {
+            console.log(error)
 
-
-
-    }
-
-    // Mostramos los carritos
-
-    getCarts = async () => {
-
-
-        const carts = await cartsModel.find();
-
-        if (!carts) {
-
-            throw new ValidationError('NOT FOUND CART DB');
         }
 
 
-        return carts
+
 
     }
 
-    // Muestra el carrito
+    // Mostramos todos los carritos
+
+    getCarts = async () => {
+
+        try {
+            const carts = await cartsModel.find();
+
+            if (!carts) {
+
+                throw new ValidationError('NOT FOUND CART DB');
+            }
+
+
+            return carts
+
+        } catch (error) {
+
+            console.log(error)
+        }
+
+    }
+
+    // Muestra el carrito x id
 
     getCartsById = async (cid) => {
 
-        const cart = await cartsModel
+        try {
+            const cart = await cartsModel
 
-            .findById(cid)
-            .populate("products.product")
-            .lean();
+                .findById(cid)
+                .populate("products.product")
+                .lean();
 
-        if (!cart) {
+            if (!cart) {
 
-            throw new ValidationError('NOT FOUND CART')
+                throw new ValidationError('NOT FOUND CART')
 
-        };
+            };
 
-        return cart
+            return cart
 
+        } catch (error) {
 
+            console.log(error)
+        }
 
     }
 
     // Agregar producto al carrito
 
-    addCart = async (cid, pid) => {
+    // VERIFICAR SI EL PRODUCTO EXISTE
 
-        const addProductInCart = await cartsModel.findOne({
-            _id: cid,
-            "products.product": pid,
-        });
+    addProductToCart = async (cid, pid) => {
+        try {
+            const cart = await this.getCartsById(cid)
 
-        if (addProductInCart) {
-            const upgradeCart = await cartsModel.updateOne(
-                { "products.product": pid },
+            if (!cart) throw new ValidationError('NOT FOUND CART')
+
+            const product = await cartsModel.findOne({ "products.product": pid })
+
+            if (!product) throw new ValidationError('PRODUCT NOT FOUND IN CART')
+
+            const addProductInCart = await cartsModel.findOne({
+                _id: cid,
+                "products.product": pid,
+            });
+
+            if (addProductInCart) {
+                const upgradeCart = await cartsModel.updateOne(
+                    { "products.product": pid },
+                    {
+                        $inc: {
+                            "products.product.quantity": 1,
+
+                        },
+                    }
+                );
+
+                return upgradeCart;
+            }
+
+            const result = await cartsModel.updateOne(
+                { _id: cid },
+
                 {
-                    $inc: {
-                        "products.product.quantity": 1,
-
+                    $push: {
+                        products: { product: pid, quantity: 1 },
                     },
                 }
             );
 
-            return upgradeCart;
+            return result;
+
+        } catch (error) {
+
+            console.log(error)
         }
-
-        const result = await cartsModel.updateOne(
-            { _id: cid },
-
-            {
-                $push: {
-                    products: { product: pid, quantity: 1 },
-                },
-            }
-        );
-
-        return result;
 
     };
 
@@ -100,37 +138,44 @@ export default class CartService {
 
     updateQuantityProduct = async (quantity, cid, pid) => {
 
-        const findCart = await cartsModel.findById(cid)
+        try {
 
-        if (!findCart) {
+            const cart = await this.getCartsById(cid)
 
-            throw new ValidationError('CART NOT FOUND')
-        }
+            if (!cart) throw new ValidationError('CART NOT FOUND')
 
+            const product = await cartsModel.findOne({ "products.product": pid })
 
-        const updateQuantity = await cartsModel.updateOne(
-            {
-                _id: cid, "products.product": pid,
-            },
+            if (!product) throw new ValidationError('PRODUCT NOT FOUND IN CART')
 
-
-            {
-                $inc: {
-                    "products.$.quantity": quantity,
-
+            const updateQuantity = await cartsModel.updateOne(
+                {
+                    _id: cid, "products.product": pid,
                 },
 
-            });
+
+                {
+                    $inc: {
+                        "products.$.quantity": quantity,
+
+                    },
+
+                });
 
 
-        if (!updateQuantity) {
+            if (!updateQuantity) {
 
-            throw new ValidationError('PRODUCT NOT FOUND IN CAR')
+                throw new ValidationError('PRODUCT NOT FOUND IN CAR')
+
+            }
+
+            console.log(updateQuantity)
+            return updateQuantity
+        } catch (error) {
+
+            console.log(error)
 
         }
-
-        console.log(updateQuantity)
-        return updateQuantity
 
     }
 
@@ -138,46 +183,65 @@ export default class CartService {
 
     arrayProduct = async (cid, products) => {
 
+        try {
+            const cart = await this.getCartsById(cid)
 
-        const mapProducts = products.map((product) => {
+            if (!cart) throw new ValidationError('CART NOT FOUND')
 
-            return { product: product._id }
-        });
 
-        console.log(mapProducts)
+            const mapProducts = products.map((product) => {
 
-        const result = await cartsModel.updateOne(
+                return { product: product._id }
+            });
 
-            { _id: cid },
+            console.log(mapProducts)
 
-            {
-                $push: {
+            const result = await cartsModel.updateOne(
 
-                    products: { $each: mapProducts },
+                { _id: cid },
 
+                {
+                    $push: {
+
+                        products: { $each: mapProducts },
+
+                    },
                 },
-            },
-        );
+            );
 
-        console.log(result)
-        return result
+
+            return result
+
+        } catch (error) {
+
+            console.log(error)
+        }
 
     }
 
     // Eliminar un producto
 
     deleteProductToCart = async (cid, pid) => {
+        try {
+            const cart = await this.getCartsById(cid)
 
-        const deleteOne = await cartsModel.updateOne(
-            { _id: cid },
+            if (!cart) throw new ValidationError('CART NOT FOUND')
 
-            // Eliminar un producto determinado
-            {
-                $pull: { products: { product: pid }, }
-            }
-        );
+            const deleteOne = await cartsModel.updateOne(
+                { _id: cid },
 
-        return deleteOne;
+                // Eliminar un producto determinado
+                {
+                    $pull: { products: { product: pid }, }
+                }
+            );
+
+            return deleteOne;
+
+        } catch (error) {
+
+            console.log(error)
+        }
 
     }
 
@@ -185,23 +249,107 @@ export default class CartService {
 
     emptyCart = async (cid) => {
 
-        const emptyCart = await cartsModel.updateOne(
-            {
-                _id: cid
-            },
+        try {
 
-            // Reemplaza al carrito con un array vacio
-            {
-                $set: {
+            const cart = await this.getCartsById(cid)
 
-                    products: []
+            if (!cart) throw new ValidationError('CART NOT FOUND')
 
+            const emptyCart = await cartsModel.updateOne(
+                {
+                    _id: cid
+                },
+
+                // Reemplaza al carrito con un array vacio
+                {
+                    $set: {
+
+                        products: []
+
+                    }
                 }
-            }
-        );
+            );
 
-        return emptyCart
+            return emptyCart
+        } catch (error) {
 
+            console.log(error)
+        }
     }
 
+    purchaseProducts = async (cid) => {
+
+        try {
+
+
+            const cart = await this.getCartsById(cid);
+
+            if (!cart) throw new Error("Cart Not Found");
+
+            const arrayProducts = Array.from(cart.products);
+
+            const purchaser = await userModel.findOne({ cart: cid }).lean().exec();
+
+            const total = await this.removeProductFromStock(cid, arrayProducts)
+
+            const reduceTotal = total.reduce((acc, curr) => acc + curr, 0);
+
+            const ticket = await this.generateTicket(purchaser.email, reduceTotal);
+
+            return ticket;
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    generateTicket = async (purchaser, total) => {
+        try {
+            const result = await ticketModel.create({
+                amount: total,
+                purchaser: purchaser,
+            });
+
+            return result;
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    removeProductFromStock = async (cid, products) => {
+        try {
+
+            const totalProducts = Promise.all(
+                products.map(async (product) => {
+
+                    const producWithStock = await this.productsService.updateStock(
+
+                        product._id,
+                        product.quantity
+                    );
+
+                    if (producWithStock) {
+
+                        await this.deleteProductToCart(cid, product.product._id);
+
+                        return product.product.price * product.quantity;
+
+                    }
+
+                    return 0
+
+                })
+
+
+            );
+
+            return totalProducts
+
+
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+
 }
+

@@ -1,5 +1,32 @@
 import { connect, set } from "mongoose";
-//import credentials from "../config/credentials.js"
+import credentials from "../config/credentials.js"
+
+
+export default class MongoConnection {
+    static #instance;
+
+    constructor() {
+        set("strictQuery", false);
+        connect(credentials.MONGO_URL, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            dbName: credentials.DB_NAME,
+        });
+    }
+
+    static getInstance = () => {
+        if (this.#instance) {
+            console.log("Already connected to MongoDB");
+
+            return this.#instance;
+        }
+
+        this.#instance = new MongoConnection();
+        console.log("Connected to MongoDB");
+
+        return this.#instance;
+    };
+}
 
 
 // Conexion a DB Mongo Atlas
@@ -14,5 +41,6 @@ export const connectDB = async () => {
         console.log(error);
     }
 };
+
 
 

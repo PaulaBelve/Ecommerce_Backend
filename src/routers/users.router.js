@@ -37,9 +37,7 @@ export default class UsersRouter extends MyRouter {
 
         this.get('/logout', usersController.logout)
 
-        // VISTA USUARIOS ADMIN
 
-        this.get('/admin', usersController.viewsAdmin)
 
 
 

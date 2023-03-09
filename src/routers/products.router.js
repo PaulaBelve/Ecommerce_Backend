@@ -1,5 +1,6 @@
 import MyRouter from "./router.js"
 import ProductsController from "../controllers/products.controllers.js";
+import { authToken, authPolicies } from '../utils/jwt.js'
 
 const productsController = new ProductsController();
 
@@ -17,16 +18,16 @@ export default class ProductsRouter extends MyRouter {
 
         // Agregar un producto
 
-        this.post('/', productsController.addNewProductCtr);
+        this.post('/', authToken, authPolicies("ADMIN"), productsController.addNewProductCtr);
 
 
         // Actualizar un producto
 
-        this.put('/:pid', productsController.updateProductCtr);
+        this.put('/:pid', authToken, authPolicies("ADMIN"), productsController.updateProductCtr);
 
         // Eliminar un producto
 
-        this.delete('/:pid', productsController.deleteProductCtr);
+        this.delete('/:pid', authToken, authPolicies("ADMIN"), productsController.deleteProductCtr);
 
     }
 }

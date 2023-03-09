@@ -1,5 +1,7 @@
 import credentials from "../config/credentials.js";
 
+
+
 export default class UsersController {
 
     // REGISTER
@@ -41,11 +43,12 @@ export default class UsersController {
             last_name: req.user.last_name,
             zona: req.user.zona,
             email: req.user.email,
-            rol: req.user.rol,
+            role: req.user.role,
             social: req.user.social
         }
 
         res.cookie(credentials.COOKIE_NAME, req.user.token).redirect('/product')
+
 
     };
 
@@ -57,16 +60,6 @@ export default class UsersController {
         res.cookie(credentials.COOKIE_NAME, req.user.token).redirect('/product')
 
     };
-
-    // Callback
-
-    /*   this.get('/githubcallback', passport.authenticate('gitHub', { failuredirect: '/error' }), async (req, res) => {
-   
-           req.session.user = req.user
-           res.cookie(credentials.COOKIE_NAME, req.user.token).redirect('/product')
-   
-   
-       }) */
 
     // LOGOUT
 
@@ -84,32 +77,16 @@ export default class UsersController {
 
 
 
-    // VISTA USUARIOS ADMIN
 
-    viewsAdmin = async (req, res) => {
 
+    getCurrentUser = (req, res) => {
         try {
+            const user = req.session.user;
 
-            const role = req.session.user.role;
-
-            const users = await usersManager.getAllUser();
-
-            if (role === "admin") {
-
-                return res.render('admin', {
-                    style: 'Css.style.css',
-                    users,
-                })
-            }
-            return res.redirect('/users/admin')
+            res.status(200).render("session", { styles: "Css/style.css", user });
+        } catch (error) {
+            console.log(error);
         }
-
-        catch (error) {
-
-            console.log(error)
-
-        }
-
     };
 
 

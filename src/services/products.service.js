@@ -142,6 +142,29 @@ export default class ProductsService {
 
     }
 
+    //actualizar stock
+
+    updateStock = async (pid, quantity) => {
+        try {
+            const product = await this.getProductById(pid);
+
+            if (product.stock < quantity) {
+                console.log("No stock");
+
+                return false;
+            }
+
+            await productModel.updateOne(
+                { _id: pid },
+                { $inc: { stock: -quantity } }
+            );
+
+            return true;
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
 
 
 

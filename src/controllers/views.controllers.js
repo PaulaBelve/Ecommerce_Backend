@@ -1,6 +1,8 @@
 import ProductsService from "../services/products.service.js";
 import CartService from "../services/carts.service.js";
+import UserService from "../services/users.service.js";
 
+const { getAllUsers } = UserService;
 
 export default class ViewsController {
 
@@ -8,6 +10,7 @@ export default class ViewsController {
 
         this.productsService = new ProductsService();
         this.cartService = new CartService();
+
     }
 
     // Vista de los productos
@@ -122,6 +125,36 @@ export default class ViewsController {
         }
 
     }
+
+    // Se rompe la pagina
+
+    // VISTA USUARIOS ADMIN
+
+    /*   viewsAdmin = async (req, res) => {
+   
+           try {
+   
+               const role = req.session.user.role;
+   
+               const users = await getAllUsers();
+   
+               if (role === "ADMIN") {
+   
+                   return res.render('admin', {
+                       style: 'Css.style.css',
+                       users,
+                   })
+               }
+               return res.redirect('/users/admin')
+           }
+   
+           catch (error) {
+   
+               console.log(error)
+   
+           } 
+   
+       };*/
 
 
 }

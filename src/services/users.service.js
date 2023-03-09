@@ -1,77 +1,177 @@
-import { NotFoundError, ValidationError } from "../utils/index.js";
-import { userModel } from "../dao/models/user.model.js";
+import CartsService from "./carts.service.js";
+import userModel from "../dao/models/user.model.js";
+import { generateToken } from "../utils/jwt.js";
+import UserDto from "../dao/DTO/users.dto.js";
 
+const cartsService = new CartsService();
 
 class UserServices {
-
-    // Crear un nuevo usuario
-    userCreate = async (data) => {
-
-
-        const newUser = await userModel.create(data);
-
-
-        if (!result) {
-
-            throw new ValidationError('FAILED TO ADD TO DATA BASE')
-        }
-
-        return newUser
-
-    }
 
     // Mostrar todos los usuarios
 
     getAllUsers = async () => {
 
-        const allUsers = await userModel.find().lean().exec();
+        try {
+            const users = await userModel.find().lean().exec();
 
-        if (!result) {
+            const mapedUser = users.map((user) => new UserDto(user));
 
-            throw new ValidationError('USERS NOT FOUND')
+            return mapedUser;
+        } catch (error) {
+            console.log(error);
         }
-
-        return allUsers;
     }
 
     // Encontrar usuario
 
     getUser = async (data) => {
 
-        const user = await userModel.findOne({ email: data }).lean().exec()
+        try {
 
-        if (!user) { throw new ValidationError('USER NOT FOUND') }
+            const result = await userModel.findOne({ email: data }).lean().exec()
+
+            const user = new UserDto(result);
+
+
+            return user
+
+        } catch (error) {
+
+            console.log(error)
+        }
+
+    }
+
+registerUser = async (req, username, password, done) => {
+
+    //const { first_name, last_name, email } = req.body
+
+    try {
+
+        const user = await userModel.findOne({ email: username }).lean().exec(); 
+        
+        if (user) {
+
+            console.log('user al ready exist');
+            return done(null, false)
+        }
+
+        const newUser = {
+
+            first_name: req.body.first_name,
+            last_name: req.body.last_name,
+            email: req.body.email,
+            zona: req.body.zona,
+            password: await userModel.encryptPassword(password),
+            cart: await cartsService.createCart(),
+
+        }
+
+       const result = await userModel.create(newUser);
+
+        if (result.email === 'adminCoder@coder.com') {
+            result.role = 'ADMIN';
+            await result.save();
+            return done(null, result);
+        }
+
+        await result.save();
+        return done(null, result);
 
 
 
-        return user
+
+    } catch (error) {
+
+        return done('Error to Register' + error)
+    }
+}
+
+loginUser = async (username, password, done) => {
+
+
+    try {
+
+        const user = await userModel
+            .findOne({ email: username })
+            .lean()
+            .exec() 
+
+
+
+        if (!user) {
+
+            console.log('User not found');
+            return done(null, false)
+        }
+
+       const isValidPassword = userModel.comparePassword(
+            password,
+            user.password
+          );
+
+          if (!isValidPassword) { 
+
+            console.log ('password incorrect')
+            
+            return done(null, false) }
+
+        const dtoUser = new UserDto(user);
+
+        const token = generateToken(dtoUser);
+        dtoUser.token = token;
+
+        return done(null, dtoUser)
+
+
+    } catch (error) {
+
+        return done('Hubo un error en el login')
+
 
     }
 
 
-    getUserByEmail = async (email) => {
-
-        const findUser = await userModel.findOne(email);
-
-        return findUser
+}
 
 
-    }
+userById = async (id) => {
 
-    userById = async (id) => {
+    const findUser = await userModel
+        .findById(id)
+        .populate("carts.cart")
+        .lean();
 
-        const findUser = await userModel
-            .findById(id)
-            .populate("carts.cart")
-            .lean();
+    return findUser
 
-        return findUser
+}
 
-    }
+
+
+}
+
+const UserService = new UserServices();
+
+export default UserService;
+
+
+  
+
+
+    /* getUserByEmail = async (email) => {
+ 
+         const findUser = await userModel.findOne(email);
+ 
+         return findUser
+ 
+ 
+     */
+
+ 
 
     // Agregar el user al cartID
 
-    updateUser = async (userEmail, cid) => {
+   /* updateUser = async (userEmail, cid) => {
 
         const findCart = await userModel.findOne({ "carts.cart": cid });
 
@@ -88,12 +188,9 @@ class UserServices {
         return result;
 
 
-    }
+    } */
 
 
-}
 
 
-const UserService = new UserServices();
 
-export default UserService;

@@ -1,43 +1,42 @@
 import passport from "passport";
 import local from "passport-local";
 import jwt from 'passport-jwt';
-import { userModel } from "../dao/models/user.model.js";
 import GitHubStrategy from 'passport-github2';
-import { createHash, isValidPassword, generateToken } from "../utils/utils.js";
-import credentials from "./credentials.js"
+import { generateToken } from "../utils/jwt.js";
+import config from "./credentials.js"
 import UserService from "../services/users.service.js";
 
 
 const localStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
-const { userCreate, getUser, userById } = UserService;
+const { registerUser, loginUser, getUser, userById } = UserService;
 
 const cookieExtractor = req => {
-    const token = (req && req.cookies) ? req.cookies[credentials.COOKIE_NAME] : null;
+    const token = (req && req.cookies) ? req.cookies[config.COOKIE_NAME] : null;
 
     return token;
 }
-
-
 
 
 const initializePassport = () => {
 
     passport.use('gitHub', new GitHubStrategy(
         {
-            clientID: "Iv1.1f67dc2b0a006359",
-            clientSecret: "8f25918d79cb04e315903d30f25533eb305bfae4",
-            callBackUrl: "http://localhost:8080/users/githubcallback",
+            clientID: config.GITHUB_CIENT_ID,
+            clientSecret: config.GITHUB_CLIENT_SECRET,
+            callBackUrl: config.GITHUB_CALLBACKURL,
             scope: ["users:email"],
         },
 
-        // NO GENERA EL TOKEN
+
         async (accessToken, refreshToken, profile, done) => {
 
             console.log("Entra", profile);
 
             try {
+
+                // No reconoce el email
 
                 const user = await getUser(profile._json.email) /*userModel
                     .findOne({
@@ -86,107 +85,30 @@ const initializePassport = () => {
         'register', new localStrategy(
 
             {
-                passReqToCallback: true, usernameField: 'email'
+                passReqToCallback: true,
+                usernameField: 'email'
             },
 
-            async (req, username, password, done) => {
+            (req, username, password, done) => registerUser(req, username, password, done)
 
-                const { first_name, last_name, email } = req.body
-
-                try {
-
-                    // Aun lo deje conectado con el model porque llamandolo desde el service me daba error y aun no encontre el motivo
-
-                    const user = await userModel.findOne({ email: username }) // getUser(username)
-                    if (user) {
-
-                        console.log('user al ready exist');
-                        return done(null, false)
-                    }
-
-                    const newUser = {
-
-                        first_name,
-                        last_name,
-                        zona: '',
-                        social: 'local',
-                        email,
-                        password: createHash(password)
-
-                    }
-
-                    //const result = await userCreate(newUser);
-
-                    const result = new userModel(newUser);
-
-                    if (result.email === 'adminCoder@coder.com') {
-                        result.role = 'admin';
-                        await result.save();
-                        return done(null, result);
-                    }
-
-                    await result.save();
-                    return done(null, result);
-
-
-
-
-                } catch (error) {
-
-                    return done('Error to Register' + error)
-                }
-            }
-
-
-        ))
+        )
+    );
 
     passport.use(
         'login', new localStrategy(
 
             { usernameField: 'email' },
 
-            async (username, password, done) => {
-
-                try {
-
-                    /*const user = await userModel
-                        .findOne({ email: username })
-                        .lean()
-                        .exec() */
-
-
-                    const user = await getUser(username);
-
-                    if (!user) {
-
-                        console.log('User dosnt exist');
-                        return done(null, false)
-                    }
-
-                    if (!isValidPassword(user, password)) { return done(null, false) }
-
-                    const token = generateToken(user);
-                    user.token = token;
-
-                    return done(null, user)
-
-
-                } catch (error) {
-
-                    return done('Hubo un error en el login')
-
-
-                }
-            }
-
-        ))
+            (username, password, done) => loginUser(username, password, done)
+        )
+    );
 
     // JWT Passport Strategy
 
     passport.use('jwt', new JWTStrategy({
 
         jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
-        secretOrKey: credentials.PRIVATE_KEY,
+        secretOrKey: config.PRIVATE_KEY,
 
     }, async (jwt_payload, done) => {
         try {

@@ -1,6 +1,6 @@
-//import { cartManager } from "../dao/managers/index.js";
 import CartsController from "../controllers/carts.controllers.js";
 import MyRouter from "./router.js";
+import { authToken, authPolicies } from '../utils/jwt.js'
 
 const cartController = new CartsController()
 
@@ -24,7 +24,7 @@ export default class CartsRouter extends MyRouter {
 
         // Agregar un producto en el carrito
 
-        this.post('/:cid/product/:pid', cartController.addProductToCart)
+        this.post('/:cid/product/:pid', authToken, authPolicies("USER"), cartController.addProductToCart)
 
         // Actualizar la cantidad de un producto
 
