@@ -1,3 +1,7 @@
+import { ERRORS_ENUM } from "../const/error.js";
+import CustomError from "../errors/customError.js";
+import { generateProductErrorInfo } from "../errors/infoError.js";
+
 import ProductsService from "../services/products.service.js";
 
 export default class ProductsController {
@@ -22,6 +26,12 @@ export default class ProductsController {
             };
 
             const products = await this.productsService.getAllProducts(query, options);
+
+            if (!products) {
+                CustomError.createError({
+                    message: ERRORS_ENUM["PRODUCT NOT FOUND"],
+                });
+            }
 
 
             res.send({
@@ -63,6 +73,12 @@ export default class ProductsController {
 
             const product = await this.productsService.getProductById(pid)
 
+            if (!product) {
+                CustomError.createError({
+                    message: ERRORS_ENUM["PRODUCT NOT FOUND"],
+                });
+            }
+
 
             res.send({
                 status: "succes",
@@ -87,15 +103,22 @@ export default class ProductsController {
 
             const newProduct = req.body
 
-            if (!newProduct) {
+            const { title, price, description, code, category } = newProduct;
 
-                return res.send({
-                    status: "error",
-                    error: "EMPTY PRODUCT",
+            if (!title || !price || !description || !code || !category) {
+                CustomError.createError({
+                    name: ERRORS_ENUM["INVALID PRODUCT PROPERTY"],
+                    message: generateProductErrorInfo(newProduct),
                 });
             }
 
             const result = await this.productsService.addNewProduct(newProduct)
+
+            if (!result) {
+                CustomError.createError({
+                    message: ERRORS_ENUM["INVALID PRODUCT PROPERTY"],
+                });
+            }
 
             res.sendSuccess({ result });
 
@@ -117,9 +140,15 @@ export default class ProductsController {
 
             const { pid } = req.params
 
-            const productToReplace = req.body
+            const updateProduct = req.body
 
-            const result = await this.productsService.updateProduct(pid, productToReplace)
+            const result = await this.productsService.updateProduct(pid, updateProduct)
+
+            if (!result) {
+                CustomError.createError({
+                    message: ERRORS_ENUM["PRODUCT NOT FOUND"],
+                });
+            }
 
             res.sendSuccess({ result });
 
@@ -140,6 +169,12 @@ export default class ProductsController {
             const { pid } = req.params
 
             const result = await this.productsService.deleteProduct(pid)
+
+            if (!result) {
+                CustomError.createError({
+                    message: ERRORS_ENUM["PRODUCT NOT FOUND"],
+                });
+            }
 
             return res.sendSuccess({ result });
 

@@ -1,5 +1,4 @@
 
-// REVISAR
 //eliminando productos desde el front
 const deleteBtns = document.querySelectorAll("#cart__product--deleteBtn");
 
@@ -11,7 +10,7 @@ const deleteProduct = async (cid, pid) => {
 
         const result = await response.json();
 
-        if (result.status === "succes") {
+        if (response.status === 200) {
             alert("Producto eliminado correctamente");
         }
 
@@ -20,11 +19,60 @@ const deleteProduct = async (cid, pid) => {
     }
 };
 
+const cid = document.getElementById("purchase__btn").value;
+
 deleteBtns.forEach((btn) => {
+
+    btn.addEventListener("click", () => {
+
+        const pid = btn.value;
+
+        deleteProduct(cid, pid)
+
+        location.reload();
+    })
+
+
+});
+
+const purchaseBtn = document.getElementById("purchase__btn");
+
+purchaseBtn.addEventListener("click", () => {
+    purchaseCart(cid);
+
+});
+
+const purchaseCart = async (cid) => {
+
+    try {
+
+        const response = await fetch(`/api/carts/${cid}/purchase`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        const result = await response.json();
+
+        if (response.status === 200) {
+            alert(`Compra realizada con exito ${result.payload.code} `);
+            location.reload();
+        }
+
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+}
+
+/*deleteBtns.forEach((btn) => {
     btn.addEventListener("click", () => {
         const pid = btn.value;
 
         deleteProduct("63d525c6279466c8fffbfc40", pid);
         location.reload();
     });
-});
+}); */

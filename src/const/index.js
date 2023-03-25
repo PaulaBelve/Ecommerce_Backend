@@ -1,1 +1,1 @@
-export { ERRORS } from "./error.js"
+export * from "./error.js"

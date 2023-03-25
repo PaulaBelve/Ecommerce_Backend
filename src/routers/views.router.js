@@ -1,8 +1,10 @@
 import MyRouter from "./router.js"
 import ViewsController from "../controllers/views.controllers.js";
+import cartControllers from "../controllers/carts.controllers.js";
 import { passportCall } from "../utils/jwt.js";
 
 const viewsController = new ViewsController();
+const cartsControllers = new cartControllers();
 
 
 export default class ViewsRouter extends MyRouter {
@@ -21,7 +23,9 @@ export default class ViewsRouter extends MyRouter {
 
         // Vista de un carrito
 
-        this.get('/cart/:cid', viewsController.viewsCart)
+        this.get('/cart/:cid', viewsController.getCartPage) //viewsController.viewsCart
+
+        this.post("/cart/:cid/purchase", cartsControllers.purchaseCart);
 
         // Vista Admin
 

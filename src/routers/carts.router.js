@@ -32,7 +32,7 @@ export default class CartsRouter extends MyRouter {
 
         // Agregar al carrito un array de productos
 
-        this.post('/:cid', cartController.addArrayOfProducts)
+        this.post('/cid', cartController.addArrayOfProducts)
 
         // Eliminar del carrito el producto seleccionado
 

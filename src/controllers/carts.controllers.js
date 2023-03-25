@@ -1,3 +1,6 @@
+import { ERRORS_ENUM } from "../const/error.js";
+import CustomError from "../errors/customError.js";
+
 import CartsService from "../services/carts.service.js";
 
 
@@ -35,6 +38,13 @@ export default class cartControllers {
 
             const cart = await this.cartsService.getCarts()
 
+            if (!cart) {
+
+                CustomError.createError({
+                    message: ERRORS_ENUM['CART IS EMPTY'],
+                });
+            }
+
 
 
             return res.sendSuccess({ cart })
@@ -65,9 +75,10 @@ export default class cartControllers {
 
             if (!result) {
 
-                return res.send({ succes: false, error: 'NOT FOUND CART' });
-
-            };
+                CustomError.createError({
+                    message: ERRORS_ENUM['CART NOT FOUND'],
+                });
+            }
 
             return res.sendSuccess({ result })
 
@@ -92,7 +103,14 @@ export default class cartControllers {
 
             const { cid, pid } = req.params
 
-            const result = await this.cartsService.addCart(cid, pid)
+            const result = await this.cartsService.addProductToCart(cid, pid)
+
+            if (!result) {
+
+                CustomError.createError({
+                    message: ERRORS_ENUM['INVALID CART PROPERTY'],
+                });
+            }
 
             return res.sendSuccess({ result })
 
@@ -122,7 +140,12 @@ export default class cartControllers {
                 pid
             )
 
-            console.log(result)
+            if (!result) {
+
+                CustomError.createError({
+                    message: ERRORS_ENUM['INVALID CART PROPERTY'],
+                });
+            }
 
             return res.sendSuccess({ result })
 
@@ -153,6 +176,8 @@ export default class cartControllers {
                 cid,
                 products)
 
+
+
             return res.sendSuccess({ result })
 
 
@@ -180,6 +205,13 @@ export default class cartControllers {
 
             const result = await this.cartsService.deleteProductToCart(cid, pid)
 
+            if (!result) {
+
+                CustomError.createError({
+                    message: ERRORS_ENUM['INVALID CART PROPERTY'],
+                });
+            }
+
             return res.sendSuccess({ result })
 
 
@@ -191,10 +223,6 @@ export default class cartControllers {
             return res.sendServerError({ error: error.message })
 
         }
-
-
-
-
     }
 
     // Vaciar el carrito
@@ -228,6 +256,13 @@ export default class cartControllers {
             const { cid } = req.params;
 
             const result = await this.cartsServices.purchaseProducts(cid);
+
+            if (!result) {
+
+                CustomError.createError({
+                    message: ERRORS_ENUM['INVALID CART PROPERTY'],
+                });
+            }
 
             return res.sendSuccess({ result })
         } catch (error) {

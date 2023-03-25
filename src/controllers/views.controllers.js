@@ -100,11 +100,39 @@ export default class ViewsController {
 
     // Vista de un carrito
 
-    viewsCart = async (req, res) => {
+    /* viewsCart = async (req, res) => {
+ 
+         try {
+ 
+             const { cid } = req.params
+ 
+             const result = await this.cartService.getCartsById(cid)
+ 
+             const cart = result
+ 
+             console.log(cart)
+ 
+             res.render("cart", {
+                 style: "Css/style.css",
+                 ...cart,
+ 
+             });
+ 
+         } catch (error) {
+ 
+             return res.sendAuthenticationError(error);
+ 
+         }
+ 
+     } */
+
+    getCartPage = async (req, res) => {
 
         try {
 
             const { cid } = req.params
+
+            const user = req.session.user
 
             const result = await this.cartService.getCartsById(cid)
 
@@ -115,12 +143,13 @@ export default class ViewsController {
             res.render("cart", {
                 style: "Css/style.css",
                 ...cart,
+                user,
 
             });
 
-        } catch (error) {
 
-            return res.sendAuthenticationError(error);
+
+        } catch (error) {
 
         }
 

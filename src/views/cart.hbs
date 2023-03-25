@@ -6,6 +6,8 @@
 
         <!--{{_id}}-->
 
+        {{#if cart}}
+
         {{#each products}}
 
         <section class="section-carrito">
@@ -23,10 +25,11 @@
 
 
                 {{/each}}
+                {{else}}
+                <h3>El carrito se encuentra vacio</h3>
+                {{/if}}
 
-
-                <!-- NO ANDAN LOS BOTONES -->
-
+                <!-- Aun sin logica-->
                 <button class="cart__total--btn">Vaciar carrito</button>
                 <button class="cart__total--btn" id="purchase__btn" value={{cart._id}}>Confirmar compra</button>
 
@@ -34,4 +37,4 @@
 
 </main>
 
-<script src="/public/js/cart.js"></script>
+<script src="/js/cart.js"></script>

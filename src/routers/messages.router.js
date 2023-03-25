@@ -5,7 +5,6 @@ import { getChatPage } from "../controllers/messages.controller.js";
 
 //Uso el router con express x ser un solo middlewear
 
-// SE QUEDA CARGANDO EN UN LUP INFINITO
 
 const Router = express.Router();
 

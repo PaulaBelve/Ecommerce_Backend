@@ -15,7 +15,7 @@ export default class UsersController {
 
     postRegister = async (req, res) => {
 
-        return res.status(200).redirect('/users/login')
+        return res.status(200).redirect('/login')
 
     };
 
@@ -72,7 +72,7 @@ export default class UsersController {
             }
         })
 
-        res.clearCookie(credentials.COOKIE_NAME).redirect('/users/login')
+        res.clearCookie(credentials.COOKIE_NAME).redirect('/login')
     };
 
 

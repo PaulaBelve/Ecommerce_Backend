@@ -1,4 +1,3 @@
-import { NotFoundError, ValidationError } from "../utils/index.js";
 import { productModel } from "../dao/models/products.model.js";
 
 export default class ProductsService {
@@ -35,7 +34,7 @@ export default class ProductsService {
 
             if (!products) {
 
-                throw new ValidationError('NOT FOUND DB')
+                throw new Error('NOT FOUND DB')
             }
 
             return products
@@ -64,7 +63,7 @@ export default class ProductsService {
 
         if (!product) {
 
-            throw new ValidationError('PRODUCT NOT FOUND')
+            throw new Error('PRODUCT NOT FOUND')
 
         }
 
@@ -81,7 +80,7 @@ export default class ProductsService {
 
         if (product) {
 
-            throw new ValidationError('Product Already Exist in DB')
+            throw new Error('Product Already Exist in DB')
 
 
         }
@@ -90,7 +89,7 @@ export default class ProductsService {
 
         if (!result) {
 
-            throw new ValidationError('FAILED TO ADD TO DATABASE')
+            throw new Error('FAILED TO ADD TO DATABASE')
 
 
         }
@@ -111,7 +110,7 @@ export default class ProductsService {
 
         if (!product) {
 
-            throw new NotFoundError('PRODUCT NOT FOUND')
+            throw new Error('PRODUCT NOT FOUND')
         }
 
         const result = await productModel.updateOne(
@@ -133,7 +132,7 @@ export default class ProductsService {
 
         if (!product) {
 
-            throw new NotFoundError('PRODUCT NOT FOUND')
+            throw new Error('PRODUCT NOT FOUND')
         }
 
         const result = await productModel.deleteOne({ _id: pid })

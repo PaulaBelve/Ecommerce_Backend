@@ -23,6 +23,7 @@ const addToCart = async (cid, pid) => {
     }
 };
 
-addToCartBtn.addEventListener("click", () => {
+addToCartBtn.addEventListener("click", (e) => {
+    console.log(e.target.value)
     addToCart("63d525c6279466c8fffbfc40", pid);
 });

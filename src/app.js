@@ -13,15 +13,18 @@ import ProductsRouter from './routers/products.router.js'
 import CartsRouter from './routers/carts.router.js'
 import UsersRouter from './routers/users.router.js'
 import chatRouter from './routers/messages.router.js'
+//mocking
+import usersFaker from './routers/mocking.router.js'
 
 // import variables de entorno desde config
 import credentials from './config/credentials.js'
 //Socket
 import { Server } from "socket.io";
 import socket from "./socket.js";
+import { errorHandler } from "./middlewares/errors/index.js";
 
 const app = express()
-const PORT = credentials.PORT || 5000 //8080
+const PORT = credentials.PORT || 5000
 
 //init mongoDB
 MongoConnection.getInstance();
@@ -54,15 +57,18 @@ app.use(express.static('public'))
 //app.use(express.static(__dirname + "/public"));
 app.use(cookieParser(credentials.COOKIE_SECRET))
 app.use(passport.initialize());
-app.use(passport.session())
+app.use(passport.session());
+app.use(errorHandler);
 
 // Routers
 app.use('/api/session', sessionRouter.getRouter())
-app.use('/users', usersRouter.getRouter())
+app.use('/', usersRouter.getRouter())
 app.use('/', viewsRouter.getRouter())
 app.use('/api/products', productsRouter.getRouter())
 app.use('/api/carts', cartsRouter.getRouter())
 app.use('/chat', chatRouter)
+// Router mocking
+app.use('/mockingProducts', usersFaker)
 
 //app.listen
 const httpServer = app.listen(PORT, () => {

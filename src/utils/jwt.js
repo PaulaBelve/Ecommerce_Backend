@@ -64,6 +64,8 @@ export const authPolicies = (policies) => (req, res, next) => {
 
         return res.status(400).render("errors", { error: "Not Authorized" });
 
+    return next()
+
 }
 
 /*const POLICIES = {

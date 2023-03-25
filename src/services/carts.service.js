@@ -1,8 +1,9 @@
-import { cartsModel } from "../dao/models/carts.model.js" // AGREGAR productsModel
+import { cartsModel } from "../dao/models/carts.model.js"
+import { productModel } from "../dao/models/products.model.js" // AGREGAR productsModel
 import userModel from '../dao/models/user.model.js'
 import ticketModel from '../dao/models/ticket.model.js'
 import ProductsService from "../services/products.service.js";
-import { NotFoundError, ValidationError } from "../utils/index.js";
+
 
 export default class CartService {
 
@@ -28,10 +29,6 @@ export default class CartService {
             console.log(error)
 
         }
-
-
-
-
     }
 
     // Mostramos todos los carritos
@@ -40,11 +37,6 @@ export default class CartService {
 
         try {
             const carts = await cartsModel.find();
-
-            if (!carts) {
-
-                throw new ValidationError('NOT FOUND CART DB');
-            }
 
 
             return carts
@@ -69,7 +61,7 @@ export default class CartService {
 
             if (!cart) {
 
-                throw new ValidationError('NOT FOUND CART')
+                throw new Error('cart not found')
 
             };
 
@@ -88,13 +80,17 @@ export default class CartService {
 
     addProductToCart = async (cid, pid) => {
         try {
-            const cart = await this.getCartsById(cid)
+            const cart = await this.getCartsById(cid);
 
-            if (!cart) throw new ValidationError('NOT FOUND CART')
+            if (!cart) throw new Error('cart not found');
 
-            const product = await cartsModel.findOne({ "products.product": pid })
+            const product = await productModel.findById(pid).lean();
 
-            if (!product) throw new ValidationError('PRODUCT NOT FOUND IN CART')
+            if (!product) throw new Error('product not found');
+
+            const productToCart = await cartsModel.findOne({ "products.product": pid });
+
+            if (!productToCart) throw new Error('product not found in cart');
 
             const addProductInCart = await cartsModel.findOne({
                 _id: cid,
@@ -142,11 +138,11 @@ export default class CartService {
 
             const cart = await this.getCartsById(cid)
 
-            if (!cart) throw new ValidationError('CART NOT FOUND')
+            if (!cart) throw new Error('cart not found')
 
             const product = await cartsModel.findOne({ "products.product": pid })
 
-            if (!product) throw new ValidationError('PRODUCT NOT FOUND IN CART')
+            if (!product) throw new Error('product not found in cart')
 
             const updateQuantity = await cartsModel.updateOne(
                 {
@@ -163,13 +159,7 @@ export default class CartService {
                 });
 
 
-            if (!updateQuantity) {
 
-                throw new ValidationError('PRODUCT NOT FOUND IN CAR')
-
-            }
-
-            console.log(updateQuantity)
             return updateQuantity
         } catch (error) {
 
@@ -186,7 +176,7 @@ export default class CartService {
         try {
             const cart = await this.getCartsById(cid)
 
-            if (!cart) throw new ValidationError('CART NOT FOUND')
+            if (!cart) throw new Error('cart not found')
 
 
             const mapProducts = products.map((product) => {
@@ -225,7 +215,7 @@ export default class CartService {
         try {
             const cart = await this.getCartsById(cid)
 
-            if (!cart) throw new ValidationError('CART NOT FOUND')
+            if (!cart) throw new Error('cart not found')
 
             const deleteOne = await cartsModel.updateOne(
                 { _id: cid },
@@ -253,7 +243,7 @@ export default class CartService {
 
             const cart = await this.getCartsById(cid)
 
-            if (!cart) throw new ValidationError('CART NOT FOUND')
+            if (!cart) throw new Error('cart not found')
 
             const emptyCart = await cartsModel.updateOne(
                 {
