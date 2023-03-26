@@ -15,6 +15,7 @@ import UsersRouter from './routers/users.router.js'
 import chatRouter from './routers/messages.router.js'
 //mocking
 import usersFaker from './routers/mocking.router.js'
+import loggerRouter from './routers/logger.router.js'
 
 // import variables de entorno desde config
 import credentials from './config/credentials.js'
@@ -22,6 +23,7 @@ import credentials from './config/credentials.js'
 import { Server } from "socket.io";
 import socket from "./socket.js";
 import { errorHandler } from "./middlewares/errors/index.js";
+import { addLogger } from './utils/logger.js'
 
 const app = express()
 const PORT = credentials.PORT || 5000
@@ -59,6 +61,7 @@ app.use(cookieParser(credentials.COOKIE_SECRET))
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(errorHandler);
+app.use(addLogger);
 
 // Routers
 app.use('/api/session', sessionRouter.getRouter())
@@ -69,6 +72,7 @@ app.use('/api/carts', cartsRouter.getRouter())
 app.use('/chat', chatRouter)
 // Router mocking
 app.use('/mockingProducts', usersFaker)
+app.use('/loggerTest', loggerRouter)
 
 //app.listen
 const httpServer = app.listen(PORT, () => {

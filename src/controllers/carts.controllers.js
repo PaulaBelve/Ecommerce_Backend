@@ -22,7 +22,7 @@ export default class cartControllers {
 
         } catch (error) {
 
-            console.log(error)
+            req.logger.error(error);
             return res.sendServerError({ error: error.message })
 
 
@@ -52,7 +52,7 @@ export default class cartControllers {
 
         } catch (error) {
 
-            console.log(error)
+            req.logger.error(error);
             return res.sendServerError({ error: error.message })
 
 
@@ -84,7 +84,7 @@ export default class cartControllers {
 
 
         } catch (error) {
-            console.log(error)
+            req.logger.error(error);
 
             return res.sendServerError({ error: error.message })
 
@@ -117,7 +117,7 @@ export default class cartControllers {
 
         } catch (error) {
 
-            console.log(error)
+            req.logger.error(error);
 
             return res.sendServerError({ error: error.message })
 
@@ -153,7 +153,7 @@ export default class cartControllers {
 
         } catch (error) {
 
-            console.log(error)
+            req.logger.error(error);
 
             return res.sendServerError({ error: error.message })
 
@@ -184,7 +184,7 @@ export default class cartControllers {
 
         } catch (error) {
 
-            console.log(error)
+            req.logger.error(error);
 
             return res.sendServerError({ error: error.message })
 
@@ -218,7 +218,7 @@ export default class cartControllers {
 
         } catch (error) {
 
-            console.log(error)
+            req.logger.error(error);
 
             return res.sendServerError({ error: error.message })
 
@@ -242,7 +242,7 @@ export default class cartControllers {
 
         } catch (error) {
 
-            console.log(error)
+            req.logger.error(error);
 
             return res.sendServerError({ error: error.message })
 
@@ -266,7 +266,7 @@ export default class cartControllers {
 
             return res.sendSuccess({ result })
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
 
             return res.sendServerError({ error: error.message })
         }

@@ -2,7 +2,7 @@ import ProductsService from "../services/products.service.js";
 import CartService from "../services/carts.service.js";
 import UserService from "../services/users.service.js";
 
-const { getAllUsers } = UserService;
+//const { getAllUsers } = UserService;
 
 export default class ViewsController {
 
@@ -55,12 +55,9 @@ export default class ViewsController {
                 ...response,
             });
 
-
-
-
         } catch (error) {
 
-            console.log(error)
+            req.logger.error(error);
 
 
             res.send({ succes: false, error: "ha ocurrido un error" })
@@ -92,6 +89,8 @@ export default class ViewsController {
 
         } catch (error) {
 
+            req.logger.error(error);
+
             return res.sendAuthenticationError(error);
 
         }
@@ -100,31 +99,33 @@ export default class ViewsController {
 
     // Vista de un carrito
 
-    /* viewsCart = async (req, res) => {
- 
-         try {
- 
-             const { cid } = req.params
- 
-             const result = await this.cartService.getCartsById(cid)
- 
-             const cart = result
- 
-             console.log(cart)
- 
-             res.render("cart", {
-                 style: "Css/style.css",
-                 ...cart,
- 
-             });
- 
-         } catch (error) {
- 
-             return res.sendAuthenticationError(error);
- 
-         }
- 
-     } */
+    viewsCart = async (req, res) => {
+
+        try {
+
+            const { cid } = req.params
+
+            const result = await this.cartService.getCartsById(cid)
+
+            const cart = result
+
+            console.log(cart)
+
+            res.render("cart", {
+                style: "Css/style.css",
+                ...cart,
+
+            });
+
+        } catch (error) {
+
+            req.logger.error(error);
+
+            return res.sendAuthenticationError(error);
+
+        }
+
+    }
 
     getCartPage = async (req, res) => {
 
@@ -150,6 +151,8 @@ export default class ViewsController {
 
 
         } catch (error) {
+
+            req.logger.error(error);
 
         }
 
@@ -179,7 +182,7 @@ export default class ViewsController {
    
            catch (error) {
    
-               console.log(error)
+              req.logger.error(error);
    
            } 
    

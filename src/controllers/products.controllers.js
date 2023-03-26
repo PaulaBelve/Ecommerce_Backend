@@ -55,8 +55,9 @@ export default class ProductsController {
 
         } catch (error) {
 
+
             res.sendServerError(error)
-            console.log(error)
+
 
 
         }
@@ -87,6 +88,8 @@ export default class ProductsController {
 
 
         } catch (error) {
+
+
 
             res.sendServerError(error)
 
@@ -123,6 +126,8 @@ export default class ProductsController {
             res.sendSuccess({ result });
 
         } catch (error) {
+
+
 
             res.sendServerError({ error: error.message });
 

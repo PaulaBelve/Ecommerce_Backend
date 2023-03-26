@@ -1,7 +1,5 @@
 import credentials from "../config/credentials.js";
 
-
-
 export default class UsersController {
 
     // REGISTER
@@ -68,15 +66,12 @@ export default class UsersController {
         req.session.destroy(err => {
 
             if (err) {
-                return console.log('Fallo el logout')
+                return req.logger.error(err);
             }
         })
 
         res.clearCookie(credentials.COOKIE_NAME).redirect('/login')
     };
-
-
-
 
 
     getCurrentUser = (req, res) => {
@@ -85,17 +80,9 @@ export default class UsersController {
 
             res.status(200).render("session", { styles: "Css/style.css", user });
         } catch (error) {
-            console.log(error);
+            req.logger.error(error);
         }
     };
-
-
-
-
-
-
-
-
 
 
 }
