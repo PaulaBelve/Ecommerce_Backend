@@ -56,7 +56,7 @@ export const passportCall = (strategy) => {
     }
 }
 
-export const authPolicies = (policies) => (req, res, next) => {
+/*export const authPolicies = (policies) => (req, res, next) => {
 
     const role = req.user.role;
 
@@ -66,24 +66,28 @@ export const authPolicies = (policies) => (req, res, next) => {
 
     return next()
 
+}*/
+
+export const authPolicies = (policieOne, policieTwo) => (req, res, next) => {
+    const role = req.user.role;
+
+    if (typeof policieOne === "undefined") {
+
+        policieOne = policieTwo;
+        policieTwo = null;
+    }
+
+    if (role !== policieOne && !role !== policieTwo) {
+
+        return res.status(400).render("errors", { error: "Not Authorized" });
+
+    }
+
+    next()
+
+
 }
 
-/*const POLICIES = {
-    ADMIN: "admin",
-    USER: "user",
-};
-
-export const authAdminPolicies = (policies) => (req, res, next) => {
-    if (policies === POLICIES.ADMIN) return next();
-
-    next();
-};
-
-export const authUserPolicies = (policies) => (req, res, next) => {
-    if (policies === POLICIES.USER) return next();
-
-    next();
-}; */
 
 
 

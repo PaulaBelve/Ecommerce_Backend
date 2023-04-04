@@ -2,8 +2,6 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 
 
-//const userCollection = 'users'
-
 const Schema = mongoose.Schema;
 
 
@@ -15,7 +13,6 @@ const userSchema = new Schema({
     social: String,
     email: {
         type: String,
-        //que no se duplique el mail
         unique: true
     },
     password: String,
@@ -24,15 +21,14 @@ const userSchema = new Schema({
         default: "USER",
     },
 
-    carts: [
-        {
-            cart: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "carts"
-            },
 
-        },
-    ],
+    cart: {
+        type: Schema.Types.ObjectId,
+        ref: "carts"
+    },
+
+
+
 
     default: [],
 

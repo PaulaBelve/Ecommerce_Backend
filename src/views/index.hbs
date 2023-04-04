@@ -9,7 +9,7 @@
     <div>
         <li><a href="/admin">Administrador</a></li>
         <li><a href="/api/session/current">Sesiones</a></li>
-        <li><a href="cart/{{this.user.cart}}">Carrito</a></li>
+        <li><a href="/cart/{{this.user.carts}}">Carrito</a></li>
         <li><a href="/logout">Logout</a></li>
 
     </div>
@@ -24,7 +24,7 @@
             <div class="cards-products">
 
 
-                <picture><img src="{{this.thumbnail}}" /></picture>
+                <picture><img src={{this.thumbnail}} /></picture>
                 <h2>{{this.title}}</h2>
                 <p>{{this.description}}</p>
                 <p>${{this.price}}</p>

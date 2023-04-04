@@ -2,7 +2,7 @@ import ProductsService from "../services/products.service.js";
 import CartService from "../services/carts.service.js";
 import UserService from "../services/users.service.js";
 
-//const { getAllUsers } = UserService;
+const { getAllUsers } = UserService;
 
 export default class ViewsController {
 
@@ -75,14 +75,17 @@ export default class ViewsController {
 
             const { pid } = req.params
 
-            const product = await this.productsService.getProductById(pid)
+            const response = await this.productsService.getProductById(pid)
 
-            console.log(product)
+            const user = req.session.user;
+
+            console.log(response)
 
             res.render("detail", {
 
                 style: "Css/style.css",
-                product
+                response,
+                user,
             });
 
 
@@ -177,7 +180,7 @@ export default class ViewsController {
                        users,
                    })
                }
-               return res.redirect('/users/admin')
+               return res.redirect('/admin')
            }
    
            catch (error) {

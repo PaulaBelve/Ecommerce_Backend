@@ -18,7 +18,7 @@ export default class ProductsRouter extends MyRouter {
 
         // Agregar un producto
 
-        this.post('/', authToken, authPolicies("ADMIN"), productsController.addNewProductCtr);
+        this.post('/', authToken, authPolicies("ADMIN", "PREMIUM"), productsController.addNewProductCtr);
 
 
         // Actualizar un producto
@@ -27,7 +27,7 @@ export default class ProductsRouter extends MyRouter {
 
         // Eliminar un producto
 
-        this.delete('/:pid', authToken, authPolicies("ADMIN"), productsController.deleteProductCtr);
+        this.delete('/:pid', authToken, authPolicies("ADMIN", "PREMIUM"), productsController.deleteProductCtr);
 
     }
 }

@@ -15,6 +15,7 @@ import UsersRouter from './routers/users.router.js'
 import chatRouter from './routers/messages.router.js'
 //mocking
 import usersFaker from './routers/mocking.router.js'
+//Logger
 import loggerRouter from './routers/logger.router.js'
 
 // import variables de entorno desde config
@@ -55,11 +56,11 @@ app.set('views', `${__dirname}/views`)
 app.use(session(MongoStoreInstance));
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static('public'))
 //app.use(express.static(__dirname + "/public"));
 app.use(cookieParser(credentials.COOKIE_SECRET))
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(errorHandler);
 app.use(addLogger);
 

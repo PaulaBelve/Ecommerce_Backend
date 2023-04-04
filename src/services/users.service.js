@@ -44,7 +44,7 @@ class UserServices {
 
 registerUser = async (req, username, password, done) => {
 
-    //const { first_name, last_name, email } = req.body
+  
 
     try {
 
@@ -135,7 +135,7 @@ loginUser = async (username, password, done) => {
 }
 
 
-userById = async (id) => {
+/*userById = async (id) => {
 
     const findUser = await userModel
         .findById(id)
@@ -144,7 +144,7 @@ userById = async (id) => {
 
     return findUser
 
-}
+} */
 
 
 

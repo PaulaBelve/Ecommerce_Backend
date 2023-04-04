@@ -1,6 +1,10 @@
 
 //eliminando productos desde el front
-const deleteBtns = document.querySelectorAll("#cart__product--deleteBtn");
+const deleteBtns = Array.from(
+
+    document.querySelectorAll("#cart__product--deleteBtn")
+
+);
 
 const deleteProduct = async (cid, pid) => {
     try {
@@ -15,7 +19,7 @@ const deleteProduct = async (cid, pid) => {
         }
 
     } catch (error) {
-        console.log(error);
+
     }
 };
 
@@ -46,7 +50,7 @@ const purchaseCart = async (cid) => {
 
     try {
 
-        const response = await fetch(`/api/carts/${cid}/purchase`, {
+        const response = await fetch(`/cart/${cid}/purchase`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -63,7 +67,7 @@ const purchaseCart = async (cid) => {
 
     } catch (error) {
 
-        console.log(error);
+
 
     }
 }

@@ -6,7 +6,7 @@
 
         <!--{{_id}}-->
 
-        {{#if cart}}
+        {{#if products}}
 
         {{#each products}}
 
@@ -16,7 +16,7 @@
 
 
                 <h2>{{this.product.title}}</h2>
-                <img src="{{this.product.thumbnail}}" />
+                <img src={{this.product.thumbnail}} />
                 <p>${{this.product.price}}</p>
                 <p>x{{this.quantity}}</p>
 
@@ -25,11 +25,12 @@
 
 
                 {{/each}}
+
                 {{else}}
                 <h3>El carrito se encuentra vacio</h3>
                 {{/if}}
 
-                <!-- Aun sin logica-->
+                <!-- Aun sin logica -->
                 <button class="cart__total--btn">Vaciar carrito</button>
                 <button class="cart__total--btn" id="purchase__btn" value={{cart._id}}>Confirmar compra</button>
 

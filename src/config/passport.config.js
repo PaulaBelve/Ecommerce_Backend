@@ -4,6 +4,7 @@ import jwt from 'passport-jwt';
 import GitHubStrategy from 'passport-github2';
 import { generateToken } from "../utils/jwt.js";
 import config from "./credentials.js"
+import userModel from "../dao/models/user.model.js";
 import UserService from "../services/users.service.js";
 
 
@@ -131,7 +132,8 @@ const initializePassport = () => {
     })
 
     passport.deserializeUser(async (id, done) => {
-        const user = await userById(id)
+        //const user = await userById(id)
+        const user = await userModel.findById(id);
         done(null, user)
     })
 
