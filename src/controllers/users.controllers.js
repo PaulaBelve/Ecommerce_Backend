@@ -42,7 +42,8 @@ export default class UsersController {
             zona: req.user.zona,
             email: req.user.email,
             role: req.user.role,
-            social: req.user.social
+            social: req.user.social,
+            cart: req.user.cart
         }
 
         res.cookie(credentials.COOKIE_NAME, req.user.token).redirect('/product')

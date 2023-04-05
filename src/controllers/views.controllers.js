@@ -49,10 +49,14 @@ export default class ViewsController {
 
             console.log(result)
 
+
+
             res.render("index", {
                 style: "style.css",
                 test: "Prueba",
                 ...response,
+                user
+
             });
 
         } catch (error) {
@@ -146,8 +150,10 @@ export default class ViewsController {
 
             res.render("cart", {
                 style: "Css/style.css",
-                ...cart,
+                products: cart,
                 user,
+                /* ...cart,
+                 user,*/
 
             });
 

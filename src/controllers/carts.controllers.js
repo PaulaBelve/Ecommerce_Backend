@@ -103,7 +103,11 @@ export default class cartControllers {
 
             const { cid, pid } = req.params
 
-            const result = await this.cartsService.addProductToCart(cid, pid)
+            const result = await this.cartsService.addProductToCart(
+                Types.ObjectId(cid),
+                pid
+
+            );
 
             if (!result) {
 

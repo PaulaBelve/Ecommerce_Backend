@@ -41,7 +41,7 @@ export default class MyRouter {
             try {
                 await cb.apply(this, params)
             } catch (error) {
-                params[1].satus(500).send(error);
+                params[1].status(500).send(error);
             }
         })
     }

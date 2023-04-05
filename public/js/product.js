@@ -7,7 +7,6 @@ const cid = document.getElementById("cart_id").innerHTML;
 
 const addToCart = async (cid, pid) => {
 
-    // not found fetch ??
     try {
         const response = await fetch(`/api/carts/${cid}/product/${pid}`, {
             method: "POST",
@@ -16,13 +15,17 @@ const addToCart = async (cid, pid) => {
             },
         });
 
+        console.log(response);
+
         const result = await response.json();
 
-        if (result.status === 200) {
+        if (response.status === 200) {
             alert("Producto agregado correctamente");
         }
-    } catch (error) {
 
+    } catch (error) {
+        console.log(error);
+        console.log('error')
     }
 };
 
