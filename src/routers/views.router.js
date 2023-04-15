@@ -1,10 +1,12 @@
 import MyRouter from "./router.js"
 import ViewsController from "../controllers/views.controllers.js";
+//import purchaseCart from "../controllers/carts.controllers.js";
 import cartControllers from "../controllers/carts.controllers.js";
 import { passportCall } from "../utils/jwt.js";
 
+
 const viewsController = new ViewsController();
-const cartsControllers = new cartControllers();
+const cartsController = new cartControllers();
 
 
 export default class ViewsRouter extends MyRouter {
@@ -21,11 +23,14 @@ export default class ViewsRouter extends MyRouter {
 
         this.get('/product/:pid', passportCall('jwt'), viewsController.viewProductDetail)
 
-        // Vista de un carrito
+        // Vista del carrito carrito
 
-        this.get('/cart/:cid', viewsController.getCartPage) //viewsController.viewsCart
+        this.get('/cart/:cid', viewsController.getCartPage)
 
-        this.post("/cart/:cid/purchase", cartsControllers.purchaseCart);
+        // Ticket
+        // Manda el ticket pero no toma el fetch
+
+        this.post("/cart/:cid/purchase", cartsController.purchaseCart);
 
         // Vista Admin
 

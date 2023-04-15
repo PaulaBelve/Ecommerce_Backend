@@ -15,7 +15,6 @@ const addToCart = async (cid, pid) => {
             },
         });
 
-        console.log(response);
 
         const result = await response.json();
 

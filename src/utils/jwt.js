@@ -35,7 +35,7 @@ export const authToken = (req, res, next) => {
             })
 
         req.user = credentials.user;
-        next()
+        next();
 
     })
 
@@ -79,7 +79,7 @@ export const authPolicies = (policieOne, policieTwo) => (req, res, next) => {
 
     if (role !== policieOne && !role !== policieTwo) {
 
-        return res.status(400).render("errors", { error: "Not Authorized" });
+        return res.status(400).render("errors", { error: "Not Authorized from Policies" });
 
     }
 

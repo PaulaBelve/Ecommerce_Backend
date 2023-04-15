@@ -1,4 +1,5 @@
 import credentials from "../config/credentials.js";
+import UserService from "../services/users.service.js";
 
 export default class UsersController {
 
@@ -43,7 +44,10 @@ export default class UsersController {
             email: req.user.email,
             role: req.user.role,
             social: req.user.social,
-            cart: req.user.cart
+            cart: req.user.cart,
+            //token: req.user.token
+
+
         }
 
         res.cookie(credentials.COOKIE_NAME, req.user.token).redirect('/product')
@@ -86,4 +90,199 @@ export default class UsersController {
     };
 
 
+    getAllUser = async (req, res) => {
+
+        try {
+
+            const users = await UserService.getAllUsers();
+
+            if (!users) {
+
+                CustomError.createError({
+                    message: "Db is empty",
+                });
+            }
+
+            res.status(200).send({
+                payload: users,
+            });
+
+
+        } catch (error) {
+
+            console.log(error)
+
+            res.render("errors", {
+                error: error.message,
+            });
+        }
+    }
+
+    getRestore = (req, res) => {
+
+        try {
+
+            res.render("restore");
+
+
+        } catch {
+
+            console.log(error)
+            res.render("errors", {
+
+                error: error.message,
+            })
+
+        }
+    }
+
+    postRestore = async (req, res) => {
+
+        try {
+
+            const { email } = req.body;
+
+            const result = await UserService.sendRestoreMail(email);
+
+            if (!result) {
+
+                return res.render("errors", {
+
+                    error: "email not found"
+                })
+            }
+
+            res.status(200).redirect("login");
+
+        } catch {
+
+            console.log(error);
+
+            res.render("errors", {
+                error: error.message,
+            });
+        }
+
+    }
+
+
+    getRestoreForm = async (req, res) => {
+
+
+        try {
+
+            const { uid, token } = req.params;
+            const user = await UserService.findUserById(uid);
+
+            if (!user) {
+
+                CustomError.createError({
+                    message: ERRORS_ENUM["USER NOT FOUND"],
+                });
+
+                return res.redirect("restore");
+            }
+
+            const userToken = await UserService.findUserToken(uid, token);
+
+            if (!userToken) {
+
+                CustomError.createError({
+                    message: "INVALID OF EXPIRED TOKEN",
+                });
+
+                return res.redirect("restore");
+
+            }
+
+            res.render("restoreForm", {
+
+                style: "style.css",
+                uid,
+                token
+            });
+
+
+
+        } catch {
+
+            console.log(error);
+
+            res.redirect("restore");
+
+        }
+    }
+
+    postRestoreForm = async (req, res) => {
+
+        try {
+
+            const { password } = req.body;
+            const { token, uid } = req.params;
+
+            const result = await UserService.restorePassword(uid, token, password);
+
+            if (!result) {
+
+                CustomError.createError({
+                    message: ERRORS_ENUM["USER NOT FOUND"],
+                });
+            }
+
+            res.status(200).redirect("login");
+
+
+        } catch (error) {
+
+            console.log(error)
+
+            res.render("errors", {
+                error: error.message,
+            });
+
+
+
+        }
+    }
+
+    changeUserRole = async (req, res) => {
+        try {
+
+            const { uid } = req.params;
+            const result = await UserService.changeUserRole(uid)
+
+            if (!result) {
+
+                CustomError.createError({
+                    message: "Something went wrong",
+                });
+            }
+
+            res.status(200).send({
+                message: "User succesfully changed role",
+            });
+
+
+        } catch (error) {
+
+            console.log(error)
+            res.render("errors", {
+                error: error.message,
+            });
+
+        }
+
+
+    }
+
+
 }
+
+
+
+
+
+
+
+
+

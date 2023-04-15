@@ -1,7 +1,8 @@
+import { Types } from "mongoose";
 import { ERRORS_ENUM } from "../const/error.js";
 import CustomError from "../errors/customError.js";
-
 import CartsService from "../services/carts.service.js";
+//import { error } from "winston";
 
 
 export default class cartControllers {
@@ -121,7 +122,8 @@ export default class cartControllers {
 
         } catch (error) {
 
-            req.logger.error(error);
+
+            console.log(error);
 
             return res.sendServerError({ error: error.message })
 
@@ -259,32 +261,30 @@ export default class cartControllers {
         try {
             const { cid } = req.params;
 
-            const result = await this.cartsServices.purchaseProducts(cid);
+            const result = await this.cartsService.purchaseProducts(
+                Types.ObjectId(cid)
+            );
+
 
             if (!result) {
 
                 CustomError.createError({
                     message: ERRORS_ENUM['INVALID CART PROPERTY'],
                 });
+
+
             }
 
             return res.sendSuccess({ result })
+
         } catch (error) {
-            req.logger.error(error);
+
+            console.log(error);
 
             return res.sendServerError({ error: error.message })
         }
 
     }
-
-
-
-
-
-
-
-
-
 
 
 }

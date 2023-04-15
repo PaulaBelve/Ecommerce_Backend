@@ -16,15 +16,15 @@ const userSchema = new Schema({
         unique: true
     },
     password: String,
-    role: {
-        type: String,
-        default: "USER",
-    },
-
 
     cart: {
         type: Schema.Types.ObjectId,
         ref: "carts"
+    },
+
+    role: {
+        type: String,
+        default: "USER",
     },
 
 
@@ -51,7 +51,3 @@ const userModel = mongoose.model("users", userSchema);
 export default userModel;
 
 
-
-// Creación del model : collection + schema
-
-//export const userModel = mongoose.model(userCollection, userSchema)

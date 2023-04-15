@@ -1,4 +1,6 @@
 import nodemailer from "nodemailer";
+import dotenv from "dotenv";
+dotenv.config();
 
 class MailManager {
 
@@ -10,16 +12,28 @@ class MailManager {
             port: 587,
             auth: {
 
-                user: "pau.belve@gmail.com",
-                pass: "123456789",
+                user: process.env.NODE_EMAIL,
+                pass: process.env.NODE_PASSWORD,
             },
 
-        })
+        });
 
     }
+
+
+    send = async (user, subject, text) => {
+        const result = await this.transport.sendMail({
+            from: process.env.NODE_EMAIL,
+            to: user,
+            subject,
+            text,
+        });
+
+        return result;
+    }
+
 }
 
 const sendMail = new MailManager();
-
 
 export default sendMail;

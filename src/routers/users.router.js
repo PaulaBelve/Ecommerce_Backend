@@ -31,17 +31,21 @@ export default class UsersRouter extends MyRouter {
 
         // Callback
 
-        this.get('/githubcallback', passport.authenticate('gitHub', { failuredirect: '/error' }), usersController.loginGitHub)
+        this.get('/githubcallback', passport.authenticate('gitHub', { failuredirect: '/errors' }), usersController.loginGitHub)
 
         // LOGOUT
 
         this.get('/logout', usersController.logout)
 
+        // EMAIL
 
+        this.get('/restore', usersController.getRestore)
 
+        this.post('/restore', usersController.postRestore)
 
+        this.get('/restoreForm/:uid/:token', usersController.getRestoreForm)
 
-
+        this.post('/restoreForm/:uid/:token', usersController.postRestoreForm)
 
 
     }

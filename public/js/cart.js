@@ -20,6 +20,8 @@ const deleteProduct = async (cid, pid) => {
 
     } catch (error) {
 
+        console.log(error)
+
     }
 };
 
@@ -42,11 +44,14 @@ deleteBtns.forEach((btn) => {
 const purchaseBtn = document.getElementById("purchase__btn");
 
 purchaseBtn.addEventListener("click", () => {
+
     purchaseCart(cid);
 
 });
 
 const purchaseCart = async (cid) => {
+
+    // NO ME TOMA EL FETCH PERO SI ANDA LA RUTA PORQUE DESDE POSTMAN ENVIO EL TICKET
 
     try {
 
@@ -66,17 +71,9 @@ const purchaseCart = async (cid) => {
 
 
     } catch (error) {
-
+        console.log(error)
 
 
     }
 }
 
-/*deleteBtns.forEach((btn) => {
-    btn.addEventListener("click", () => {
-        const pid = btn.value;
-
-        deleteProduct("63d525c6279466c8fffbfc40", pid);
-        location.reload();
-    });
-}); */

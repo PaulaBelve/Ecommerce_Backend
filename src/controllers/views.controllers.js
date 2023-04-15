@@ -150,10 +150,9 @@ export default class ViewsController {
 
             res.render("cart", {
                 style: "Css/style.css",
-                products: cart,
+                products: cart.products,
                 user,
-                /* ...cart,
-                 user,*/
+
 
             });
 

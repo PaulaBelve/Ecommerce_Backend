@@ -4,7 +4,6 @@ const Schema = mongoose.Schema;
 
 const cartsCollection = 'carts';
 
-//const cartSchema = new Schema({
 
 const cartSchema = new Schema({
      products: [

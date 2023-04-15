@@ -1,3 +1,4 @@
+//import { error } from "winston";
 import { productModel } from "../dao/models/products.model.js";
 
 export default class ProductsService {
@@ -74,7 +75,7 @@ export default class ProductsService {
 
     // Agregar productos
 
-    addNewProduct = async (newProduct) => {
+    addNewProduct = async (newProduct, user) => {
 
         const product = await productModel.findOne({ code: newProduct.code });
 
@@ -85,20 +86,13 @@ export default class ProductsService {
 
         }
 
-        const result = await productModel.create(newProduct)
+        const result = await productModel.create({
+            ...newProduct,
+            owner: user._id
+        })
 
-        if (!result) {
-
-            throw new Error('FAILED TO ADD TO DATABASE')
-
-
-        }
 
         return result
-
-
-
-
     }
 
     // Actualizar un producto
@@ -129,6 +123,15 @@ export default class ProductsService {
 
         const product = await this.getProductById(pid);
 
+        //TODO el owner dentro del prodcuto se guarda como un objeto
+
+        if (product.owner !== "ADMIN" && product.owner != user._id) {
+
+            throw new Error('Not authorized')
+
+
+        }
+
 
         if (!product) {
 
@@ -144,33 +147,21 @@ export default class ProductsService {
     //actualizar stock
 
     updateStock = async (pid, quantity) => {
-        try {
-            const product = await this.getProductById(pid);
 
-            if (product.stock < quantity) {
-                console.log("No stock");
+        const product = await this.getProductById(pid);
 
-                return false;
-            }
+        if (product.stock < quantity) {
+            console.log("No stock");
 
-            await productModel.updateOne(
-                { _id: pid },
-                { $inc: { stock: -quantity } }
-            );
-
-            return true;
-        } catch (error) {
-            console.log(error);
+            return false;
         }
+
+        await productModel.updateOne(
+            { _id: pid },
+            { $inc: { stock: -quantity } }
+        );
+
+        return true;
+
     };
-
-
-
-
-
-
-
-
-
-
 }

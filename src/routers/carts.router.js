@@ -24,7 +24,7 @@ export default class CartsRouter extends MyRouter {
 
         // Agregar un producto en el carrito
 
-        this.post('/:cid/product/:pid', authToken, authPolicies("USER"), cartController.addProductToCart)
+        this.post('/:cid/product/:pid', authToken, authPolicies("USER", "PREMIUM"), cartController.addProductToCart)
 
         // Actualizar la cantidad de un producto
 
@@ -32,7 +32,7 @@ export default class CartsRouter extends MyRouter {
 
         // Agregar al carrito un array de productos
 
-        this.post('/cid', cartController.addArrayOfProducts)
+        this.post('/:cid', cartController.addArrayOfProducts)
 
         // Eliminar del carrito el producto seleccionado
 

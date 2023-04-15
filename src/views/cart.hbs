@@ -20,6 +20,8 @@
                 <p>${{this.product.price}}</p>
                 <p>x{{this.quantity}}</p>
 
+                <!-- NO FUNCIONA EL BOTON QUE ELIMINA -->
+
                 <button class="cart__deleteBtn" id="cart__product--deleteBtn"
                     value={{this.product._id}}>Eliminar</button>
 
@@ -30,9 +32,11 @@
                 <h3>El carrito se encuentra vacio</h3>
                 {{/if}}
 
-                <!-- Aun sin logica -->
+
                 <button class="cart__total--btn">Vaciar carrito</button>
-                <button class="cart__total--btn" id="purchase__btn" value={{cart._id}}>Confirmar compra</button>
+                <!-- NO FUNCIONA EL BOTON DE CONFIRMAR -->
+                <button class="cart__total--btn" id="purchase__btn" value={{cart.products._id}}>Confirmar
+                    compra</button>
 
             </div>
 

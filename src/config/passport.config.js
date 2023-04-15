@@ -11,7 +11,7 @@ import UserService from "../services/users.service.js";
 const localStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy;
 const ExtractJWT = jwt.ExtractJwt;
-const { registerUser, loginUser, getUser, userById } = UserService;
+const { registerUser, loginUser, getUser } = UserService;
 
 const cookieExtractor = req => {
     const token = (req && req.cookies) ? req.cookies[config.COOKIE_NAME] : null;

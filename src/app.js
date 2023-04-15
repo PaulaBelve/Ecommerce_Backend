@@ -9,6 +9,7 @@ import MongoConnection from './utils/mongoDB.js'
 import __dirname, { MongoStoreInstance } from './utils.js'
 import ViewsRouter from './routers/views.router.js'
 import SessionRouter from './routers/session.router.js'
+import apiUsers from './routers/apiUsers.router.js'
 import ProductsRouter from './routers/products.router.js'
 import CartsRouter from './routers/carts.router.js'
 import UsersRouter from './routers/users.router.js'
@@ -23,7 +24,10 @@ import credentials from './config/credentials.js'
 //Socket
 import { Server } from "socket.io";
 import socket from "./socket.js";
+
+//Error
 import { errorHandler } from "./middlewares/errors/index.js";
+//Logger
 import { addLogger } from './utils/logger.js'
 
 const app = express()
@@ -66,6 +70,7 @@ app.use(addLogger);
 
 // Routers
 app.use('/api/session', sessionRouter.getRouter())
+app.use('/', apiUsers)
 app.use('/', usersRouter.getRouter())
 app.use('/', viewsRouter.getRouter())
 app.use('/api/products', productsRouter.getRouter())
