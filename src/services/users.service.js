@@ -195,7 +195,7 @@ class UserServices {
 
         await sendMail.send(user.email, "Password Reset", link)
 
-        return true
+        return true;
 
     }
 

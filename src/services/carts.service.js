@@ -144,7 +144,7 @@ export default class CartService {
 
     }
 
-    // Traer un array dentro del carrito
+    // Traer un array de productos dentro del carrito
 
     arrayProduct = async (cid, products) => {
 

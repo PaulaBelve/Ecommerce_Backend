@@ -29,6 +29,9 @@ import socket from "./socket.js";
 import { errorHandler } from "./middlewares/errors/index.js";
 //Logger
 import { addLogger } from './utils/logger.js'
+//Swagger
+import initSwagger from './swagger.js'
+import swaggerUiExpress from 'swagger-ui-express'
 
 const app = express()
 const PORT = credentials.PORT || 5000
@@ -67,6 +70,10 @@ app.use(express.static('public'))
 app.use(cookieParser(credentials.COOKIE_SECRET))
 app.use(errorHandler);
 app.use(addLogger);
+app.use('/api/docs',
+    swaggerUiExpress.serve,
+    swaggerUiExpress.setup(initSwagger())
+);
 
 // Routers
 app.use('/api/session', sessionRouter.getRouter())
