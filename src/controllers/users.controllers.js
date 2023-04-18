@@ -45,7 +45,7 @@ export default class UsersController {
             role: req.user.role,
             social: req.user.social,
             cart: req.user.cart,
-            //token: req.user.token
+
 
 
         }
@@ -172,6 +172,7 @@ export default class UsersController {
         try {
 
             const { uid, token } = req.params;
+
             const user = await UserService.findUserById(uid);
 
             if (!user) {
@@ -198,7 +199,7 @@ export default class UsersController {
             res.render("restoreForm", {
 
                 style: "style.css",
-                uid,
+                ...uid,
                 token
             });
 
@@ -220,7 +221,7 @@ export default class UsersController {
             const { password } = req.body;
             const { token, uid } = req.params;
 
-            const result = await UserService.restorePassword(uid, token, password);
+            const result = await UserService.restorePassword(uid, password, token);
 
             if (!result) {
 

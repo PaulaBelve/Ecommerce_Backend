@@ -29,6 +29,8 @@ class MailManager {
             text,
         });
 
+        console.log(result)
+
         return result;
     }
 

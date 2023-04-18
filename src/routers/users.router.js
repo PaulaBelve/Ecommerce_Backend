@@ -43,6 +43,8 @@ export default class UsersRouter extends MyRouter {
 
         this.post('/restore', usersController.postRestore)
 
+        // Error en las rutas de restoreForm
+
         this.get('/restoreForm/:uid/:token', usersController.getRestoreForm)
 
         this.post('/restoreForm/:uid/:token', usersController.postRestoreForm)
