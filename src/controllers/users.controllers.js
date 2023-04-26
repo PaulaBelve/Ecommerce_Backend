@@ -250,7 +250,7 @@ export default class UsersController {
         try {
 
             const { uid } = req.params;
-            const result = await UserService.changeUserRole(uid)
+            const result = await UserService.changeRole(uid)
 
             if (!result) {
 

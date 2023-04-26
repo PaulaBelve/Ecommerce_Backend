@@ -87,6 +87,15 @@ app.use('/chat', chatRouter)
 app.use('/mockingProducts', usersFaker)
 app.use('/loggerTest', loggerRouter)
 
+// Pagina principal login
+
+/*app.use((req, res) =>
+
+    res.redirect('/login')
+
+
+);*/
+
 //app.listen
 const httpServer = app.listen(PORT, () => {
     console.log("Server up!");

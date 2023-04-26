@@ -282,7 +282,7 @@ class UserServices {
 
     findUserToken = async (uid, token) => {
 
-        userToken = await tokenModel.findOne({ userId: uid })
+        const userToken = await tokenModel.findOne({ userId: uid })
 
         return userToken
 

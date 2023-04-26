@@ -10,5 +10,6 @@ export const getLoggerTest = (req, res) => {
         req.logger.fatal("Fatal Error Test");
     } catch (error) {
         req.logger.error(error);
+        console.log(error)
     }
 };

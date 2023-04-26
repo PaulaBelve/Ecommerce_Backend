@@ -1,6 +1,5 @@
 import MyRouter from "./router.js"
 import ViewsController from "../controllers/views.controllers.js";
-//import purchaseCart from "../controllers/carts.controllers.js";
 import cartControllers from "../controllers/carts.controllers.js";
 import { passportCall } from "../utils/jwt.js";
 

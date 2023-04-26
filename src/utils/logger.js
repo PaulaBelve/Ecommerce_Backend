@@ -56,7 +56,7 @@ const devLogger = winston.createLogger({
             level: "debug",
             format: winston.format.combine(
                 winston.format.colorize({ colors: customLevels.colors }),
-                winston.format.simple()
+                winston.format.simple(),
             )
         }),
         new winston.transports.File({
