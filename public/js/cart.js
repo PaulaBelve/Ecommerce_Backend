@@ -1,5 +1,4 @@
 
-//eliminando productos desde el front
 const deleteBtns = Array.from(
 
     document.querySelectorAll("#cart__product--deleteBtn")
@@ -15,7 +14,7 @@ const deleteProduct = async (cid, pid) => {
         const result = await response.json();
 
         if (response.status === 200) {
-            alert("Producto eliminado correctamente");
+            location.reload();
         }
 
     } catch (error) {
@@ -28,30 +27,22 @@ const deleteProduct = async (cid, pid) => {
 const cid = document.getElementById("purchase__btn").value;
 
 deleteBtns.forEach((btn) => {
-
-    btn.addEventListener("click", () => {
-
+    btn.addEventListener("click", async () => {
         const pid = btn.value;
-
-        deleteProduct(cid, pid)
-
-        location.reload();
-    })
-
-
+        console.log({ cid, pid });
+        deleteProduct(cid, pid);
+    });
 });
 
 const purchaseBtn = document.getElementById("purchase__btn");
 
-purchaseBtn.addEventListener("click", () => {
-
+purchaseBtn.addEventListener("click", (e) => {
+    const cid = e.target.value;
     purchaseCart(cid);
-
 });
 
-const purchaseCart = async (cid) => {
 
-    // NO ME TOMA EL FETCH PERO SI ANDA LA RUTA PORQUE DESDE POSTMAN ENVIO EL TICKET
+const purchaseCart = async (cid) => {
 
     try {
 
@@ -61,7 +52,7 @@ const purchaseCart = async (cid) => {
                 "Content-Type": "application/json",
             },
         });
-
+        console.log(response)
         const result = await response.json();
 
         if (response.status === 200) {

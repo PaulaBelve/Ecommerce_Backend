@@ -152,6 +152,7 @@ export default class ViewsController {
                 style: "Css/style.css",
                 products: cart.products,
                 user,
+                cid
 
 
             });

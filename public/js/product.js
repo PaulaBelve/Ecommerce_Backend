@@ -1,6 +1,4 @@
 
-// REVISAR
-// agregando productos desde el front
 const addToCartBtn = document.getElementById("addProduct__btn");
 const pid = addToCartBtn.value;
 const cid = document.getElementById("cart_id").innerHTML;

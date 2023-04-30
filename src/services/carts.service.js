@@ -239,7 +239,7 @@ export default class CartService {
 
         if (!cart) throw new Error("Cart Not Found");
 
-        const arrayProducts = Array.from({ products: cart.products });
+        const arrayProducts = Array.from(cart.products);
 
         const purchaser = await userModel.findOne({ cart: cid }).lean().exec();
 
@@ -273,9 +273,11 @@ export default class CartService {
         const totalProducts = Promise.all(
             products.map(async (product) => {
 
+                console.log(product)
+
                 const producWithStock = await this.productsService.updateStock(
 
-                    product._id,
+                    product.product._id,
                     product.quantity
                 );
 

@@ -77,7 +77,7 @@ app.use('/api/docs',
 
 // Routers
 app.use('/api/session', sessionRouter.getRouter())
-app.use('/', apiUsers)
+app.use('/api/users', apiUsers)
 app.use('/', usersRouter.getRouter())
 app.use('/', viewsRouter.getRouter())
 app.use('/api/products', productsRouter.getRouter())
@@ -89,12 +89,9 @@ app.use('/loggerTest', loggerRouter)
 
 // Pagina principal login
 
-/*app.use((req, res) =>
-
-    res.redirect('/login')
-
-
-);*/
+app.use((req, res) =>
+    req.user ? res.redirect("/product") : res.redirect("/login")
+);
 
 //app.listen
 const httpServer = app.listen(PORT, () => {
