@@ -82,8 +82,9 @@ export const addLogger = (req, res, next) => {
 
     }
 
-    const date = new Date().toLocaleDateString();
-    req.logger.info(`METHOD: ${req.method}, ENDPOINT: ${req.url}, DATE: ${date}`)
+    const date = new Date(); //.toLocaleDateString();
+    const dateLocal = date.toLocaleString();
+    req.logger.info(`METHOD: ${req.method}, ENDPOINT: ${req.url}, DATE: ${dateLocal}`)
 
     next()
 

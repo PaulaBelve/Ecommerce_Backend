@@ -38,6 +38,7 @@ export default class UsersController {
         }
 
         req.session.user = {
+
             first_name: req.user.first_name,
             last_name: req.user.last_name,
             zona: req.user.zona,
@@ -45,10 +46,17 @@ export default class UsersController {
             role: req.user.role,
             social: req.user.social,
             cart: req.user.cart,
+            documents: req.user.documents,
+            last_connection: req.user.last_connection,
 
 
 
         }
+
+        //Chequear que este ok-NOFUNCIONA
+
+        //const updateUser = await UserService.getUser(req.session.user._id);
+        // console.log(updateUser)
 
         res.cookie(credentials.COOKIE_NAME, req.user.token).redirect('/product')
 
@@ -68,14 +76,25 @@ export default class UsersController {
 
     logout = (req, res) => {
 
-        req.session.destroy(err => {
+        try {
 
-            if (err) {
-                return req.logger.error(err);
-            }
-        })
+            //chequear que este ok -NO FUNCIONA
+            //const updateUser = UserService.getUser(req.session.user._id);
+            //console.log(updateUser)
 
-        res.clearCookie(credentials.COOKIE_NAME).redirect('/login')
+            req.session.destroy(err => {
+
+                if (err) {
+                    return req.logger.error(err);
+                }
+            })
+
+            res.clearCookie(credentials.COOKIE_NAME).redirect('/login')
+
+        } catch (error) {
+
+            req.logger.error(error)
+        }
     };
 
 
@@ -275,6 +294,39 @@ export default class UsersController {
 
 
     }
+
+    /*  uploadDocument = async (req, res) => {
+          try {
+              const { uid } = req.params;
+  
+              if (!req.files)
+                  return res.status(404).send({ message: "SOMETHING WENT WRONG" });
+  
+              const filesValues = Object.values(req.files);
+  
+              filesValues.map(async (arrayOfFiles) => {
+                  return arrayOfFiles.map(async (file) => {
+                      const newDocument = {
+                          name: file.originalname,
+                          reference: file.path,
+                      };
+  
+                      await UserService.updateUpload(uid, newDocument);
+  
+                      return;
+                  });
+              });
+  
+              res.status(200).send({
+                  message: `Document succesfully upload`,
+              });
+          } catch (error) {
+              req.logger.error(error);
+  
+              return res.status(404).send({ message: "SOMETHING WENT WRONG" });
+          }
+      }; */
+
 
 
 }

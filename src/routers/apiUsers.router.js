@@ -1,4 +1,4 @@
-import express from "express"
+/*import express from "express"
 import UsersController from "../controllers/users.controllers.js"
 
 const usersController = new UsersController()
@@ -9,4 +9,4 @@ Router.get("/", usersController.getAllUser)
 
 Router.get("/premium/:uid", usersController.changeUserRole)
 
-export default Router;
+export default Router;*/

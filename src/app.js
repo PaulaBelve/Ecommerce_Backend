@@ -9,7 +9,7 @@ import MongoConnection from './utils/mongoDB.js'
 import __dirname, { MongoStoreInstance } from './utils.js'
 import ViewsRouter from './routers/views.router.js'
 import SessionRouter from './routers/session.router.js'
-import apiUsers from './routers/apiUsers.router.js'
+//import apiUsers from './routers/apiUsers.router.js'
 import ProductsRouter from './routers/products.router.js'
 import CartsRouter from './routers/carts.router.js'
 import UsersRouter from './routers/users.router.js'
@@ -70,14 +70,11 @@ app.use(express.static('public'))
 app.use(cookieParser(credentials.COOKIE_SECRET))
 app.use(errorHandler);
 app.use(addLogger);
-app.use('/api/docs',
-    swaggerUiExpress.serve,
-    swaggerUiExpress.setup(initSwagger())
-);
+
 
 // Routers
 app.use('/api/session', sessionRouter.getRouter())
-app.use('/api/users', apiUsers)
+//app.use('/api/users', apiUsers)
 app.use('/', usersRouter.getRouter())
 app.use('/', viewsRouter.getRouter())
 app.use('/api/products', productsRouter.getRouter())
@@ -86,6 +83,10 @@ app.use('/chat', chatRouter)
 // Router mocking
 app.use('/mockingProducts', usersFaker)
 app.use('/loggerTest', loggerRouter)
+app.use('/api/docs',
+    swaggerUiExpress.serve,
+    swaggerUiExpress.setup(initSwagger())
+);
 
 // Pagina principal login
 

@@ -23,7 +23,7 @@ export default class ViewsController {
 
             const options = {
 
-                limit: limit || 5,
+                limit: limit || 3,
                 page: page || 1,
                 sort: { price: sort } || { price: 1 },
                 lean: true,

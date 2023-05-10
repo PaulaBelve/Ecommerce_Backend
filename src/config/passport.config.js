@@ -98,10 +98,18 @@ const initializePassport = () => {
     passport.use(
         'login', new localStrategy(
 
-            { usernameField: 'email' },
+            {
+                usernameField: 'email'
+
+            },
 
             (username, password, done) => loginUser(username, password, done)
+
         )
+
+
+
+
     );
 
     // JWT Passport Strategy

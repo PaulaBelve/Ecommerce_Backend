@@ -11,6 +11,7 @@ const userSchema = new Schema({
     last_name: String,
     zona: String,
     social: String,
+
     email: {
         type: String,
         unique: true
@@ -26,13 +27,27 @@ const userSchema = new Schema({
         type: String,
         default: "USER",
     },
+    documents: [
 
+        {
 
+            name: String,
+            reference: String,
+
+        },
+    ],
+
+    last_connection: {
+
+        type: Date,
+        default: Date.now,
+
+    },
 
 
     default: [],
 
-})
+},);
 
 userSchema.statics.encryptPassword = async (password) => {
     const salt = await bcrypt.genSalt(10);

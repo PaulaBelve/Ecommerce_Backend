@@ -118,6 +118,7 @@ class UserServices {
 
                 console.log('password incorrect')
 
+
                 return done(null, false)
             }
 
@@ -126,12 +127,17 @@ class UserServices {
             const token = generateToken(dtoUser);
             dtoUser.token = token;
 
+            //Probar para verificar Login-Logout
+
+            this.updateLoginDate(user._id);
+
             return done(null, dtoUser)
 
 
         } catch (error) {
 
-            console.log(error)
+
+            req.logger.error(error)
 
             return done('Hubo un error en el login')
 
@@ -140,6 +146,87 @@ class UserServices {
 
 
     }
+
+    updateLoginDate = async (id) => {
+
+        return await userModel.findByIdAndUpdate(
+            { _id: id },
+
+            {
+                $set: { last_connection: Date.now() },
+            },
+
+            { new: true }
+
+
+        )
+
+    }
+
+    //ACTUALIZAR PARA QUE INCLUYA LOS DOCUMENTOS QUE SUBE EL USUARIO PREMIUM
+
+    /*   changeRole = async (uid) => {
+           try {
+               const user = await this.findUserById(uid);
+   
+               if (!user) {
+                   CustomError.createError({
+                       name: ERRORS_ENUM["USER NOT FOUND"],
+                       message: ERRORS_ENUM["USER NOT FOUND"],
+                   });
+               }
+   
+               if (user?.role === "USER") {
+                   const userDocuments = user?.documents.map((document) => {
+                       console.log(document);
+   
+                       if (!document) {
+                           CustomError.createError({
+                               name: "DOCUMENT NOT FOUND",
+                               message: "YOU DONT HAVE ANY DOCUMENT UPLOADED",
+                           });
+                       }
+   
+                       const result = path.parse(document.name).name;
+   
+                       console.log(result);
+   
+                       return result;
+                   });
+   
+                   console.log(userDocuments);
+   
+                   if (
+                       !userDocuments?.includes("identificación") &&
+                       !userDocuments?.includes("comprobante de domicilio") &&
+                       !userDocuments?.includes("comprobante de estado de cuenta")
+                   ) {
+                       CustomError.createError({
+                           name: "Invalid Credentials",
+                           message: "Must upload ",
+                       });
+   
+                       return false;
+                   }
+               }
+   
+               const result = await userModel.updateOne(
+                   { _id: uid },
+                   { role: user?.role === "USER" ? "PREMIUM" : "USER" }
+               );
+   
+               if (!result) return false;
+   
+               return true;
+           } catch (error) {
+               console.log(error);
+               return error;
+           }
+       }; */
+
+
+
+    // ChangeRole sin agregar documentos
 
     changeRole = async (uid) => {
         try {
@@ -288,6 +375,38 @@ class UserServices {
 
 
     }
+
+    /*   deleteToken = async (uid) => {
+   
+           const usertoken = await tokenModel.deleteOne({ userId: uid })
+   
+           return usertoken;
+   
+   
+       } */
+
+    /*  updateUpload = async (uid, newDocument) => {
+  
+          const user = await userModel.findById({ _id: uid }).lean().exec();
+  
+          if (!user) {
+              CustomError.createError({
+                  name: ERRORS_ENUM["USER NOT FOUND"],
+                  message: ERRORS_ENUM["USER NOT FOUND"],
+              });
+  
+              return;
+          }
+  
+          return await userModel.updateOne(
+  
+              { _id: uid },
+              { $push: { documents: newDocument } }
+  
+          );
+      } */
+
+
 
 }
 

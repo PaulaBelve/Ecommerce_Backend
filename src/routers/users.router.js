@@ -37,17 +37,32 @@ export default class UsersRouter extends MyRouter {
 
         this.get('/logout', usersController.logout)
 
+        // USER PREMIUM
+
+        this.get("/premium/:uid", usersController.changeUserRole)
+
         // EMAIL
 
         this.get('/restore', usersController.getRestore)
 
         this.post('/restore', usersController.postRestore)
 
-        // Error en las rutas de restoreForm
-
         this.get('/restoreForm/:uid/:token', usersController.getRestoreForm)
 
         this.post('/restoreForm/:uid/:token', usersController.postRestoreForm)
+
+        // DOCUMENT
+
+        /* this.post(
+             "/:uid/documents",
+             upload.fields([
+                 { name: "documents", maxCount: 3 },
+                 { name: "profiles", maxCount: 1 },
+                 { name: "products", maxCount: 10 },
+             ]),
+             usersController.uploadDocument
+         );*/
+
 
 
     }

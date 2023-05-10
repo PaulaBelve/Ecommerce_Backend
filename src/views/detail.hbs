@@ -1,19 +1,21 @@
 <main>
 
-   <h1>Detalle</h1>
+   <h1 class="tituloDetalle">Detalle del producto</h1>
 
    <div id="cart_id" style="display: none;">{{user.cart}}</div>
 
-   <div class="cards-products">
+   <div class="contenedorDetalle">
 
-      <picture><img src="{{response.thumbnail}}" /></picture>
-      <h2>{{response.title}}</h2>
-      <p>{{response.description}}</p>
-      <p>${{response.price}}</p>
+      <picture><img class="imgDetalle" src="{{response.thumbnail}}" /></picture>
+      <div class="infoDetalle">
+         <h2 class="titulosDetalle ">{{response.title}}</h2>
+         <p>{{response.description}}</p>
+         <p class="precioDetalle">${{response.price}}</p>
+      </div>
 
 
 
-      <button class="product__detail__button" id="addProduct__btn" value={{response._id}}>Agregar al carrito</button>
+      <button class="btn-AgregarCarrito" id="addProduct__btn" value={{response._id}}>Agregar al carrito</button>
 
    </div>
 
