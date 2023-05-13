@@ -295,6 +295,26 @@ export default class UsersController {
 
     }
 
+    deleteUserInactivity = async (req, res, next) => {
+
+        try {
+            const { uid } = req.params;
+            const { Email } = req.body;
+
+            await UserService.deleteUserInactivity(uid, Email);
+
+
+            res.status(200).json({ message: 'El usuario ha sido eliminado con éxito' });
+
+
+        } catch (error) {
+
+            next(error)
+        }
+    };
+
+    // Intento para subir documentos
+
     /*  uploadDocument = async (req, res) => {
           try {
               const { uid } = req.params;

@@ -169,33 +169,33 @@ export default class ViewsController {
 
     // Se rompe la pagina
 
-    // VISTA USUARIOS ADMIN
+    // VISTA USUARIOS ADMIN - VISTA SOLO PARA EL ADMINISTRADOR 
 
-    /*   viewsAdmin = async (req, res) => {
-   
-           try {
-   
-               const role = req.session.user.role;
-   
-               const users = await getAllUsers();
-   
-               if (role === "ADMIN") {
-   
-                   return res.render('admin', {
-                       style: 'Css.style.css',
-                       users,
-                   })
-               }
-               return res.redirect('/admin')
-           }
-   
-           catch (error) {
-   
-              req.logger.error(error);
-   
-           } 
-   
-       };*/
+    viewsAdmin = async (req, res) => {
+
+        try {
+
+            const role = req.session.user.role;
+
+            const users = await getAllUsers();
+
+            if (role === "ADMIN") {
+
+                return res.render('admin', {
+                    style: 'Css.style.css',
+                    users,
+                })
+            }
+            return res.redirect('/admin')
+        }
+
+        catch (error) {
+
+            req.logger.error(error);
+
+        }
+
+    };
 
 
 }

@@ -1,6 +1,6 @@
 <main>
     <div>
-        <h2> Registro de adminstración de usuarios</h2>
+        <h2> Registro de usuarios para el administrador</h2>
 
         {{#each users}}
 
@@ -8,6 +8,9 @@
         <h2>{{this.first_name}}</h2>
         <p>{{this.last_name}}</p>
         <p>{{this.email}}</p>
+        <p>{{this.role}}</p>
+        <button>Modificar Rol</button>
+        <button>Eliminar usuario</button>
 
         {{/each}}
 

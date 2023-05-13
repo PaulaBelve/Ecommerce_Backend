@@ -2,6 +2,7 @@ import CartsService from "./carts.service.js";
 import tokenModel from "../dao/models/tocken.model.js";
 import userModel from "../dao/models/user.model.js";
 import sendMail from "../nodemailer.js";
+import sendMailDelete from "../nodemailerDelete.js"
 import { generateCode } from "../utils.js"
 import { generateToken } from "../utils/jwt.js";
 import UserDto from "../dao/DTO/users.dto.js";
@@ -376,14 +377,43 @@ class UserServices {
 
     }
 
-    /*   deleteToken = async (uid) => {
-   
-           const usertoken = await tokenModel.deleteOne({ userId: uid })
-   
-           return usertoken;
-   
-   
-       } */
+    deleteToken = async (uid) => {
+
+        const usertoken = await tokenModel.deleteOne({ userId: uid })
+
+        return usertoken;
+
+
+    }
+
+    deleteUserInactivity = async (uid, email) => {
+
+
+        // Obtener el usuario por su ID 
+        const user = await userModel.findOne({ userId: uid });
+
+        // Verificar si el usuario no ha iniciado sesión en los últimos 30 minutos
+        const lastConnection = user.last_connection;
+        const cutoffTime = new Date(Date.now() - 30 * 60 * 1000);
+        if (lastConnection < cutoffTime) {
+            // Eliminar el usuario
+            await userModel.deleteOne({ _id: uid });
+
+            // Enviar correo electrónico al usuario eliminado
+            /*  const nodeMailerDelete = require('./nodeMailerDelete');
+              await nodeMailerDelete.sendMailDelete(userEmail); */
+        }
+
+        const messageInactivityUser = `${process.env.BASE_URL}/register/${user._id}`;
+
+        console.log(messageInactivityUser)
+
+        await sendMailDelete.sendDelete(email, "Caducidad de la cuenta", messageInactivityUser)
+
+        return true;
+
+    };
+
 
     /*  updateUpload = async (uid, newDocument) => {
   

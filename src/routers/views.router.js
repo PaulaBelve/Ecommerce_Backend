@@ -31,9 +31,9 @@ export default class ViewsRouter extends MyRouter {
 
         this.post("/cart/:cid/purchase", cartsController.purchaseCart);
 
-        // Vista Admin
+        // Vista Admin - VISTA SOLO PARA EL ADMINISTRADOR
 
-        //this.get('/admin', viewsController.viewsAdmin)
+        this.get('/admin', viewsController.viewsAdmin)
 
     }
 }
