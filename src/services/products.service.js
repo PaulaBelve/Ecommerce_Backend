@@ -88,7 +88,7 @@ export default class ProductsService {
 
         const result = await productModel.create({
             ...newProduct,
-            owner: user._id
+            owner: user
         })
 
 
@@ -119,28 +119,42 @@ export default class ProductsService {
 
     // Eliminar un producto
 
-    deleteProduct = async (pid) => {
+    deleteProduct = async (pid, user) => {
 
         const product = await this.getProductById(pid);
 
         //TODO el owner dentro del prodcuto se guarda como un objeto
 
-        if (product.owner !== "ADMIN" && product.owner != user._id) {
-
-            throw new Error('Not authorized')
-
-
-        }
-
-
         if (!product) {
 
-            throw new Error('PRODUCT NOT FOUND')
+            CustomError.createError({
+                name: ERRORS_ENUM["PRODUCT NOT FOUND"],
+                message: ERRORS_ENUM["PRODUCT NOT FOUND"],
+            });
+
+            return;
         }
 
-        const result = await productModel.deleteOne({ _id: pid })
+        if (product.owner !== "ADMIN" && product.owner != user) {
 
-        return result
+            CustomError.createError({
+                name: ERRORS_ENUM["INVALID USER"],
+                message: ERRORS_ENUM["INVALID USER"],
+            });
+
+            return;
+        }
+
+
+
+
+        const deleteProduct = await productModel.deleteOne(
+
+            { _id: pid },
+
+            user)
+
+        return deleteProduct
 
     }
 

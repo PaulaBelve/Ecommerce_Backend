@@ -3,6 +3,7 @@ import { productModel } from "../dao/models/products.model.js"
 import userModel from '../dao/models/user.model.js'
 import ticketModel from '../dao/models/ticket.model.js'
 import ProductsService from "../services/products.service.js";
+import { v4 as uuidv4 } from 'uuid'
 
 
 export default class CartService {
@@ -257,6 +258,7 @@ export default class CartService {
     generateTicket = async (purchaser, total) => {
         try {
             const result = await ticketModel.create({
+                code: uuidv4(),
                 amount: total,
                 purchaser: purchaser,
             });

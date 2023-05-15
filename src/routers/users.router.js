@@ -22,6 +22,9 @@ export default class UsersRouter extends MyRouter {
 
         this.post('/login', passport.authenticate('login', { failuredirect: '/errors' }), usersController.postLogin)
 
+        this.get('/users', usersController.getAllUser)
+
+
 
         // LOGIN GITHUB
 
@@ -51,7 +54,7 @@ export default class UsersRouter extends MyRouter {
 
         this.post('/restoreForm/:uid/:token', usersController.postRestoreForm)
 
-        this.delete('/:uid', usersController.deleteUserInactivity)
+        this.delete('/deleteUsers/:uid', usersController.deleteUserInactivity)
 
         // DOCUMENT
 

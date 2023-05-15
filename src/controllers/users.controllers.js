@@ -114,6 +114,7 @@ export default class UsersController {
         try {
 
             const users = await UserService.getAllUsers();
+            console.log(users)
 
             if (!users) {
 

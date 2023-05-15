@@ -56,7 +56,7 @@ const purchaseCart = async (cid) => {
         const result = await response.json();
 
         if (response.status === 200) {
-            alert(`Compra realizada con exito ${result.payload.code} `);
+            alert(`Compra realizada con exito ${result.result.code} `);
             location.reload();
         }
 

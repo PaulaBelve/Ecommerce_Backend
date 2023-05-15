@@ -18,15 +18,14 @@ class UserServices {
 
     getAllUsers = async () => {
 
-        try {
-            const users = await userModel.find().lean().exec();
 
-            const mapedUser = users.map((user) => new UserDto(user));
+        const users = await userModel.find().lean().exec();
 
-            return mapedUser;
-        } catch (error) {
-            console.log(error);
-        }
+        const mapedUser = users.map((user) => new UserDto(user));
+        console.log(mapedUser)
+
+        return mapedUser;
+
     }
 
     // Encontrar usuario
@@ -358,14 +357,6 @@ class UserServices {
 
         return user;
 
-
-        /* const findUser = await userModel
-             .findById(id)
-             .populate("carts.cart")
-             .lean();
-      
-         return findUser */
-
     }
 
     findUserToken = async (uid, token) => {
@@ -388,27 +379,45 @@ class UserServices {
 
     deleteUserInactivity = async (uid, email) => {
 
+        // Obtener el usuario por su ID
 
-        // Obtener el usuario por su ID 
-        const user = await userModel.findOne({ userId: uid });
+        //const users = await userModel.find({});
+        const users = await userModel.find({})
 
-        // Verificar si el usuario no ha iniciado sesión en los últimos 30 minutos
-        const lastConnection = user.last_connection;
-        const cutoffTime = new Date(Date.now() - 30 * 60 * 1000);
-        if (lastConnection < cutoffTime) {
-            // Eliminar el usuario
-            await userModel.deleteOne({ _id: uid });
+        users.forEach(async (user) => {
 
-            // Enviar correo electrónico al usuario eliminado
-            /*  const nodeMailerDelete = require('./nodeMailerDelete');
-              await nodeMailerDelete.sendMailDelete(userEmail); */
-        }
+            // Verificar si el usuario no ha iniciado sesión en los últimos 30 minutos
 
-        const messageInactivityUser = `${process.env.BASE_URL}/register/${user._id}`;
+            const lastConnection = user.last_connection;
 
-        console.log(messageInactivityUser)
+            const cutoffTime = new Date(Date.now() - 30 * 60 * 1000);
 
-        await sendMailDelete.sendDelete(email, "Caducidad de la cuenta", messageInactivityUser)
+            if (lastConnection < cutoffTime) {
+
+                // Eliminar el usuario
+                // Revisar 
+
+                await userModel.remove({});
+
+                // Enviar correo electrónico al usuario eliminado
+
+                const messageInactivityUser = `${process.env.BASE_URL}/register`;
+
+                console.log(messageInactivityUser);
+
+                await sendMailDelete.sendDelete(
+
+                    user,
+
+                    "Caducidad de la cuenta",
+
+                    messageInactivityUser
+
+                );
+
+            }
+
+        });
 
         return true;
 
