@@ -299,18 +299,29 @@ export default class UsersController {
     deleteUserInactivity = async (req, res, next) => {
 
         try {
-            const { uid } = req.params;
-            const { Email } = req.body;
+            /*const { uid } = req.params;
+            const { Email } = req.body;*/
+            const result = await UserService.deleteUserInactivity();
 
-            await UserService.deleteUserInactivity(uid, Email);
+            if (!result) {
+
+                CustomError.createError({
+                    message: "Something went wrong",
+                });
+            }
+
+            res.status(200).send({
+                message: "Los usuarios han sido eliminados con exito",
+            });
+
+            //res.status(200).redirect("register");
 
 
-            res.status(200).json({ message: 'El usuario ha sido eliminado con éxito' });
 
 
         } catch (error) {
-
-            next(error)
+            console.log(error)
+            //next(error)
         }
     };
 

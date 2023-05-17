@@ -86,8 +86,11 @@ export default class ProductsService {
 
         }
 
+        //probar esto
+
         const result = await productModel.create({
             ...newProduct,
+            //owner: user ? user._id : "ADMIN",
             owner: user
         })
 
@@ -146,13 +149,20 @@ export default class ProductsService {
         }
 
 
-
+        //Elimina el usuario de la base de datos
 
         const deleteProduct = await productModel.deleteOne(
 
             { _id: pid },
 
             user)
+
+        // Verifica si el usuario es PREMIUM
+
+        if (product.owner === user && user.PREMIUM) {
+            // Aquí puedes agregar la lógica para enviar el correo al usuario
+            //enviarCorreo(product.owner, 'Producto eliminado', 'Tu producto ha sido eliminado.');
+        }
 
         return deleteProduct
 

@@ -54,7 +54,7 @@ export default class UsersRouter extends MyRouter {
 
         this.post('/restoreForm/:uid/:token', usersController.postRestoreForm)
 
-        this.delete('/deleteUsers/:uid', usersController.deleteUserInactivity)
+        this.delete('/deleteUsers', usersController.deleteUserInactivity)
 
         // DOCUMENT
 

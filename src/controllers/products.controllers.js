@@ -105,6 +105,7 @@ export default class ProductsController {
         try {
 
             const newProduct = req.body
+            const user = req.session.user;
 
             const { title, price, description, code, category } = newProduct;
 
@@ -114,6 +115,9 @@ export default class ProductsController {
                     message: generateProductErrorInfo(newProduct),
                 });
             }
+
+            console.log(newProduct);
+            console.log(user);
 
             const result = await this.productsService.addNewProduct(newProduct)
 

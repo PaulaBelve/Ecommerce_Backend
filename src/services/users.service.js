@@ -377,11 +377,13 @@ class UserServices {
 
     }
 
-    deleteUserInactivity = async (uid, email) => {
+    //Se eliminar los usuarios que hayan estado inactivos 30min
 
-        // Obtener el usuario por su ID
+    deleteUserInactivity = async () => {
 
-        //const users = await userModel.find({});
+
+        //Obtener todos los usuarios
+
         const users = await userModel.find({})
 
         users.forEach(async (user) => {
@@ -397,7 +399,9 @@ class UserServices {
                 // Eliminar el usuario
                 // Revisar 
 
-                await userModel.remove({});
+                const deleteUsers = await userModel.remove({});
+
+                console.log(deleteUsers)
 
                 // Enviar correo electrónico al usuario eliminado
 
