@@ -379,7 +379,7 @@ class UserServices {
 
     //Se eliminar los usuarios que hayan estado inactivos 30min
 
-    deleteUserInactivity = async () => {
+    deleteUserInactivity = async (email) => {
 
 
         //Obtener todos los usuarios
@@ -396,26 +396,28 @@ class UserServices {
 
             if (lastConnection < cutoffTime) {
 
-                // Eliminar el usuario
-                // Revisar 
+                // Eliminar los usuarios
 
-                const deleteUsers = await userModel.remove({});
+                const deleteUsers = await userModel.deleteOne({ _id: user._id });
 
                 console.log(deleteUsers)
 
                 // Enviar correo electrónico al usuario eliminado
 
-                const messageInactivityUser = `${process.env.BASE_URL}/register`;
+                const linkMessageInactivityUser = `${process.env.BASE_URL}/register`;
 
-                console.log(messageInactivityUser);
+                console.log(linkMessageInactivityUser);
+
+                // await sendMailDelete.sendDelete
 
                 await sendMailDelete.sendDelete(
 
-                    user,
+                    user.email,
 
                     "Caducidad de la cuenta",
 
-                    messageInactivityUser
+
+                    linkMessageInactivityUser
 
                 );
 

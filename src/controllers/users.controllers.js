@@ -296,12 +296,12 @@ export default class UsersController {
 
     }
 
-    deleteUserInactivity = async (req, res, next) => {
+    deleteUserInactivity = async (req, res) => {
 
         try {
-            /*const { uid } = req.params;
-            const { Email } = req.body;*/
-            const result = await UserService.deleteUserInactivity();
+            /*const { uid } = req.params;*/
+            const { email } = req.body;
+            const result = await UserService.deleteUserInactivity(email);
 
             if (!result) {
 
@@ -321,7 +321,7 @@ export default class UsersController {
 
         } catch (error) {
             console.log(error)
-            //next(error)
+
         }
     };
 

@@ -1,5 +1,6 @@
 //import { error } from "winston";
 import { productModel } from "../dao/models/products.model.js";
+import sendMailDeletePremium from "../nodemailerDelete.js"
 
 export default class ProductsService {
 
@@ -149,7 +150,7 @@ export default class ProductsService {
         }
 
 
-        //Elimina el usuario de la base de datos
+        //Elimina el producto de un usuario PREMIUM de la base de datos
 
         const deleteProduct = await productModel.deleteOne(
 
@@ -160,8 +161,21 @@ export default class ProductsService {
         // Verifica si el usuario es PREMIUM
 
         if (product.owner === user && user.PREMIUM) {
-            // Aquí puedes agregar la lógica para enviar el correo al usuario
-            //enviarCorreo(product.owner, 'Producto eliminado', 'Tu producto ha sido eliminado.');
+
+
+
+            await sendMailDeletePremium.sendDeletePremium(
+
+                product.owner,
+
+                "Producto eliminado",
+
+                "Uno de los productos de tu colección ha sido eliminado"
+
+
+            );
+
+
         }
 
         return deleteProduct

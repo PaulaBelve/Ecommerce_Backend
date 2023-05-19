@@ -9,12 +9,14 @@ const dltUser = async (uid) => {
             method: "DELETE",
         });
 
+        const result = await response.json();
+
         if (response.status === 200) {
             alert("Usuario eliminado");
-        } else {
+        } /*else {
             const errorData = await response.json();
             throw new Error(errorData.message);
-        }
+        } */
     } catch (error) {
         console.log(error);
 

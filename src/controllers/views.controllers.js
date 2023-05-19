@@ -167,7 +167,7 @@ export default class ViewsController {
 
     }
 
-    // Se rompe la pagina
+
 
     // VISTA USUARIOS ADMIN - VISTA SOLO PARA EL ADMINISTRADOR 
 
@@ -184,6 +184,7 @@ export default class ViewsController {
                 return res.render('admin', {
                     style: 'Css.style.css',
                     users,
+
                 })
             }
             return res.redirect('/admin')

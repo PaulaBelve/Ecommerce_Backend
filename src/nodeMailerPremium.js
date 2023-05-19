@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 dotenv.config();
 
-class MailDelete {
+class MailDeletePremium {
 
     constructor() {
 
@@ -21,7 +21,7 @@ class MailDelete {
     }
 
 
-    sendDelete = async (email, subject, text) => {
+    sendDeletePremium = async (email, subject, text) => {
         const result = await this.transport.sendMail({
             from: process.env.NODE_EMAIL,
             to: email,
@@ -47,7 +47,6 @@ class MailDelete {
 
 }
 
-const sendMailDelete = new MailDelete();
+const sendMailDeletePremium = new MailDeletePremium();
 
-export default sendMailDelete;
-
+export default sendMailDeletePremium;
