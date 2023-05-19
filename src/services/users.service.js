@@ -127,7 +127,7 @@ class UserServices {
             const token = generateToken(dtoUser);
             dtoUser.token = token;
 
-            //Probar para verificar Login-Logout
+
 
             this.updateLoginDate(user._id);
 

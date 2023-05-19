@@ -160,11 +160,15 @@ export default class ProductsService {
 
         // Verifica si el usuario es PREMIUM
 
+        //deleteProduct en el if?
+
         if (product.owner === user && user.PREMIUM) {
 
 
 
             await sendMailDeletePremium.sendDeletePremium(
+
+                //user.role,
 
                 product.owner,
 
