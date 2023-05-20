@@ -172,7 +172,7 @@ components:
           description: Fotos del producto
         owner:
           type: ObjectId
-          description: Id del usuario que creo el producto
+          description: Role del usuario que creo el producto
       example:
         _id: 63bc9445d5302d73be990269
         title": Hercules
@@ -183,7 +183,7 @@ components:
         code: 473
         state: true
         stock: 4
-        owner: 63bf146e58e7baa835ee686f
+        owner: ADMIN
     updateProduct:
       type: object
       properties:

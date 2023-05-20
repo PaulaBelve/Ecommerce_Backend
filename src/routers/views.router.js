@@ -17,17 +17,15 @@ export default class ViewsRouter extends MyRouter {
 
         this.get('/product', passportCall('jwt'), viewsController.viewsProducts)
 
-
         // Product Detail
 
         this.get('/product/:pid', passportCall('jwt'), viewsController.viewProductDetail)
 
-        // Vista del carrito carrito
+        // Vista del carrito 
 
         this.get('/cart/:cid', viewsController.getCartPage)
 
         // Ticket
-        // Manda el ticket pero no toma el fetch
 
         this.post("/cart/:cid/purchase", cartsController.purchaseCart);
 

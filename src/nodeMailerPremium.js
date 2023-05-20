@@ -21,10 +21,10 @@ class MailDeletePremium {
     }
 
 
-    sendDeletePremium = async (user, subject, text) => {
+    sendDeletePremium = async (email, subject, text) => {
         const result = await this.transport.sendMail({
             from: process.env.NODE_EMAIL,
-            to: user,
+            to: email,
             subject,
             text,
 

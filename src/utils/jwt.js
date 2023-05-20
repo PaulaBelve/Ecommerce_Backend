@@ -69,6 +69,8 @@ export const passportCall = (strategy) => {
 }*/
 
 export const authPolicies = (policieOne, policieTwo) => (req, res, next) => {
+
+
     const role = req.user.role;
 
     if (typeof policieOne === "undefined") {

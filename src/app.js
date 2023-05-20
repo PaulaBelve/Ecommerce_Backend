@@ -19,18 +19,18 @@ import usersFaker from './routers/mocking.router.js'
 //Logger
 import loggerRouter from './routers/logger.router.js'
 
-// import variables de entorno desde config
+//import variables de entorno desde config
 import credentials from './config/credentials.js'
 //Socket
 import { Server } from "socket.io";
-import socket from "./socket.js";
+import socket from "./utils/socket.js";
 
 //Error
 import { errorHandler } from "./middlewares/errors/index.js";
 //Logger
 import { addLogger } from './utils/logger.js'
 //Swagger
-import initSwagger from './swagger.js'
+import initSwagger from './utils/swagger.js'
 import swaggerUiExpress from 'swagger-ui-express'
 
 const app = express()
@@ -66,7 +66,6 @@ app.use(express.urlencoded({ extended: true }))
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static('public'))
-//app.use(express.static(__dirname + "/public"));
 app.use(cookieParser(credentials.COOKIE_SECRET))
 app.use(errorHandler);
 app.use(addLogger);

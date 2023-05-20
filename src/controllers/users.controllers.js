@@ -53,10 +53,6 @@ export default class UsersController {
 
         }
 
-        //Chequear que este ok-NOFUNCIONA
-
-        //const updateUser = await UserService.getUser(req.session.user._id);
-        // console.log(updateUser)
 
         res.cookie(credentials.COOKIE_NAME, req.user.token).redirect('/product')
 
@@ -77,10 +73,6 @@ export default class UsersController {
     logout = (req, res) => {
 
         try {
-
-            //chequear que este ok -NO FUNCIONA
-            //const updateUser = UserService.getUser(req.session.user._id);
-            //console.log(updateUser)
 
             req.session.destroy(err => {
 
@@ -130,7 +122,7 @@ export default class UsersController {
 
         } catch (error) {
 
-            console.log(error)
+            req.logger.error(error)
 
             res.render("errors", {
                 error: error.message,
@@ -147,7 +139,7 @@ export default class UsersController {
 
         } catch {
 
-            console.log(error)
+            req.logger.error(error)
             res.render("errors", {
 
                 error: error.message,
@@ -176,7 +168,7 @@ export default class UsersController {
 
         } catch {
 
-            console.log(error);
+            req.logger.error(error);
 
             res.render("errors", {
                 error: error.message,
@@ -227,7 +219,7 @@ export default class UsersController {
 
         } catch {
 
-            console.log(error);
+            req.logger.error(error);
 
             res.redirect("restore");
 
@@ -299,7 +291,7 @@ export default class UsersController {
     deleteUserInactivity = async (req, res) => {
 
         try {
-            /*const { uid } = req.params;*/
+
             const { email } = req.body;
             const result = await UserService.deleteUserInactivity(email);
 
@@ -316,48 +308,13 @@ export default class UsersController {
 
             //res.status(200).redirect("register");
 
-
-
-
         } catch (error) {
-            console.log(error)
+            req.logger.error(error)
 
         }
     };
 
-    // Intento para subir documentos
 
-    /*  uploadDocument = async (req, res) => {
-          try {
-              const { uid } = req.params;
-  
-              if (!req.files)
-                  return res.status(404).send({ message: "SOMETHING WENT WRONG" });
-  
-              const filesValues = Object.values(req.files);
-  
-              filesValues.map(async (arrayOfFiles) => {
-                  return arrayOfFiles.map(async (file) => {
-                      const newDocument = {
-                          name: file.originalname,
-                          reference: file.path,
-                      };
-  
-                      await UserService.updateUpload(uid, newDocument);
-  
-                      return;
-                  });
-              });
-  
-              res.status(200).send({
-                  message: `Document succesfully upload`,
-              });
-          } catch (error) {
-              req.logger.error(error);
-  
-              return res.status(404).send({ message: "SOMETHING WENT WRONG" });
-          }
-      }; */
 
 
 

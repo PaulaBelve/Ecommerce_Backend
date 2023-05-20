@@ -1,9 +1,9 @@
 //Eliminar un usuario
 
-const btnDeleteUser = document.getElementById("deleteUser");
-const uid = btnDeleteUser.value;
+const deleteBtnsUser = document.getElementById("deleteUser");
+const uid = deleteBtnsUser.value;
 
-const dltUser = async (uid) => {
+const deleteUser = async (uid) => {
     try {
         const response = await fetch(`/admin/${uid}`, {
             method: "DELETE",
@@ -23,10 +23,12 @@ const dltUser = async (uid) => {
     }
 };
 
-btnDeleteUser.addEventListener("click", (e) => {
+deleteBtnsUser.addEventListener("click", (e) => {
     console.log(e.target.value)
-    dltUser(uid);
-});
+    deleteUser(uid);
+})
+
+
 
 // Cambiar el role del usuario
 

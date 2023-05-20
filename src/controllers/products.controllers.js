@@ -107,9 +107,9 @@ export default class ProductsController {
             const newProduct = req.body
             const user = req.session.user;
 
-            const { title, price, description, code, category } = newProduct;
+            const { title, price, description, code, category, owner } = newProduct;
 
-            if (!title || !price || !description || !code || !category) {
+            if (!title || !price || !description || !code || !category || !owner) {
                 CustomError.createError({
                     name: ERRORS_ENUM["INVALID PRODUCT PROPERTY"],
                     message: generateProductErrorInfo(newProduct),
