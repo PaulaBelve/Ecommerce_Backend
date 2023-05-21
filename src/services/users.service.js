@@ -1,8 +1,8 @@
 import CartsService from "./carts.service.js";
 import tokenModel from "../dao/models/tocken.model.js";
 import userModel from "../dao/models/user.model.js";
-import sendMail from "../nodemailer.js";
-import sendMailDelete from "../nodemailerDelete.js"
+import sendMail from "./nodeMailer.service.js";
+//import sendMailDelete from "../nodemailerDelete.js"
 import { generateCode } from "../utils.js"
 import { generateToken } from "../utils/jwt.js";
 import UserDto from "../dao/DTO/users.dto.js";
@@ -226,7 +226,7 @@ class UserServices {
 
 
 
-    // ChangeRole sin agregar documentos
+    // ChangeRole entre USER Y PREMIUM
 
     changeRole = async (uid) => {
         try {
@@ -252,6 +252,36 @@ class UserServices {
             console.log(error);
         }
     };
+
+
+    // USER - ADMIN - PREMIUM
+
+    changeUsersRole = async (uid) => {
+        try {
+            const user = await this.findUserById(uid);
+
+            if (!user) {
+                CustomError.createError({
+                    message: ERRORS_ENUM["USER NOT FOUND"],
+                });
+            }
+
+            console.log(user);
+
+            const result = await userModel.updateOne(
+                { _id: uid },
+                { role: user.role === "USER" ? "PREMIUM" : user.role === "PREMIUM" ? "ADMIN" : "USER" }
+
+            );
+
+            if (!result) return false;
+
+            return true;
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
 
 
     sendRestoreMail = async (email) => {
@@ -377,6 +407,22 @@ class UserServices {
 
     }
 
+    deleteUser = async (uid) => {
+
+        const user = await userModel.findById({ _id: uid })
+
+        if (!user) {
+            CustomError.createError({
+                message: ERRORS_ENUM["USER NOT FOUND"],
+            });
+        }
+
+        const deleteUser = await userModel.deleteOne({ _id: uid });
+
+        return deleteUser
+
+    }
+
     //Se eliminar los usuarios que hayan estado inactivos 30min
 
     deleteUserInactivity = async (email) => {
@@ -410,7 +456,7 @@ class UserServices {
 
                 // await sendMailDelete.sendDelete
 
-                await sendMailDelete.sendDelete(
+                await sendMail.sendDelete(
 
                     user.email,
 
@@ -428,31 +474,6 @@ class UserServices {
         return true;
 
     };
-
-
-    /*  updateUpload = async (uid, newDocument) => {
-  
-          const user = await userModel.findById({ _id: uid }).lean().exec();
-  
-          if (!user) {
-              CustomError.createError({
-                  name: ERRORS_ENUM["USER NOT FOUND"],
-                  message: ERRORS_ENUM["USER NOT FOUND"],
-              });
-  
-              return;
-          }
-  
-          return await userModel.updateOne(
-  
-              { _id: uid },
-              { $push: { documents: newDocument } }
-  
-          );
-      } */
-
-
-
 }
 
 const UserService = new UserServices();

@@ -105,11 +105,11 @@ export default class ProductsController {
         try {
 
             const newProduct = req.body
-            const user = req.session.user;
+            const user = req.user;
 
-            const { title, price, description, code, category, owner } = newProduct;
+            const { title, price, description, code, category } = newProduct;
 
-            if (!title || !price || !description || !code || !category || !owner) {
+            if (!title || !price || !description || !code || !category) {
                 CustomError.createError({
                     name: ERRORS_ENUM["INVALID PRODUCT PROPERTY"],
                     message: generateProductErrorInfo(newProduct),
@@ -119,7 +119,9 @@ export default class ProductsController {
             console.log(newProduct);
             console.log(user);
 
-            const result = await this.productsService.addNewProduct(newProduct)
+            const result = await this.productsService.addNewProduct(
+                newProduct,
+                user._id)
 
             if (!result) {
                 CustomError.createError({

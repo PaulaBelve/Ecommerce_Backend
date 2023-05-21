@@ -288,6 +288,63 @@ export default class UsersController {
 
     }
 
+    changeUsersRol = async (req, res) => {
+
+        try {
+
+            const { uid } = req.params;
+            const result = await UserService.changeUsersRole(uid)
+
+            if (!result) {
+
+                CustomError.createError({
+                    message: "Something went wrong",
+                });
+            }
+
+            res.status(200).send({
+                message: "User succesfully changed role",
+            });
+
+
+
+        } catch {
+
+            console.log(error)
+            res.render("errors", {
+                error: error.message,
+            });
+
+
+
+        }
+
+
+    }
+
+    // Eliminar un usuario
+
+    deleteUserCtr = async (req, res) => {
+        try {
+
+            const { uid } = req.params
+
+            const result = await UserService.deleteUser(uid)
+
+            if (!result) {
+                CustomError.createError({
+                    message: ERRORS_ENUM["USER NOT FOUND"],
+                });
+            }
+
+            return res.sendSuccess({ result });
+
+        } catch (error) {
+
+            return res.sendServerError({ error: error.message });
+        }
+    }
+
     deleteUserInactivity = async (req, res) => {
 
         try {
@@ -313,10 +370,6 @@ export default class UsersController {
 
         }
     };
-
-
-
-
 
 }
 

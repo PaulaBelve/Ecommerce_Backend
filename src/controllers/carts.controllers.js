@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 import { ERRORS_ENUM } from "../const/error.js";
 import CustomError from "../errors/customError.js";
 import CartsService from "../services/carts.service.js";
-//import { error } from "winston";
+
 
 
 export default class cartControllers {
@@ -103,10 +103,12 @@ export default class cartControllers {
         try {
 
             const { cid, pid } = req.params
+            const user = req.user;
 
             const result = await this.cartsService.addProductToCart(
                 Types.ObjectId(cid),
-                pid
+                pid,
+                user.role
 
             );
 
@@ -123,7 +125,7 @@ export default class cartControllers {
         } catch (error) {
 
 
-            console.log(error);
+            req.logger.error(error);
 
             return res.sendServerError({ error: error.message })
 

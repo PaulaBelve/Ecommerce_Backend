@@ -1,6 +1,6 @@
 //import { error } from "winston";
 import { productModel } from "../dao/models/products.model.js";
-import sendMailDeletePremium from "../nodemailerDelete.js"
+import sendMail from "./nodeMailer.service.js"
 
 export default class ProductsService {
 
@@ -164,9 +164,7 @@ export default class ProductsService {
 
         if (product.owner === user && user.PREMIUM) {
 
-
-
-            await sendMailDeletePremium.sendDeletePremium(
+            await sendMail.sendDeletePremium(
 
                 //user.role,
 

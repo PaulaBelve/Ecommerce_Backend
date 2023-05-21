@@ -1,11 +1,13 @@
 import MyRouter from "./router.js"
 import ViewsController from "../controllers/views.controllers.js";
 import cartControllers from "../controllers/carts.controllers.js";
+import UsersController from "../controllers/users.controllers.js";
 import { passportCall } from "../utils/jwt.js";
 
 
 const viewsController = new ViewsController();
 const cartsController = new cartControllers();
+const usersController = new UsersController();
 
 
 export default class ViewsRouter extends MyRouter {
@@ -32,6 +34,10 @@ export default class ViewsRouter extends MyRouter {
         // Vista Admin - VISTA SOLO PARA EL ADMINISTRADOR
 
         this.get('/admin', viewsController.viewsAdmin)
+
+        this.delete('/admin/:uid', usersController.deleteUserCtr)
+
+        this.put('/admin/:uid/role', usersController.changeUsersRol)
 
     }
 }

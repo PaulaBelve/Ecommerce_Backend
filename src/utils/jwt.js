@@ -56,32 +56,17 @@ export const passportCall = (strategy) => {
     }
 }
 
-/*export const authPolicies = (policies) => (req, res, next) => {
 
-    const role = req.user.role;
-
-    if (role !== policies)
-
-        return res.status(400).render("errors", { error: "Not Authorized" });
-
-    return next()
-
-}*/
-
-export const authPolicies = (policieOne, policieTwo) => (req, res, next) => {
+export const authPolicies = (policies) => (req, res, next) => {
 
 
     const role = req.user.role;
 
-    if (typeof policieOne === "undefined") {
+    if (!policies.includes(role)) {
 
-        policieOne = policieTwo;
-        policieTwo = null;
-    }
-
-    if (role !== policieOne && !role !== policieTwo) {
-
-        return res.status(400).render("errors", { error: "Not Authorized from Policies" });
+        return res
+            .status(400)
+            .render("errors", { error: "Not Authorized from Policies" });
 
     }
 
