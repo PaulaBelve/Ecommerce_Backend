@@ -183,7 +183,7 @@ components:
         code: 473
         state: true
         stock: 4
-        owner: ADMIN
+        owner: 6466f88ba8f97a924665892f
     updateProduct:
       type: object
       properties:

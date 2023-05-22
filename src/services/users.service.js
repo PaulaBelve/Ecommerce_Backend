@@ -428,13 +428,9 @@ class UserServices {
     deleteUserInactivity = async (email) => {
 
 
-        //Obtener todos los usuarios
-
         const users = await userModel.find({})
 
         users.forEach(async (user) => {
-
-            // Verificar si el usuario no ha iniciado sesión en los últimos 30 minutos
 
             const lastConnection = user.last_connection;
 
@@ -448,13 +444,10 @@ class UserServices {
 
                 console.log(deleteUsers)
 
-                // Enviar correo electrónico al usuario eliminado
-
                 const linkMessageInactivityUser = `${process.env.BASE_URL}/register`;
 
                 console.log(linkMessageInactivityUser);
 
-                // await sendMailDelete.sendDelete
 
                 await sendMail.sendDelete(
 

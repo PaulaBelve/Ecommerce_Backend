@@ -68,7 +68,7 @@ changeRoleButtons.forEach((btn) => {
             await changeUserRole(uid, newRole);
         }
         console.log(uid, newRole);
-        //changeUserRole(uid, newRole);
+
     });
 });
 

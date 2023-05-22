@@ -178,8 +178,13 @@ export default class ProductsController {
         try {
 
             const { pid } = req.params
+            const user = req.user
 
-            const result = await this.productsService.deleteProduct(pid)
+            const result = await this.productsService.deleteProduct(
+
+                pid,
+                user
+            )
 
             if (!result) {
                 CustomError.createError({

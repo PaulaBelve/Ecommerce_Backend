@@ -64,7 +64,7 @@ export default class CartService {
 
     // Agregar producto al carrito
 
-    addProductToCart = async (cid, pid, user) => {
+    addProductToCart = async (cid, pid, uid) => {
 
         const cart = await this.getCartsById(cid);
 
@@ -74,16 +74,18 @@ export default class CartService {
 
         if (!product) throw new Error('product not found');
 
-        // verificar el user que agrega el producto
+
         // Premium no puede agregar sus productos
-        // REVISAR
+
+        const user = await userModel.findById(uid).lean();
+
+        console.log(user)
 
         if (product.owner === user._id && user.role === "PREMIUM") {
             throw new Error('Premium users cannot add their own products to the cart');
         }
 
-        console.log(typeof product.owner)
-
+        console.log(product.owner)
 
         /*  if (product.owner == user._id) {
               CustomError.createError({

@@ -102,15 +102,20 @@ export default class cartControllers {
 
         try {
 
-            const { cid, pid } = req.params
+            const { cid, pid, uid } = req.params
             const user = req.user;
+
+            // no toma el id
 
             const result = await this.cartsService.addProductToCart(
                 Types.ObjectId(cid),
                 pid,
-                user.role
+                //Types.ObjectId(uid)
+                user._id
 
             );
+
+            console.log(result)
 
             if (!result) {
 

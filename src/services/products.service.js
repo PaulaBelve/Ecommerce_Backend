@@ -122,6 +122,8 @@ export default class ProductsService {
 
     }
 
+    // Eliminar producto
+
     // Eliminar un producto
 
     deleteProduct = async (pid, user) => {
@@ -139,15 +141,15 @@ export default class ProductsService {
             return;
         }
 
-        if (product.owner !== "ADMIN" && product.owner != user) {
-
-            CustomError.createError({
-                name: ERRORS_ENUM["INVALID USER"],
-                message: ERRORS_ENUM["INVALID USER"],
-            });
-
-            return;
-        }
+        /*  if (product.owner !== "ADMIN" && product.owner != user) {
+  
+              CustomError.createError({
+                  name: ERRORS_ENUM["INVALID USER"],
+                  message: ERRORS_ENUM["INVALID USER"],
+              });
+  
+              return;
+          } */
 
 
         //Elimina el producto de un usuario PREMIUM de la base de datos
@@ -158,17 +160,14 @@ export default class ProductsService {
 
             user)
 
+        console.log(deleteProduct)
+
         // Verifica si el usuario es PREMIUM
-
-        //deleteProduct en el if?
-
-        if (product.owner === user && user.PREMIUM) {
+        if (product.owner === user._id && user.role === "PREMIUM") {
 
             await sendMail.sendDeletePremium(
 
-                //user.role,
-
-                product.owner,
+                user.email,
 
                 "Producto eliminado",
 
@@ -180,9 +179,89 @@ export default class ProductsService {
 
         }
 
-        return deleteProduct
+        return true
 
     }
+
+    // Eliminar un producto CON EL MAIL DE PREMIUM
+
+    /*  deleteProduct = async (pid, user) => {
+  
+          const product = await this.getProductById(pid);
+  
+  
+          if (!product) {
+  
+              CustomError.createError({
+                  name: ERRORS_ENUM["PRODUCT NOT FOUND"],
+                  message: ERRORS_ENUM["PRODUCT NOT FOUND"],
+              });
+  
+              return;
+          }
+  
+          /*    if (product.owner !== "ADMIN" && product.owner != user) {
+      
+                  CustomError.createError({
+                      name: ERRORS_ENUM["INVALID USER"],
+                      message: ERRORS_ENUM["INVALID USER"],
+                  });
+      
+                  return;
+              } */
+
+
+    //Elimina el producto de un usuario PREMIUM de la base de datos
+
+    /*   const deleteProduct = await productModel.deleteOne(
+
+           { _id: pid },
+
+           user)
+
+           return deleteProduct */
+
+
+
+    // Verifica si el usuario es PREMIUM
+
+    /*const deleteProductPremium = await productModel.deleteOne(
+
+        { _id: pid },
+
+        user) 
+
+    deleteProduct.forEach( async (products) => {
+
+        const role = user.role;
+
+        //deleteProduct en el if?
+
+        if (product.owner === user._id && user.role === "PREMIUM") {
+
+            await sendMail.sendDeletePremium(
+
+                user.role,
+
+                //product.owner,
+
+                "Producto eliminado",
+
+                "Uno de los productos de tu colección ha sido eliminado"
+
+
+            );
+            
+        }
+
+        });
+
+        return true
+
+    }
+
+    } */
+
 
     //actualizar stock
 
