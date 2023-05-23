@@ -1,5 +1,6 @@
 //import { error } from "winston";
 import { productModel } from "../dao/models/products.model.js";
+import userModel from "../dao/models/user.model.js";
 import sendMail from "./nodeMailer.service.js"
 
 export default class ProductsService {
@@ -141,16 +142,6 @@ export default class ProductsService {
             return;
         }
 
-        /*  if (product.owner !== "ADMIN" && product.owner != user) {
-  
-              CustomError.createError({
-                  name: ERRORS_ENUM["INVALID USER"],
-                  message: ERRORS_ENUM["INVALID USER"],
-              });
-  
-              return;
-          } */
-
 
         //Elimina el producto de un usuario PREMIUM de la base de datos
 
@@ -158,16 +149,20 @@ export default class ProductsService {
 
             { _id: pid },
 
-            user)
+        )
 
         console.log(deleteProduct)
 
-        // Verifica si el usuario es PREMIUM
-        if (product.owner === user._id && user.role === "PREMIUM") {
+
+        if (product.owner) {
+
+            const productOwner = await userModel.findById(product.owner)
+
+            console.log({ productOwner })
 
             await sendMail.sendDeletePremium(
 
-                user.email,
+                productOwner.email,
 
                 "Producto eliminado",
 
@@ -175,93 +170,11 @@ export default class ProductsService {
 
 
             );
-
-
         }
 
         return true
 
     }
-
-    // Eliminar un producto CON EL MAIL DE PREMIUM
-
-    /*  deleteProduct = async (pid, user) => {
-  
-          const product = await this.getProductById(pid);
-  
-  
-          if (!product) {
-  
-              CustomError.createError({
-                  name: ERRORS_ENUM["PRODUCT NOT FOUND"],
-                  message: ERRORS_ENUM["PRODUCT NOT FOUND"],
-              });
-  
-              return;
-          }
-  
-          /*    if (product.owner !== "ADMIN" && product.owner != user) {
-      
-                  CustomError.createError({
-                      name: ERRORS_ENUM["INVALID USER"],
-                      message: ERRORS_ENUM["INVALID USER"],
-                  });
-      
-                  return;
-              } */
-
-
-    //Elimina el producto de un usuario PREMIUM de la base de datos
-
-    /*   const deleteProduct = await productModel.deleteOne(
-
-           { _id: pid },
-
-           user)
-
-           return deleteProduct */
-
-
-
-    // Verifica si el usuario es PREMIUM
-
-    /*const deleteProductPremium = await productModel.deleteOne(
-
-        { _id: pid },
-
-        user) 
-
-    deleteProduct.forEach( async (products) => {
-
-        const role = user.role;
-
-        //deleteProduct en el if?
-
-        if (product.owner === user._id && user.role === "PREMIUM") {
-
-            await sendMail.sendDeletePremium(
-
-                user.role,
-
-                //product.owner,
-
-                "Producto eliminado",
-
-                "Uno de los productos de tu colección ha sido eliminado"
-
-
-            );
-            
-        }
-
-        });
-
-        return true
-
-    }
-
-    } */
-
 
     //actualizar stock
 

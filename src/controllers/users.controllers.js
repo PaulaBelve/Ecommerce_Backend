@@ -63,8 +63,16 @@ export default class UsersController {
 
     loginGitHub = async (req, res) => {
 
-        req.session.user = req.user
-        res.cookie(credentials.COOKIE_NAME, req.user.token).redirect('/product')
+        try {
+
+            req.session.user = req.user
+            res.cookie(credentials.COOKIE_NAME, req.user.token).redirect('/product')
+
+        } catch (error) {
+
+            req.logger.error(error)
+
+        }
 
     };
 

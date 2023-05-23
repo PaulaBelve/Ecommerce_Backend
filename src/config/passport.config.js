@@ -31,6 +31,7 @@ const initializePassport = () => {
         },
 
 
+
         async (accessToken, refreshToken, profile, done) => {
 
             console.log("Entra", profile);
@@ -39,11 +40,7 @@ const initializePassport = () => {
 
                 // No reconoce el email
 
-                const user = await getUser(profile._json.email) /*userModel
-                    .findOne({
-                        email: profile._json.email,  
-                    })
-                    .lean() */
+                const user = await getUser(profile._json.email);
 
                 if (user) {
 
@@ -55,16 +52,17 @@ const initializePassport = () => {
                 }
 
                 const newUser = {
-
+                    _id: "",
                     first_name: profile._json.name,
                     last_name: "",
-                    email: profile._json.email, // profile.emails[0].values,
+                    email: profile._json.email,  // me da null el email
                     social: 'GitHub',
+                    cart: "",
                     password: ""
 
                 };
 
-                const result = await userCreate(newUser)
+                const result = await userModel.create(newUser)
 
                 const token = generateToken(user);
                 result.token = token;
@@ -140,7 +138,7 @@ const initializePassport = () => {
     })
 
     passport.deserializeUser(async (id, done) => {
-        //const user = await userById(id)
+
         const user = await userModel.findById(id);
         done(null, user)
     })

@@ -73,11 +73,6 @@ class UserServices {
 
             const result = await userModel.create(newUser);
 
-            /*    if (result.email === 'adminCoder@coder.com') {
-                    result.role = 'ADMIN';
-                    await result.save();
-                    return done(null, result);
-                } */
 
             await result.save();
             return done(null, result);
@@ -162,69 +157,6 @@ class UserServices {
         )
 
     }
-
-    //ACTUALIZAR PARA QUE INCLUYA LOS DOCUMENTOS QUE SUBE EL USUARIO PREMIUM
-
-    /*   changeRole = async (uid) => {
-           try {
-               const user = await this.findUserById(uid);
-   
-               if (!user) {
-                   CustomError.createError({
-                       name: ERRORS_ENUM["USER NOT FOUND"],
-                       message: ERRORS_ENUM["USER NOT FOUND"],
-                   });
-               }
-   
-               if (user?.role === "USER") {
-                   const userDocuments = user?.documents.map((document) => {
-                       console.log(document);
-   
-                       if (!document) {
-                           CustomError.createError({
-                               name: "DOCUMENT NOT FOUND",
-                               message: "YOU DONT HAVE ANY DOCUMENT UPLOADED",
-                           });
-                       }
-   
-                       const result = path.parse(document.name).name;
-   
-                       console.log(result);
-   
-                       return result;
-                   });
-   
-                   console.log(userDocuments);
-   
-                   if (
-                       !userDocuments?.includes("identificación") &&
-                       !userDocuments?.includes("comprobante de domicilio") &&
-                       !userDocuments?.includes("comprobante de estado de cuenta")
-                   ) {
-                       CustomError.createError({
-                           name: "Invalid Credentials",
-                           message: "Must upload ",
-                       });
-   
-                       return false;
-                   }
-               }
-   
-               const result = await userModel.updateOne(
-                   { _id: uid },
-                   { role: user?.role === "USER" ? "PREMIUM" : "USER" }
-               );
-   
-               if (!result) return false;
-   
-               return true;
-           } catch (error) {
-               console.log(error);
-               return error;
-           }
-       }; */
-
-
 
     // ChangeRole entre USER Y PREMIUM
 

@@ -34,9 +34,9 @@ deleteBtns.forEach((btn) => {
     });
 });
 
-const purchaseBtn = document.getElementById("purchase__btn");
+//const purchaseBtn = document.getElementById("purchase__btn");
 
-purchaseBtn.addEventListener("click", (e) => {
+/*purchaseBtn.addEventListener("click", (e) => {
     const cid = e.target.value;
     purchaseCart(cid);
 });
@@ -68,5 +68,5 @@ const purchaseCart = async (cid) => {
 
 
     }
-}
+} */
 

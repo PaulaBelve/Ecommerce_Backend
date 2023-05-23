@@ -60,22 +60,7 @@ const oneMessage = (message) => {
   return container;
 };
 
-//funcion que recibe el array de mensajes y los itera para pintarlos en el DOM
-const renderMessages = (messages) => {
-  messagesContainer.innerHTML = "";
-  messages.forEach((message) => messagesContainer.append(oneMessage(message)));
-};
 
-// pinta el nuevo mensaje al DOM
-const appendNewMessage = (message) => {
-  messagesContainer.append(oneMessage(message));
-};
-
-// cargando los mensajes cuando se carga la pagina
-window.addEventListener("DOMContentLoaded", () => {
-  loadMessages(renderMessages);
-  loadNewMessage(appendNewMessage);
-});
 
 
 

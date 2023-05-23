@@ -81,11 +81,20 @@ export default class CartService {
 
         console.log(user)
 
-        if (product.owner === user._id && user.role === "PREMIUM") {
-            throw new Error('Premium users cannot add their own products to the cart');
+        if (product.owner && product.owner.toString() === user._id.toString() && user.role === "PREMIUM"
+
+        ) {
+
+            throw new Error(
+
+                "Premium users cannot add their own products to the cart"
+
+            );
+
         }
 
         console.log(product.owner)
+
 
         /*  if (product.owner == user._id) {
               CustomError.createError({

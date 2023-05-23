@@ -102,16 +102,13 @@ export default class cartControllers {
 
         try {
 
-            const { cid, pid, uid } = req.params
+            const { cid, pid } = req.params
             const user = req.user;
-
-            // no toma el id
 
             const result = await this.cartsService.addProductToCart(
                 Types.ObjectId(cid),
                 pid,
-                //Types.ObjectId(uid)
-                user._id
+                user
 
             );
 
@@ -282,7 +279,17 @@ export default class cartControllers {
 
             }
 
-            return res.sendSuccess({ result })
+            res.render("ticket", {
+
+                style: "Css/style.css",
+                result,
+                cid,
+            });
+
+
+            /*   return res.sendSuccess({ result }) */
+
+
 
         } catch (error) {
 

@@ -32,9 +32,16 @@
                 {{/if}}
 
 
+                <form action="/carts/{{cid}}/purchase" method="post">
 
-                <button class="cart__total--btn" id="purchase__btn" value={{cid}}>Confirmar
-                    compra</button>
+                    <button type="submit" class="cart__total--btn" id="purchase__btn" value={{cid}}>Confirmar
+                        compra</button>
+
+                </form>
+
+
+
+
 
             </div>
 
