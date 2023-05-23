@@ -9,7 +9,6 @@ import MongoConnection from './utils/mongoDB.js'
 import __dirname, { MongoStoreInstance } from './utils.js'
 import ViewsRouter from './routers/views.router.js'
 import SessionRouter from './routers/session.router.js'
-//import apiUsers from './routers/apiUsers.router.js'
 import ProductsRouter from './routers/products.router.js'
 import CartsRouter from './routers/carts.router.js'
 import UsersRouter from './routers/users.router.js'
@@ -73,7 +72,6 @@ app.use(addLogger);
 
 // Routers
 app.use('/api/session', sessionRouter.getRouter())
-//app.use('/api/users', apiUsers)
 app.use('/', usersRouter.getRouter())
 app.use('/', viewsRouter.getRouter())
 app.use('/api/products', productsRouter.getRouter())
@@ -89,9 +87,12 @@ app.use('/api/docs',
 
 // Pagina principal login
 
-app.use((req, res) =>
+app.use((req, res) => {
+
+    console.log("Ruta no encontrada!!!")
+
     req.user ? res.redirect("/product") : res.redirect("/login")
-);
+});
 
 //app.listen
 const httpServer = app.listen(PORT, () => {

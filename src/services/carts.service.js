@@ -289,6 +289,8 @@ export default class CartService {
                 purchaser: purchaser,
             });
 
+            console.log(result)
+
             return result;
         } catch (error) {
             console.log(error);

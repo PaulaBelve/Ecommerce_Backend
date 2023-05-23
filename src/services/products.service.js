@@ -76,7 +76,7 @@ export default class ProductsService {
     }
 
     // Agregar productos
-    // No authoriza al user premium a subir un nuevo producto
+
 
     addNewProduct = async (newProduct, user) => {
 
@@ -93,7 +93,7 @@ export default class ProductsService {
 
         const result = await productModel.create({
             ...newProduct,
-            //owner: user ? user._id : "ADMIN",
+
             owner: user
         })
 

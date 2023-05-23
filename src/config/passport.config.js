@@ -62,6 +62,8 @@ const initializePassport = () => {
 
                 };
 
+                console.log(newUser)
+
                 const result = await userModel.create(newUser)
 
                 const token = generateToken(user);

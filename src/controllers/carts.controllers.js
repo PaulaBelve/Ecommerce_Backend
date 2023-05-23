@@ -265,9 +265,16 @@ export default class cartControllers {
         try {
             const { cid } = req.params;
 
-            const result = await this.cartsService.purchaseProducts(
+            const data = await this.cartsService.purchaseProducts(
                 Types.ObjectId(cid)
             );
+
+            const result = {
+                code: data.code,
+                amount: data.amount,
+                purchaser: data.purchaser,
+
+            }
 
 
             if (!result) {
@@ -279,11 +286,14 @@ export default class cartControllers {
 
             }
 
+            console.log(result)
+
             res.render("ticket", {
 
                 style: "Css/style.css",
                 result,
                 cid,
+
             });
 
 
